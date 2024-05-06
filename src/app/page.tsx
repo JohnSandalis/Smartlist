@@ -6,7 +6,9 @@ import CategoryCard from "@/components/categories/CategoryCard";
 import SuperMarketsList from "@/components/supermarkets/SuperMarketList";
 import { supermarkets } from "@/lib/data/supermarkets";
 import { categories, Category } from "@/lib/data/categories";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import Search from "@/components/search/Search";
+import { IconButton } from "@mui/material";
 
 export interface Price {
   price: number;
@@ -34,8 +36,19 @@ const Home: React.FC = () => {
     superMarketsList.length === 0
   );
 
+  const [searchOpen, setSearchOpen] = useState<boolean>(false);
+
   return (
     <>
+      <Search open={searchOpen} setOpen={setSearchOpen} />
+      <div className="w-10 ml-auto">
+        <IconButton
+          onClick={() => setSearchOpen(true)}
+          sx={{ zIndex: 1000 }}
+        >
+          <MagnifyingGlassIcon width="24px" height="24px" />
+        </IconButton>
+      </div>
       <button
         className="w-full bg-white rounded-md mb-2 p-3 flex items-center justify-between gap-2"
         onClick={() => setSuperMarketsListOpen(true)}

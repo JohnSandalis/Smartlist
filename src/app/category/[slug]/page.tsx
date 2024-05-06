@@ -16,6 +16,7 @@ import ProductCardSkeleton from "@/components/products/ProductCardSkeleton";
 import { shoppingListAtom } from "@/app/page";
 import { useAtom } from "jotai";
 import ShoppingList from "@/components/ShoppingList";
+import Search from "@/components/search/Search";
 
 interface CategoryPageProps {
   params: { slug: string };
@@ -132,6 +133,7 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ params }) => {
 
   return (
     <>
+      <Search open={searchOpen} setOpen={setSearchOpen} />
       <Drawer anchor="bottom" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
         <Link href="/">
           <IconButton sx={{ position: "absolute", top: 8, left: 8, zIndex: 1000 }}>
@@ -161,7 +163,14 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ params }) => {
           <h1 className="text-md text-center font-medium w-full">
             {category?.greek_name}
           </h1>
-          <div className="max-w-10 w-10"></div>
+          <div className="w-10">
+            <IconButton
+              onClick={() => setSearchOpen(true)}
+              sx={{ zIndex: 1000 }}
+            >
+              <MagnifyingGlassIcon width="24px" height="24px" />
+            </IconButton>
+          </div>
         </div>
         <div className="overflow-x-auto whitespace-nowrap scroll-smooth scrollbar-hide mb-2 py-2">
           {subcategoryList.map((subcategory, index) => (
