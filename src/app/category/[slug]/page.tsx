@@ -15,7 +15,7 @@ import ProductCard from "@/components/products/ProductCard";
 import ProductCardSkeleton from "@/components/products/ProductCardSkeleton";
 import { shoppingListAtom } from "@/app/page";
 import { useAtom } from "jotai";
-import ShoppingList from "@/components/ShoppingList";
+import ShoppingList from "@/components/list/ShoppingList";
 import Search from "@/components/search/Search";
 
 interface CategoryPageProps {
