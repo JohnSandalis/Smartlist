@@ -13,7 +13,9 @@ import { subCategories, SubCategory } from "@/lib/data/subCategories";
 import { supabase } from "@/lib/helper/supabaseClient";
 import ProductCard from "@/components/products/ProductCard";
 import ProductCardSkeleton from "@/components/products/ProductCardSkeleton";
+import { shoppingListAtom } from "@/app/page";
 import { useAtom } from "jotai";
+import ShoppingList from "@/components/ShoppingList";
 
 interface CategoryPageProps {
   params: { slug: string };
@@ -33,6 +35,25 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ params }) => {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
   const subcategoryRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  const [listOpen, setListOpen] = useState<boolean>(false);
+  const [shoppingList] = useAtom(shoppingListAtom);
+
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  const listTotalQuantity = shoppingList.reduce(
+    (acc, item) => acc + item.quantity,
+    0
+  );
+
+  const listTotalPrice = shoppingList.reduce((acc, item) => {
+    const minPrice = item.Prices.reduce(
+      (min, priceObj) => (priceObj.price < min ? priceObj.price : min),
+      item.Prices[0].price
+    );
+
+    return acc + item.quantity * minPrice;
+  }, 0);
 
   useEffect(() => {
     if (selectedSubCategory && subcategoryRefs.current[selectedSubCategory]) {
@@ -187,6 +208,23 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ params }) => {
       ) : (
         <h2 className="text-lg text-center">Δεν βρέθηκε κάποιο προϊόν</h2>
       )}
+      <div className="fixed bottom-0 left-0 w-full rounded-t-lg bg-white py-4 px-2 shadow-lg">
+        <button
+          onClick={() => setListOpen((prev) => !prev)}
+          className="w-full bg-primary text-white p-4 rounded-xl flex justify-between items-center"
+        >
+          <div className="w-1/3">
+            <span className="flex items-center justify-center bg-white rounded w-6 h-6 text-black">
+              {listTotalQuantity}
+            </span>
+          </div>
+          <span className="w-1/3 text-md font-medium">Λίστα</span>
+          <span className="w-1/3 text-right text-sm font-medium">
+            {listTotalPrice.toFixed(2)}€
+          </span>
+        </button>
+      </div>
+      <ShoppingList open={listOpen} setOpen={setListOpen} />
     </>
   );
 };
