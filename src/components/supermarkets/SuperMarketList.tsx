@@ -7,7 +7,7 @@ import {
   SlideProps
 } from "@mui/material";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { supermarkets } from "@/data/supermarkets";
+import { supermarkets } from "@/lib/data/supermarkets";
 import SuperMarketCard from "./SuperMarketCard";
 import { FC } from "react";
 

@@ -11,7 +11,7 @@ interface Category {
 export default function CategoryCard({ category }: { category: Category }) {
   return (
     <Link
-      href={`/categories/${category.id}`}
+      href={`/category/${category.id}`}
       className="rounded-md h-[200px] p-3 flex flex-col items-center justify-center bg-white"
     >
       <div className="flex items-center justify-center">
