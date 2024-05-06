@@ -2,32 +2,138 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+
+  .btn-primary {
+    @apply rounded-md bg-primary px-3.5 py-2.5 font-semibold text-white shadow-sm hover:bg-primary-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-strong;
+  }
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/Inter/Inter-Regular.ttf") format("truetype"); /* IE9 Compat Modes */
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  src: url("/fonts/Inter/Inter-Medium.ttf") format("truetype"); /* IE9 Compat Modes */
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  src: url("/fonts/Inter/Inter-SemiBold.ttf") format("truetype"); /* IE9 Compat Modes */
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/fonts/Inter/Inter-Bold.ttf") format("truetype"); /* IE9 Compat Modes */
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 800;
+  src: url("/fonts/Inter/Inter-ExtraBold.ttf") format("truetype"); /* IE9 Compat Modes */
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 900;
+  src: url("/fonts/Inter/Inter-Black.ttf") format("truetype"); /* IE9 Compat Modes */
+}
+
+*,
+body {
+  font-family: "Inter", -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+h1 {
+  font-weight: 600;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.page-title {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+}
+
+.checked-overlay::after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  pointer-events: none;
+  border-radius: var(
+    --Checkbox-actionRadius,
+    var(--unstable_actionRadius, inherit)
+  );
+}
+
+.supermarket-checkbox::after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  pointer-events: none;
+  filter: grayscale(0.5);
+  border-radius: var(
+    --Checkbox-actionRadius,
+    var(--unstable_actionRadius, inherit)
+  );
+}
+
+.supermarket-checkbox .supermarket-checkbox__image {
+  filter: gray !important;
+  -webkit-filter: grayscale(1) !important;
+  filter: grayscale(1) !important;
+}
+
+.supermarket-checkbox--checked::after {
+  display: none;
+}
+
+.supermarket-checkbox--checked .supermarket-checkbox__image {
+  filter: none !important;
+  -webkit-filter: none !important;
+  filter: none !important;
 }
