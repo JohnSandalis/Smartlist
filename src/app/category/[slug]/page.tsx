@@ -103,6 +103,7 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ params }) => {
       setOffsets({});
       getProducts();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedSubCategory]);
 
   const observer = useRef<IntersectionObserver>();
