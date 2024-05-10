@@ -1,5 +1,5 @@
 'use client'
-import getSupermarketSplit from "@/lib/helper/supermarketSplit";
+import getSupermarketSplit from "@/utils/supermarketSplit";
 import { superMarketsListAtom, shoppingListAtom } from "@/app/page";
 import { useAtom } from "jotai";
 import SupermarketCombCard from "@/components/list/SuperMarketCombCard";

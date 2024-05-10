@@ -10,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import { ArrowLeftIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { categories, Category } from "@/lib/data/categories";
 import { subCategories, SubCategory } from "@/lib/data/subCategories";
-import { supabase } from "@/lib/helper/supabaseClient";
+import { createClient } from "@/utils/supabase/client";
 import ProductCard from "@/components/products/ProductCard";
 import ProductCardSkeleton from "@/components/products/ProductCardSkeleton";
 import { shoppingListAtom } from "@/app/page";
@@ -75,6 +75,7 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ params }) => {
     const start = offsets[selectedSubCategory] || 0;
     const end = start + productsPerPage - 1;
 
+    const supabase = createClient();
     const { data } = await supabase
       .from("Products")
       .select("id, title, brand, category, Prices(price, store_name, imageUrl)", {
