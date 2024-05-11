@@ -1,5 +1,5 @@
 import ProductCard from "@/components/products/ProductCard";
-import { Product } from "@/app/page";
+import { Product } from "@/lib/types/Product";
 
 export const SearchResults = ({ results }: { results: Product[] }) => {
   return (

@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useAtom } from "jotai";
-import { shoppingListAtom } from "@/app/page";
+import { shoppingListAtom } from "@/app/atoms";
 import ProductCard from "@/components/products/ProductCard";
 import Link from "next/link";
 

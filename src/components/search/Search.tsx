@@ -10,7 +10,7 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { SearchBar } from "@/components/search/SearchBar";
 import { SearchResults } from "@/components/search/SearchResults";
 import ProductCardSkeleton from "@/components/products/ProductCardSkeleton";
-import { Product } from "@/app/page";
+import { Product } from "@/lib/types/Product";
 
 export default function Search({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void }) {
   const [results, setResults] = useState<Product[] | null>(null);

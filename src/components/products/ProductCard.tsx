@@ -1,6 +1,6 @@
 import React, { forwardRef, ReactElement } from "react";
 import { useAtom } from "jotai";
-import { shoppingListAtom } from "@/app/page";
+import { shoppingListAtom } from "@/app/atoms";
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 import { supermarkets } from "@/lib/data/supermarkets";
 import ProductImage from "./ProductImage";

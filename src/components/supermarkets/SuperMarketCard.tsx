@@ -2,7 +2,7 @@ import { useState } from "react";
 import Checkbox from "@mui/joy/Checkbox";
 import ListItem from "@mui/joy/ListItem";
 import { useAtom } from "jotai";
-import { superMarketsListAtom } from "@/app/page";
+import { superMarketsListAtom } from "@/app/atoms";
 import Image from "next/image";
 
 interface SuperMarket {

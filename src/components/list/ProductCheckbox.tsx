@@ -2,7 +2,7 @@ import { useState } from "react";
 import Checkbox from "@mui/joy/Checkbox";
 import ListItem from "@mui/joy/ListItem";
 import ProductImage from "@/components/products/ProductImage";
-import { ShoppingCartItem } from "@/app/page";
+import { ShoppingCartItem } from "@/lib/types/ShoppingCartItem";
 
 interface ProductCheckboxProps {
   product: ShoppingCartItem;

@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState, FormEvent, ChangeEvent } from "react";
-import { Product } from "@/app/page";
+import { Product } from "@/lib/types/Product";
 
 interface SearchBarProps {
   setLoading: (loading: boolean) => void;

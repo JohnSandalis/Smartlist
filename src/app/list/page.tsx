@@ -1,6 +1,6 @@
 'use client'
 import getSupermarketSplit from "@/utils/supermarketSplit";
-import { superMarketsListAtom, shoppingListAtom } from "@/app/page";
+import { superMarketsListAtom, shoppingListAtom } from "@/app/atoms";
 import { useAtom } from "jotai";
 import SupermarketCombCard from "@/components/list/SuperMarketCombCard";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
