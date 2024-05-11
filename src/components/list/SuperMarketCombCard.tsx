@@ -2,7 +2,7 @@
 import { useState } from "react";
 import ProductListComb from "./ProductListComb";
 import { supermarkets } from "@/lib/data/supermarkets";
-import { CombinationResult } from "@/utils/supermarketSplit";
+import { CombinationResult } from "@/lib/types/CombinationResult";
 import Image from "next/image";
 
 export default function SupermarketCombCard({ combination, combinationIndex }: {

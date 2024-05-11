@@ -8,8 +8,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import IconButton from "@mui/material/IconButton";
 import { ArrowLeftIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { categories, Category } from "@/lib/data/categories";
-import { subCategories, SubCategory } from "@/lib/data/subCategories";
+import { categories } from "@/lib/data/categories";
+import { subCategories } from "@/lib/data/subCategories";
 import { createClient } from "@/utils/supabase/client";
 import ProductCard from "@/components/products/ProductCard";
 import ProductCardSkeleton from "@/components/products/ProductCardSkeleton";
@@ -17,6 +17,8 @@ import { shoppingListAtom } from "@/app/page";
 import { useAtom } from "jotai";
 import ShoppingList from "@/components/list/ShoppingList";
 import Search from "@/components/search/Search";
+import { Category } from "@/lib/types/Category";
+import { SubCategory } from "@/lib/types/SubCategory";
 
 interface CategoryPageProps {
   params: { slug: string };

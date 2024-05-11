@@ -1,10 +1,5 @@
-import { ShoppingCartItem, Product } from "@/app/page";
-
-export interface CombinationResult {
-  supermarkets: string[];
-  total: number;
-  [key: string]: any;
-}
+import { ShoppingCartItem } from "@/lib/types/ShoppingCartItem";
+import { CombinationResult } from "@/lib/types/CombinationResult";
 
 export default function getSupermarketSplit(
   shoppingList: ShoppingCartItem[]

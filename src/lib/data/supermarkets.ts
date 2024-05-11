@@ -1,13 +1,4 @@
-export interface Supermarket {
-  store_name: string;
-  id: string;
-  image_url: string;
-  image_base64: string;
-}
-
-export interface Supermarkets {
-  [key: string]: Supermarket;
-}
+import { Supermarkets } from "@/lib/types/Supermarkets";
 
 export const supermarkets: Supermarkets = {
   vasilopoulos: {

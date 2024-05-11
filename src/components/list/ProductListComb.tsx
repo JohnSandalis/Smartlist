@@ -8,8 +8,8 @@ import {
 } from "@mui/material";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import ProductCheckbox from "@/components/list/ProductCheckbox";
-import { supermarkets, Supermarkets } from "@/lib/data/supermarkets";
-import { CombinationResult } from "@/utils/supermarketSplit";
+import { supermarkets } from "@/lib/data/supermarkets";
+import { CombinationResult } from "@/lib/types/CombinationResult";
 import Image from "next/image";
 
 export default function ProductListComb({

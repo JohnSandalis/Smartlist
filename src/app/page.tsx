@@ -5,28 +5,13 @@ import { useState } from "react";
 import CategoryCard from "@/components/categories/CategoryCard";
 import SuperMarketsList from "@/components/supermarkets/SuperMarketList";
 import { supermarkets } from "@/lib/data/supermarkets";
-import { categories, Category } from "@/lib/data/categories";
+import { categories } from "@/lib/data/categories";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import SearchButton from "@/components/search/SearchButton";
 import { IconButton } from "@mui/material";
-
-export interface Price {
-  price: number;
-  store_name: string;
-  imageUrl: string;
-}
-
-export interface Product {
-  id: string;
-  title: string;
-  brand: string;
-  Prices: Price[];
-}
-
-export interface ShoppingCartItem extends Product {
-  quantity: number;
-}
+import { ShoppingCartItem } from "@/lib/types/ShoppingCartItem";
+import { Category } from "@/lib/types/Category";
 
 export const shoppingListAtom = atom<ShoppingCartItem[]>([]);
 export const superMarketsListAtom = atom<string[]>([]);

@@ -1,13 +1,4 @@
-export interface SubCategory {
-  name: string;
-  greek_name: string;
-  id: string;
-  img_url: string;
-}
-
-export interface SubCategories {
-  [key: string]: SubCategory[];
-}
+import { SubCategories } from "@/lib/types/SubCategories";
 
 export const subCategories: SubCategories = {
   fruits_and_vegetables: [
