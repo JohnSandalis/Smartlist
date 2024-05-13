@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 import BackButton from '@/components/ui/BackButton'
+import { logout } from '@/app/(auth)/logout/actions'
 
 export default async function AccountPage() {
   const supabase = createClient()
@@ -17,7 +18,9 @@ export default async function AccountPage() {
         Email: {data.user.email}
       </p>
     </div>
-    <button className='mx-auto mt-4 btn-white'>Log out</button>
+    <form action={logout} className='mx-auto mt-4'>
+      <button type="submit" className='btn-white'>Log out</button>
+    </form>
   </div>
   )
 }
