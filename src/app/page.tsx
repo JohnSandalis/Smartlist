@@ -5,20 +5,19 @@ import SearchButton from "@/components/search/SearchButton";
 import { IconButton } from "@mui/material";
 import { Category } from "@/lib/types/Category";
 import SelectedSuperMarkets from "@/components/supermarkets/SelectedSuperMarkets";
+import Link from "next/link";
 
 const Home: React.FC = () => {
-
-
   return (
     <>
-      <header>
-        <div className="flex items-center justify-between gap-2">
+      <header className="flex items-center justify-between gap-2 mb-2">
+        <Link href="/account">
           <IconButton
           >
             <UserCircleIcon className="text-black" width="32px" height="32px" />
           </IconButton>
-          <SearchButton />
-        </div>
+        </Link>
+        <SearchButton />
       </header>
       <SelectedSuperMarkets />
       <div className="grid grid-cols-2 gap-2">
