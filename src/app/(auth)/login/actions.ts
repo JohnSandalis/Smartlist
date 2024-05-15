@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 
-interface LoginParams {
+interface AuthParams {
   email: string;
   password: string;
 }
@@ -11,7 +11,7 @@ interface LoginParams {
 export async function login({
   email,
   password,
-}: LoginParams): Promise<string | void> {
+}: AuthParams): Promise<string | void> {
   const supabase = createClient();
 
   const data = {
@@ -29,20 +29,21 @@ export async function login({
   redirect("/");
 }
 
-export async function signup(formData: FormData) {
+export async function signup({
+  email,
+  password,
+}: AuthParams): Promise<string | void> {
   const supabase = createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
   const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
+    email,
+    password,
   };
 
   const { error } = await supabase.auth.signUp(data);
 
   if (error) {
-    redirect("/error");
+    return error.message;
   }
 
   revalidatePath("/", "layout");

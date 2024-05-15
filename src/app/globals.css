@@ -63,6 +63,10 @@ body {
   font-family: "Inter", -apple-system, sans-serif;
 }
 
+*:focus-visible {
+  outline-color: #003afe;
+}
+
 body {
   margin: 0;
 }
