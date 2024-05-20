@@ -6,6 +6,7 @@ import { IconButton } from "@mui/material";
 import { Category } from "@/lib/types/Category";
 import SelectedSuperMarkets from "@/components/supermarkets/SelectedSuperMarkets";
 import Link from "next/link";
+import Image from "next/image";
 
 const Home: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const Home: React.FC = () => {
             <UserCircleIcon className="text-black" width="32px" height="32px" />
           </IconButton>
         </Link>
+        <Image src="/images/smart-list-logo.png" alt="Smart list logo" width={144} height={35} />
         <SearchButton />
       </header>
       <SelectedSuperMarkets />
