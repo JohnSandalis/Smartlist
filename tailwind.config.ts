@@ -9,10 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "button-default": "#003AFE",
-        primary: "#003AFE",
-        "primary-strong": "#002ecb",
-        "primary-light": "#3361fe",
+        "button-default": "#20c997",
+        primary: "#20c997",
+        "primary-strong": "#1db588",
+        "primary-light": "#36cea1",
         "primary-ultra-light": "#ebefff",
         "off-white": "#f4f4f4",
       },
