@@ -83,11 +83,11 @@ export default function LogInForm() {
           <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
             Κωδικός
           </label>
-          <div className="text-sm">
+          {/* <div className="text-sm">
             <Link href="/reset-password" className="font-semibold text-primary hover:text-primary">
               Ξέχασες τον κωδικό σου?
             </Link>
-          </div>
+          </div> */}
         </div>
         <div>
           <input
