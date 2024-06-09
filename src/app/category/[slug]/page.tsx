@@ -135,6 +135,8 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ params }) => {
     }));
   }
 
+  console.log(JSON.stringify(products))
+
   return (
     <>
       <Search open={searchOpen} setOpen={setSearchOpen} />
@@ -209,13 +211,13 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ params }) => {
       {products.length > 0 ? (
         <div className="grid grid-cols-1 gap-2">
           {products.map((product, index) => (
-            <ProductCard
+            product.Prices && product.Prices.length > 0 ? <ProductCard
               key={`${product.id}-${index}`}
               product={product}
               ref={
                 index === products.length - 1 ? lastProductElementRef : null
               }
-            />
+            /> : undefined
           ))}
         </div>
       ) : (
