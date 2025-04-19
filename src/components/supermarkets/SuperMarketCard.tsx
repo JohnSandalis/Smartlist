@@ -1,41 +1,32 @@
-import { useState } from "react";
+"use client";
+
 import Checkbox from "@mui/joy/Checkbox";
 import ListItem from "@mui/joy/ListItem";
-import { useAtom } from "jotai";
-import { superMarketsListAtom } from "@/app/atoms";
 import Image from "next/image";
-
-interface SuperMarket {
-  id: string;
-  store_name: string;
-  image_url: string;
-  image_base64: string;
-}
+import { Supermarket } from "@/lib/types/Supermarket";
+import { useSelectedSupermarkets } from "@/context/SupermarketProvider";
 
 interface SuperMarketCardProps {
-  supermarket: SuperMarket;
+  supermarket: Supermarket;
 }
 
 const SuperMarketCard: React.FC<SuperMarketCardProps> = ({ supermarket }) => {
-  const [superMarketsList, setSuperMarketsList]: [string[], (newList: string[]) => void] = useAtom(superMarketsListAtom);
+  const { selected, setSelected } = useSelectedSupermarkets();
+  const checked = selected.includes(supermarket.store_id);
 
-  const [checked, setChecked] = useState<boolean>(
-    superMarketsList.includes(supermarket.id)
-  );
-
-  const handleCheck = (): void => {
+  const handleCheck = () => {
     if (checked) {
-      setSuperMarketsList(superMarketsList.filter((s) => s !== supermarket.id));
+      setSelected(selected.filter((s) => s !== supermarket.store_id));
     } else {
-      setSuperMarketsList([...superMarketsList, supermarket.id]);
+      setSelected([...selected, supermarket.store_id]);
     }
-    setChecked((prev) => !prev);
   };
 
   return (
     <ListItem
-      className={`supermarket-checkbox relative !rounded-md !p-3 flex flex-col items-center justify-center bg-white ${checked ? "supermarket-checkbox--checked" : ""
-        }`}
+      className={`supermarket-checkbox relative !rounded-md !p-3 flex flex-col items-center justify-center bg-white ${
+        checked ? "supermarket-checkbox--checked" : ""
+      }`}
     >
       <Checkbox
         overlay
@@ -45,8 +36,8 @@ const SuperMarketCard: React.FC<SuperMarketCardProps> = ({ supermarket }) => {
       />
       <div className="flex items-center justify-center">
         <Image
-          src={supermarket.image_url}
-          alt={supermarket.store_name}
+          src={supermarket.logo_url}
+          alt={supermarket.name}
           width="225"
           height="225"
           className="supermarket-checkbox__image w-24 h-24 object-cover"
@@ -54,7 +45,7 @@ const SuperMarketCard: React.FC<SuperMarketCardProps> = ({ supermarket }) => {
       </div>
       <div className="mt-4 pb-2 text-center">
         <h3 className="text-lg font-medium text-gray-900 leading-tight">
-          {supermarket.store_name}
+          {supermarket.name}
         </h3>
       </div>
     </ListItem>

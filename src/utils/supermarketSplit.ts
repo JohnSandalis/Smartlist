@@ -6,9 +6,9 @@ export default function getSupermarketSplit(
 ): CombinationResult[] {
   // Helper function to find all unique supermarkets
   const uniqueSupermarkets = shoppingList.reduce<string[]>((acc, product) => {
-    product.Prices.forEach((price) => {
-      if (!acc.includes(price.store_name)) {
-        acc.push(price.store_name);
+    product.prices.forEach((price) => {
+      if (!acc.includes(price.supermarket.store_id)) {
+        acc.push(price.supermarket.store_id);
       }
     });
     return acc;
@@ -47,13 +47,13 @@ export default function getSupermarketSplit(
       let cheapestPrice = Infinity;
       let cheapestStore: string | null = null;
 
-      product.Prices.forEach((price) => {
+      product.prices.forEach((price) => {
         if (
-          combination.includes(price.store_name) &&
+          combination.includes(price.supermarket.store_id) &&
           price.price < cheapestPrice
         ) {
           cheapestPrice = price.price;
-          cheapestStore = price.store_name;
+          cheapestStore = price.supermarket.store_id;
         }
       });
 
@@ -77,7 +77,7 @@ export default function getSupermarketSplit(
     // Validate if all products are included in the combination
     const allProductsIncluded = shoppingList.every((product) =>
       combination.some((store) =>
-        result[store].some((p: any) => p.id === product.id)
+        result[store].some((p: any) => p.barcode === product.barcode)
       )
     );
 

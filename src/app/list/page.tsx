@@ -1,32 +1,38 @@
-'use client'
+"use client";
 import getSupermarketSplit from "@/utils/supermarketSplit";
-import { superMarketsListAtom, shoppingListAtom } from "@/app/atoms";
-import { useAtom } from "jotai";
 import SupermarketCombCard from "@/components/list/SuperMarketCombCard";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { Icon, IconButton } from "@mui/material";
-import { useRouter } from 'next/navigation'
+import { IconButton } from "@mui/material";
+import { useRouter } from "next/navigation";
+import {
+  useSelectedSupermarkets,
+  useSupermarkets,
+} from "@/context/SupermarketProvider";
+import { useShoppingList } from "@/context/ShoppingListProvider";
 
 export default function List() {
-  const [shoppingList] = useAtom(shoppingListAtom);
-  const [superMarketsList] = useAtom(superMarketsListAtom);
-  const router = useRouter()
+  const { items: shoppingList } = useShoppingList();
+
+  const { selected: selectedSupermarkets } = useSelectedSupermarkets();
+  const router = useRouter();
 
   const combinations = getSupermarketSplit(shoppingList);
   const sortedCombinations = combinations.sort((a, b) => a.total - b.total);
   const filteredCombinations =
     sortedCombinations.filter((combination) =>
-      combination.supermarkets.every((sm) => superMarketsList.includes(sm))
+      combination.supermarkets.every((sm) => selectedSupermarkets.includes(sm))
     ) || [];
   const excludedCombinations =
     sortedCombinations.filter((combination) =>
-      combination.supermarkets.some((sm) => !superMarketsList.includes(sm))
+      combination.supermarkets.some((sm) => !selectedSupermarkets.includes(sm))
     ) || [];
 
   return (
     <>
       <div className="w-full">
-        <IconButton onClick={() => router.back()}><ArrowLeftIcon width="24px" height="24px" /></IconButton>
+        <IconButton onClick={() => router.back()}>
+          <ArrowLeftIcon width="24px" height="24px" />
+        </IconButton>
       </div>
       <h1 className="text-center page-title mb-4">Φθηνότερα Super Market</h1>
       <div className="grid grid-cols-1 gap-2">

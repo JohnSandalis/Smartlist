@@ -1,15 +1,19 @@
-'use client'
+"use client";
 import { useState } from "react";
 import ProductListComb from "./ProductListComb";
-import { supermarkets } from "@/lib/data/supermarkets";
 import { CombinationResult } from "@/lib/types/CombinationResult";
 import Image from "next/image";
+import { useSupermarkets } from "@/context/SupermarketProvider";
 
-export default function SupermarketCombCard({ combination, combinationIndex }: {
+export default function SupermarketCombCard({
+  combination,
+  combinationIndex,
+}: {
   combination: CombinationResult;
   combinationIndex: number;
 }) {
   const [listOpen, setListOpen] = useState(false);
+  const supermarkets = useSupermarkets();
 
   return (
     <>
@@ -18,7 +22,8 @@ export default function SupermarketCombCard({ combination, combinationIndex }: {
         className="rounded-md p-4 flex items-center justify-start bg-white self-stretch gap-4"
       >
         {combination.supermarkets.map((supermarket, index) => {
-          const supermarketImage = supermarkets[supermarket]?.image_url;
+          const supermarketImage = supermarkets[supermarket].logo_url;
+
           return (
             <div
               key={`sm-comb-${combinationIndex}-${index}`}
@@ -29,7 +34,7 @@ export default function SupermarketCombCard({ combination, combinationIndex }: {
                 alt={supermarket}
                 width="225"
                 height="225"
-                className="w-full h-full object-cover rounded-full"
+                className="w-full h-full object-contain rounded-full"
               />
             </div>
           );

@@ -4,19 +4,27 @@ import {
   DialogActions,
   Slide,
   IconButton,
-  SlideProps
+  SlideProps,
 } from "@mui/material";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { supermarkets } from "@/lib/data/supermarkets";
 import SuperMarketCard from "./SuperMarketCard";
 import { FC } from "react";
+import { Supermarket } from "@/lib/types/Supermarket";
+import { SupermarketProvider } from "@/context/SupermarketProvider";
+
+type SupermarketMap = Record<string, Supermarket>;
 
 interface SuperMarketsListProps {
   open: boolean;
   setOpen: (open: boolean) => void;
+  supermarkets: SupermarketMap;
 }
 
-const SuperMarketsList: FC<SuperMarketsListProps> = ({ open, setOpen }) => {
+const SuperMarketsList: FC<SuperMarketsListProps> = ({
+  open,
+  setOpen,
+  supermarkets,
+}) => {
   const handleClose = (): void => {
     setOpen(false);
   };
@@ -30,7 +38,7 @@ const SuperMarketsList: FC<SuperMarketsListProps> = ({ open, setOpen }) => {
       fullScreen
       className="!bg-off-white"
       PaperProps={{
-        style: { backgroundColor: "#f4f4f4" }
+        style: { backgroundColor: "#f4f4f4" },
       }}
     >
       <DialogContent className="bg-off-white flex flex-col gap-2 overflow-y-auto !px-4 !py-6 sm:!px-6">
@@ -41,10 +49,12 @@ const SuperMarketsList: FC<SuperMarketsListProps> = ({ open, setOpen }) => {
           Επίλεξε τα super market που σε εξυπηρετούν καλύτερα.
         </p>
         <div className="grid grid-cols-2 gap-2 mt-4">
-          {Object.keys(supermarkets).map((key) => {
-            const supermarket = supermarkets[key];
-            return <SuperMarketCard key={key} supermarket={supermarket} />;
-          })}
+          {Object.values(supermarkets).map((supermarket) => (
+            <SuperMarketCard
+              key={supermarket.store_id}
+              supermarket={supermarket}
+            />
+          ))}
         </div>
       </DialogContent>
       <DialogActions className="w-full !rounded-t-lg bg-white !py-4 !px-2 !shadow-lg">
@@ -60,6 +70,6 @@ const SuperMarketsList: FC<SuperMarketsListProps> = ({ open, setOpen }) => {
       </DialogActions>
     </Dialog>
   );
-}
+};
 
 export default SuperMarketsList;

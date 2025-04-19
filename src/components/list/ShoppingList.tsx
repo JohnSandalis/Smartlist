@@ -7,13 +7,18 @@ import {
   IconButton,
 } from "@mui/material";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { useAtom } from "jotai";
-import { shoppingListAtom } from "@/app/atoms";
 import ProductCard from "@/components/products/ProductCard";
 import Link from "next/link";
+import { useShoppingList } from "@/context/ShoppingListProvider";
 
-export default function ShoppingList({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void }) {
-  const [shoppingList] = useAtom(shoppingListAtom);
+export default function ShoppingList({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}) {
+  const { items: shoppingList } = useShoppingList();
 
   const handleClose = () => {
     setOpen(false);
@@ -37,7 +42,7 @@ export default function ShoppingList({ open, setOpen }: { open: boolean; setOpen
       </DialogTitle>
       <DialogContent className="bg-off-white flex flex-col gap-2 overflow-y-auto !px-4 !py-6 sm:!px-6">
         {shoppingList.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product.barcode} product={product} />
         ))}
       </DialogContent>
       <DialogActions className="w-full !rounded-t-lg bg-white !py-4 !px-2 !shadow-lg">

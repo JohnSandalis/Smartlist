@@ -9,10 +9,13 @@ interface ProductCheckboxProps {
   supermarket: string;
 }
 
-export default function ProductCheckbox({ product, supermarket }: ProductCheckboxProps) {
+export default function ProductCheckbox({
+  product,
+  supermarket,
+}: ProductCheckboxProps) {
   const [checked, setChecked] = useState(false);
-  const priceObj = product.Prices.find(
-    (price) => price.store_name === supermarket
+  const priceObj = product.prices.find(
+    (price) => price.supermarket.store_id === supermarket
   );
 
   return (
@@ -26,10 +29,11 @@ export default function ProductCheckbox({ product, supermarket }: ProductCheckbo
 
       <div className="h-full px-4 flex flex-col justify-between gap-2">
         <p
-          className={`text-[14px] font-normal text-gray-900${checked ? " line-through	" : ""
-            }`}
+          className={`text-[14px] font-normal text-gray-900${
+            checked ? " line-through	" : ""
+          }`}
         >
-          <span className="uppercase">{product.brand}</span> {product.title}
+          {product.name}
         </p>
         <div className="flex items-center gap-2">
           <span className="flex items-center justify-center text-xs bg-gray-200 px-2 py-1 rounded-md h-[28px] w-[28px]">

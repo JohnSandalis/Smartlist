@@ -1,6 +1,5 @@
 export interface SubCategory {
-  name: string;
-  greek_name: string;
   id: string;
-  img_url: string;
+  name: string;
+  category_id: string;
 }

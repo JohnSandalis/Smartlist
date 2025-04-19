@@ -8,9 +8,9 @@ import {
 } from "@mui/material";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import ProductCheckbox from "@/components/list/ProductCheckbox";
-import { supermarkets } from "@/lib/data/supermarkets";
 import { CombinationResult } from "@/lib/types/CombinationResult";
 import Image from "next/image";
+import { useSupermarkets } from "@/context/SupermarketProvider";
 
 export default function ProductListComb({
   combination,
@@ -22,8 +22,9 @@ export default function ProductListComb({
   combinationIndex: number;
   open: boolean;
   setOpen: (open: boolean) => void;
-
 }) {
+  const supermarkets = useSupermarkets();
+
   // Explicitly close the dialog only via the close button
   const handleClose = () => {
     setOpen(false);
@@ -47,8 +48,8 @@ export default function ProductListComb({
       </DialogTitle>
       <DialogContent className="bg-off-white flex flex-col gap-2 overflow-y-auto !px-4 !py-6 sm:!px-6">
         {combination.supermarkets.map((supermarket, index) => {
-          const supermarketImage = supermarkets[supermarket]?.image_url;
-          const supermarketName = supermarkets[supermarket]?.store_name;
+          const supermarketImage = supermarkets[supermarket]?.logo_url;
+          const supermarketName = supermarkets[supermarket]?.name;
 
           return (
             <div
@@ -62,7 +63,7 @@ export default function ProductListComb({
                     alt={supermarket}
                     width="225"
                     height="225"
-                    className="w-full h-full object-cover rounded-full"
+                    className="w-full h-full object-contain rounded-full"
                   />
                 </div>
                 <h2 className="text-xl font-medium capitalize">
@@ -71,7 +72,7 @@ export default function ProductListComb({
               </div>
               {combination[supermarket].map((product: any) => (
                 <ProductCheckbox
-                  key={`product-${product.id}`}
+                  key={`product-${product.barcode}`}
                   product={product}
                   supermarket={supermarket}
                 />

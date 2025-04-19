@@ -134,6 +134,7 @@ code {
   filter: gray !important;
   -webkit-filter: grayscale(1) !important;
   filter: grayscale(1) !important;
+  object-fit: contain;
 }
 
 .supermarket-checkbox--checked::after {
