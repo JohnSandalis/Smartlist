@@ -4,16 +4,19 @@ import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import SuperMarketsList from "@/components/supermarkets/SuperMarketList";
 import {
-  useSupermarkets,
   useSelectedSupermarkets,
+  useSupermarketState,
 } from "@/context/SupermarketProvider";
+import SelectedSuperMarketsSkeleton from "./SelectedSuperMarketsSkeleton";
 
 export default function SelectedSuperMarkets() {
-  const supermarkets = useSupermarkets();
+  const { supermarkets, isLoaded } = useSupermarketState();
   const { selected } = useSelectedSupermarkets();
   const [superMarketsListOpen, setSuperMarketsListOpen] = useState<boolean>(
-    selected.length === 0
+    isLoaded && selected.length === 0
   );
+
+  if (!isLoaded) return <SelectedSuperMarketsSkeleton />;
 
   return (
     <>
@@ -25,7 +28,7 @@ export default function SelectedSuperMarkets() {
           <h2 className="text-md font-medium text-gray-900 leading-tight">
             Επιλεγμένα Super Markets
           </h2>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 min-h-[36px]">
             {selected.map((storeId) => {
               const supermarket = supermarkets[storeId];
               if (!supermarket) return null;

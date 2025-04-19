@@ -10,6 +10,7 @@ interface SupermarketContextType {
   supermarkets: SupermarketMap;
   selected: string[];
   setSelected: (ids: string[]) => void;
+  isLoaded: boolean;
 }
 
 const SupermarketContext = createContext<SupermarketContextType | undefined>(
@@ -23,40 +24,50 @@ export function SupermarketProvider({
 }) {
   const [supermarkets, setSupermarkets] = useState<SupermarketMap>({});
   const [selected, setSelected] = useState<string[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
   const supabase = createClient();
 
-  // Fetch supermarkets
   useEffect(() => {
-    const fetchSupermarkets = async () => {
-      const { data, error } = await supabase
-        .from("supermarkets")
-        .select("store_id, name, logo_url");
-      if (error) {
-        console.error("Failed to fetch supermarkets:", error);
-        return;
+    try {
+      const saved = localStorage.getItem("selectedSupermarkets");
+      if (saved) {
+        setSelected(JSON.parse(saved));
       }
 
-      const map: SupermarketMap = {};
-      data.forEach((sm) => {
-        map[sm.store_id] = sm;
-      });
+      const fetchSupermarkets = async () => {
+        const { data, error } = await supabase
+          .from("supermarkets")
+          .select("store_id, name, logo_url");
+        if (error) {
+          console.error("Failed to fetch supermarkets:", error);
+          return;
+        }
 
-      // sort keys alphabetically
-      const sortedKeys = Object.keys(map).sort();
-      const sortedMap: SupermarketMap = {};
-      sortedKeys.forEach((key) => {
-        sortedMap[key] = map[key];
-      });
+        const map: SupermarketMap = {};
+        data.forEach((sm) => {
+          map[sm.store_id] = sm;
+        });
 
-      setSupermarkets(sortedMap);
-    };
+        const sortedKeys = Object.keys(map).sort();
+        const sortedMap: SupermarketMap = {};
+        sortedKeys.forEach((key) => {
+          sortedMap[key] = map[key];
+        });
 
-    fetchSupermarkets();
+        setSupermarkets(sortedMap);
+      };
+
+      fetchSupermarkets();
+    } catch {
+      setSelected([]);
+    } finally {
+      setIsLoaded(true);
+    }
   }, []);
 
   return (
     <SupermarketContext.Provider
-      value={{ supermarkets, selected, setSelected }}
+      value={{ supermarkets, selected, setSelected, isLoaded }}
     >
       {children}
     </SupermarketContext.Provider>
@@ -79,4 +90,13 @@ export function useSelectedSupermarkets() {
       "useSelectedSupermarkets must be used within a SupermarketProvider"
     );
   return { selected: ctx.selected, setSelected: ctx.setSelected };
+}
+
+export function useSupermarketState() {
+  const ctx = useContext(SupermarketContext);
+  if (!ctx)
+    throw new Error(
+      "useSupermarketState must be used within a SupermarketProvider"
+    );
+  return ctx;
 }
