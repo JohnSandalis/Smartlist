@@ -252,10 +252,12 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
               </div>
             ) : null
           )}
-          {loading &&
-            Array.from({ length: 8 }).map((_, index) => (
-              <ProductCardSkeleton key={`skeleton-${index}`} />
-            ))}
+        </div>
+      ) : loading ? (
+        <div className="grid grid-cols-1 gap-2">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <ProductCardSkeleton key={`skeleton-${index}`} />
+          ))}
         </div>
       ) : (
         <h2 className="text-lg text-center mt-4">Δεν βρέθηκε κάποιο προϊόν</h2>
