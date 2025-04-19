@@ -5,7 +5,9 @@ export const SearchResults = ({ results }: { results: Product[] }) => {
   return (
     <div className="grid grid-cols-1 gap-2">
       {results.map((product, index) =>
-        product.Prices && product.Prices.length > 0 ? <ProductCard key={`${product.id}-${index}`} product={product} /> : undefined
+        product.prices && product.prices.length > 0 ? (
+          <ProductCard key={`${product.barcode}-${index}`} product={product} />
+        ) : undefined
       )}
     </div>
   );
