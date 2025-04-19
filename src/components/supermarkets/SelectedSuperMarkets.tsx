@@ -28,7 +28,11 @@ export default function SelectedSuperMarkets() {
           <h2 className="text-md font-medium text-gray-900 leading-tight">
             Επιλεγμένα Super Markets
           </h2>
-          <div className="flex items-center gap-2 min-h-[36px]">
+          <div
+            className={`flex items-center gap-2 ${
+              selected.length > 0 ? "min-h-[36px]" : ""
+            }`}
+          >
             {selected.map((storeId) => {
               const supermarket = supermarkets[storeId];
               if (!supermarket) return null;

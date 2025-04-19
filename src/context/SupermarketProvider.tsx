@@ -29,11 +29,6 @@ export function SupermarketProvider({
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("selectedSupermarkets");
-      if (saved) {
-        setSelected(JSON.parse(saved));
-      }
-
       const fetchSupermarkets = async () => {
         const { data, error } = await supabase
           .from("supermarkets")
@@ -58,12 +53,21 @@ export function SupermarketProvider({
       };
 
       fetchSupermarkets();
+      const saved = localStorage.getItem("selectedSupermarkets");
+      if (saved) {
+        setSelected(JSON.parse(saved));
+      }
     } catch {
       setSelected([]);
     } finally {
       setIsLoaded(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (selected && selected.length > 0)
+      localStorage.setItem("selectedSupermarkets", JSON.stringify(selected));
+  }, [selected]);
 
   return (
     <SupermarketContext.Provider
