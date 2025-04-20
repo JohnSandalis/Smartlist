@@ -22,7 +22,7 @@ export default function SupermarketCombCard({
         className="rounded-md p-4 flex items-center justify-start bg-white self-stretch gap-4"
       >
         {combination.supermarkets.map((supermarket, index) => {
-          const supermarketImage = supermarkets[supermarket].logo_url;
+          const supermarketImage = supermarkets[supermarket].image;
 
           return (
             <div
@@ -31,7 +31,7 @@ export default function SupermarketCombCard({
             >
               <Image
                 src={supermarketImage}
-                alt={supermarket}
+                alt={supermarkets[supermarket]?.name}
                 width="225"
                 height="225"
                 className="w-full h-full object-contain rounded-full"

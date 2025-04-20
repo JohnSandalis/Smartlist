@@ -35,7 +35,7 @@ const Home: React.FC = async () => {
       <SelectedSuperMarkets />
       <div className="grid grid-cols-2 gap-2">
         {categories.map((category: Category) => (
-          <CategoryCard key={category.id} category={category} />
+          <CategoryCard key={category.uuid} category={category} />
         ))}
       </div>
     </>

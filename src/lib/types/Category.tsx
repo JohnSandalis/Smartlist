@@ -1,5 +1,5 @@
 export interface Category {
+  uuid: number;
   name: string;
-  id: string;
-  img_url: string;
+  image: string;
 }

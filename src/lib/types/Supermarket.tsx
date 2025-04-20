@@ -1,5 +1,6 @@
 export interface Supermarket {
+  merchant_uuid: number;
+  image: string;
   name: string;
-  store_id: string;
-  logo_url: string;
+  display_name: string;
 }

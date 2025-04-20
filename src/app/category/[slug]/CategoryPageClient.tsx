@@ -28,12 +28,12 @@ interface Props {
 
 export default function CategoryPageClient({ category, subcategories }: Props) {
   const params = useParams();
-  const category_id = Array.isArray(params?.slug)
-    ? params.slug[0]
-    : params?.slug;
+  const category_uuid = parseInt(
+    Array.isArray(params?.slug) ? params.slug[0] : params?.slug
+  );
 
   const subcategoryList = subcategories.filter(
-    (sub) => sub.category_id === category_id
+    (sub) => sub.category_uuid === category_uuid
   );
 
   const [products, setProducts] = useState<any[]>([]);
@@ -89,33 +89,45 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
     const end = start + productsPerPage - 1;
 
     const supabase = createClient();
+    const { data: subSubCategories } = await supabase
+      .from("sub_sub_categories")
+      .select("uuid")
+      .eq("sub_category_uuid", selectedSubCategory);
+
+    if (!subSubCategories || subSubCategories.length === 0) {
+      return { data: [] };
+    }
+
+    const subSubCategoryUuids = subSubCategories.map((item) =>
+      item.uuid.toString()
+    );
+
     const { data } = await supabase
       .from("products")
       .select(
         `
-        barcode,
-        name,
-        image_url,
-        subcategory_id,
-        prices (
-          price,
-          supermarket:supermarkets (
-            name,
-            logo_url,
-            store_id
-          )
-        )
-      `
+      barcode,
+      name,
+      image,
+      category,
+      supplier,
+      prices (
+        merchant_uuid,
+        price,
+        price_normalized,
+        date,
+        unit
       )
-      .eq("subcategory_id", selectedSubCategory)
+    `
+      )
+      .overlaps("category", subSubCategoryUuids)
       .order("barcode")
       .range(start, end);
 
     if (data) {
       const filteredProducts = data.filter((product) =>
         product.prices.some((price) =>
-          // @ts-ignore
-          selectedSupermarkets.includes(price.supermarket.store_id)
+          selectedSupermarkets.includes(price.merchant_uuid)
         )
       );
 
@@ -187,9 +199,9 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
           style={{ width: "100vw", height: "100vh", paddingTop: "3rem" }}
         >
           {subcategoryList.map((subcategory) => (
-            <ListItem key={subcategory.id} disablePadding>
+            <ListItem key={subcategory.uuid} disablePadding>
               <ListItemButton
-                onClick={() => handleSubcategorySelect(subcategory.id)}
+                onClick={() => handleSubcategorySelect(subcategory.uuid)}
               >
                 <span className="text-md font-medium leading-6 text-gray-900">
                   {subcategory.name}
@@ -222,12 +234,12 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
         <div className="overflow-x-auto whitespace-nowrap scroll-smooth scrollbar-hide mb-2 py-2">
           {subcategoryList.map((subcategory) => (
             <button
-              key={subcategory.id}
+              key={subcategory.uuid}
               // @ts-ignore
               ref={(el) => (subcategoryRefs.current[subcategory.name] = el)}
-              onClick={() => setSelectedSubCategory(subcategory.id)}
+              onClick={() => setSelectedSubCategory(subcategory.uuid)}
               className={`inline-block px-2 py-1 m-1 ${
-                selectedSubCategory === subcategory.id
+                selectedSubCategory === subcategory.uuid
                   ? "bg-primary text-white"
                   : "bg-white text-black"
               } rounded`}
@@ -239,7 +251,7 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
       </div>
 
       {products.length > 0 ? (
-        <div className="grid grid-cols-1 gap-2">
+        <div className="grid grid-cols-1 gap-2 pb-20">
           {products.map((product, index) =>
             product.prices && product.prices.length > 0 ? (
               <div

@@ -6,7 +6,7 @@ import { ShoppingCartItem } from "@/lib/types/ShoppingCartItem";
 
 interface ProductCheckboxProps {
   product: ShoppingCartItem;
-  supermarket: string;
+  supermarket: number;
 }
 
 export default function ProductCheckbox({
@@ -15,7 +15,7 @@ export default function ProductCheckbox({
 }: ProductCheckboxProps) {
   const [checked, setChecked] = useState(false);
   const priceObj = product.prices.find(
-    (price) => price.supermarket.store_id === supermarket
+    (price) => price.merchant_uuid === supermarket
   );
 
   return (

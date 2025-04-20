@@ -1,8 +1,8 @@
 export interface Price {
+  barcode: string;
+  merchant_uuid: number;
   price: number;
-  supermarket: {
-    name: string;
-    logo_url: string;
-    store_id: string;
-  };
+  price_normalized: number;
+  date: Date;
+  unit: string;
 }

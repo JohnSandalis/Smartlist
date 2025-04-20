@@ -3,7 +3,10 @@ import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 import ProductImage from "./ProductImage";
 import Image from "next/image";
 import { Product } from "@/lib/types/Product";
-import { useSelectedSupermarkets } from "@/context/SupermarketProvider";
+import {
+  useSelectedSupermarkets,
+  useSupermarkets,
+} from "@/context/SupermarketProvider";
 import { useShoppingList } from "@/context/ShoppingListProvider";
 
 interface SupermarketImageProps {
@@ -27,6 +30,7 @@ interface ProductCardProps {
 
 const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
   ({ product }, ref) => {
+    const supermarkets = useSupermarkets();
     const { selected: selectedSupermarkets } = useSelectedSupermarkets();
 
     const {
@@ -59,6 +63,7 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
           </div>
           <div className="w-full text-left flex flex-col items-left justify-between gap-2">
             <h3 className="text-[14px] font-normal text-gray-900">
+              <span className="uppercase">{product.supplier}</span>{" "}
               {product.name}
             </h3>
             {shoppingList.find((item) => item.barcode === product.barcode)
@@ -94,11 +99,12 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
         <ul className="flex gap-2 min-w-[68px] text-left w-full overflow-auto">
           {product.prices
             .filter((priceObj) =>
-              selectedSupermarkets.includes(priceObj.supermarket?.store_id)
+              selectedSupermarkets.includes(priceObj.merchant_uuid)
             )
             .map((priceObj, index) => {
-              const supermarketImage = priceObj.supermarket?.logo_url;
-              const supermarketName = priceObj.supermarket?.name;
+              const supermarket = supermarkets[priceObj.merchant_uuid];
+              const supermarketImage = supermarket?.image;
+              const supermarketName = supermarket?.name;
 
               return (
                 <li

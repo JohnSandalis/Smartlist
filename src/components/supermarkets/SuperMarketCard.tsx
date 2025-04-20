@@ -12,13 +12,13 @@ interface SuperMarketCardProps {
 
 const SuperMarketCard: React.FC<SuperMarketCardProps> = ({ supermarket }) => {
   const { selected, setSelected } = useSelectedSupermarkets();
-  const checked = selected.includes(supermarket.store_id);
+  const checked = selected.includes(supermarket.merchant_uuid);
 
   const handleCheck = () => {
     if (checked) {
-      setSelected(selected.filter((s) => s !== supermarket.store_id));
+      setSelected(selected.filter((s) => s !== supermarket.merchant_uuid));
     } else {
-      setSelected([...selected, supermarket.store_id]);
+      setSelected([...selected, supermarket.merchant_uuid]);
     }
   };
 
@@ -36,8 +36,8 @@ const SuperMarketCard: React.FC<SuperMarketCardProps> = ({ supermarket }) => {
       />
       <div className="flex items-center justify-center">
         <Image
-          src={supermarket.logo_url}
-          alt={supermarket.name}
+          src={supermarket.image}
+          alt={supermarket.display_name}
           width="225"
           height="225"
           className="supermarket-checkbox__image w-24 h-24 object-cover"
@@ -45,7 +45,7 @@ const SuperMarketCard: React.FC<SuperMarketCardProps> = ({ supermarket }) => {
       </div>
       <div className="mt-4 pb-2 text-center">
         <h3 className="text-lg font-medium text-gray-900 leading-tight">
-          {supermarket.name}
+          {supermarket.display_name}
         </h3>
       </div>
     </ListItem>

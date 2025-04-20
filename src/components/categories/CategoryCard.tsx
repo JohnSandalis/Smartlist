@@ -5,12 +5,12 @@ import { Category } from "@/lib/types/Category";
 export default function CategoryCard({ category }: { category: Category }) {
   return (
     <Link
-      href={`/category/${category.id}`}
+      href={`/category/${category.uuid}`}
       className="rounded-md h-[200px] p-3 flex flex-col items-center justify-center bg-white"
     >
       <div className="flex items-center justify-center">
         <Image
-          src={category.img_url}
+          src={category.image}
           alt={category.name}
           width="320"
           height="320"

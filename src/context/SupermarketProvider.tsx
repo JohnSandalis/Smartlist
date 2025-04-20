@@ -8,8 +8,8 @@ type SupermarketMap = Record<string, Supermarket>;
 
 interface SupermarketContextType {
   supermarkets: SupermarketMap;
-  selected: string[];
-  setSelected: (ids: string[]) => void;
+  selected: number[];
+  setSelected: (ids: number[]) => void;
   isLoaded: boolean;
 }
 
@@ -23,30 +23,26 @@ export function SupermarketProvider({
   children: React.ReactNode;
 }) {
   const [supermarkets, setSupermarkets] = useState<SupermarketMap>({});
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<number[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const supabase = createClient();
 
   useEffect(() => {
     try {
       const fetchSupermarkets = async () => {
-        const { data, error } = await supabase
-          .from("supermarkets")
-          .select("store_id, name, logo_url");
+        const { data, error } = await supabase.from("supermarkets").select("*");
         if (error) {
           console.error("Failed to fetch supermarkets:", error);
           return;
         }
 
-        const map: SupermarketMap = {};
-        data.forEach((sm) => {
-          map[sm.store_id] = sm;
-        });
+        data.sort((a, b) =>
+          a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+        );
 
-        const sortedKeys = Object.keys(map).sort();
         const sortedMap: SupermarketMap = {};
-        sortedKeys.forEach((key) => {
-          sortedMap[key] = map[key];
+        data.forEach((sm) => {
+          sortedMap[sm.merchant_uuid] = sm;
         });
 
         setSupermarkets(sortedMap);

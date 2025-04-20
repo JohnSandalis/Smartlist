@@ -8,18 +8,18 @@ interface CategoryPageProps {
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const supabase = createClient();
-  const category_id = params.slug;
+  const category_uuid = parseInt(params.slug);
 
   // Get category details
   const { data: categories } = await supabase.from("categories").select("*");
 
-  const category = categories?.find((c) => c.id === category_id);
+  const category = categories?.find((c) => c.uuid === category_uuid);
 
   // Get subcategories of this category
   const { data: subcategories } = await supabase
-    .from("subcategories")
+    .from("sub_categories")
     .select("*")
-    .eq("category_id", category_id);
+    .eq("category_uuid", category_uuid);
 
   return (
     <CategoryPageClient

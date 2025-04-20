@@ -5,20 +5,20 @@ export default function getSupermarketSplit(
   shoppingList: ShoppingCartItem[]
 ): CombinationResult[] {
   // Helper function to find all unique supermarkets
-  const uniqueSupermarkets = shoppingList.reduce<string[]>((acc, product) => {
+  const uniqueSupermarkets = shoppingList.reduce<number[]>((acc, product) => {
     product.prices.forEach((price) => {
-      if (!acc.includes(price.supermarket.store_id)) {
-        acc.push(price.supermarket.store_id);
+      if (!acc.includes(price.merchant_uuid)) {
+        acc.push(price.merchant_uuid);
       }
     });
     return acc;
   }, []);
 
   // Helper function to generate all combinations of supermarkets
-  const getAllCombinations = (array: string[]): string[][] => {
+  const getAllCombinations = (array: number[]): number[][] => {
     return array
       .reduce(
-        (subsets: string[][], value: string) =>
+        (subsets: number[][], value: number) =>
           subsets.concat(subsets.map((set) => [value, ...set])),
         [[]]
       )
@@ -30,7 +30,7 @@ export default function getSupermarketSplit(
 
   // Calculate the cheapest options for each combination
   const calculateCheapestOptions = (
-    combination: string[]
+    combination: number[]
   ): CombinationResult | null => {
     const result: CombinationResult = {
       supermarkets: combination,
@@ -45,15 +45,15 @@ export default function getSupermarketSplit(
     // Determine the cheapest option for each product within the current combination
     shoppingList.forEach((product) => {
       let cheapestPrice = Infinity;
-      let cheapestStore: string | null = null;
+      let cheapestStore: number | null = null;
 
       product.prices.forEach((price) => {
         if (
-          combination.includes(price.supermarket.store_id) &&
+          combination.includes(price.merchant_uuid) &&
           price.price < cheapestPrice
         ) {
           cheapestPrice = price.price;
-          cheapestStore = price.supermarket.store_id;
+          cheapestStore = price.merchant_uuid;
         }
       });
 

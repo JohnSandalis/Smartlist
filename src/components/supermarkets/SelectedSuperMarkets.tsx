@@ -43,8 +43,8 @@ export default function SelectedSuperMarkets() {
                   className="flex items-center justify-center w-9 h-9"
                 >
                   <Image
-                    src={supermarket.logo_url}
-                    alt={supermarket.name}
+                    src={supermarket.image}
+                    alt={supermarket.display_name}
                     width={225}
                     height={225}
                     className="w-full h-full object-contain rounded-full"

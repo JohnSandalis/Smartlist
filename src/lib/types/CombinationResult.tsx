@@ -1,5 +1,5 @@
 export interface CombinationResult {
-  supermarkets: string[];
+  supermarkets: number[];
   total: number;
-  [key: string]: any;
+  [key: number]: any;
 }

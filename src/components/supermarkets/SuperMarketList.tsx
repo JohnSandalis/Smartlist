@@ -10,7 +10,6 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import SuperMarketCard from "./SuperMarketCard";
 import { FC } from "react";
 import { Supermarket } from "@/lib/types/Supermarket";
-import { SupermarketProvider } from "@/context/SupermarketProvider";
 
 type SupermarketMap = Record<string, Supermarket>;
 
@@ -51,7 +50,7 @@ const SuperMarketsList: FC<SuperMarketsListProps> = ({
         <div className="grid grid-cols-2 gap-2 mt-4">
           {Object.values(supermarkets).map((supermarket) => (
             <SuperMarketCard
-              key={supermarket.store_id}
+              key={supermarket.merchant_uuid}
               supermarket={supermarket}
             />
           ))}

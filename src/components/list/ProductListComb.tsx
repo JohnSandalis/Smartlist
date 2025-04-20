@@ -48,7 +48,7 @@ export default function ProductListComb({
       </DialogTitle>
       <DialogContent className="bg-off-white flex flex-col gap-2 overflow-y-auto !px-4 !py-6 sm:!px-6">
         {combination.supermarkets.map((supermarket, index) => {
-          const supermarketImage = supermarkets[supermarket]?.logo_url;
+          const supermarketImage = supermarkets[supermarket]?.image;
           const supermarketName = supermarkets[supermarket]?.name;
 
           return (
@@ -60,7 +60,7 @@ export default function ProductListComb({
                 <div className="flex items-center justify-center w-8 h-8 mb-2">
                   <Image
                     src={supermarketImage}
-                    alt={supermarket}
+                    alt={supermarkets[supermarket]?.name}
                     width="225"
                     height="225"
                     className="w-full h-full object-contain rounded-full"
