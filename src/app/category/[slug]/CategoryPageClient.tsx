@@ -110,7 +110,7 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
       name,
       image,
       category,
-      supplier,
+      supplier:suppliers (name),
       prices (
         merchant_uuid,
         price,

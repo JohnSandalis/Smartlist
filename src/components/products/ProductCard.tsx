@@ -62,9 +62,9 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
             <ProductImage product={product} />
           </div>
           <div className="w-full text-left flex flex-col items-left justify-between gap-2">
-            <h3 className="text-[14px] font-normal text-gray-900">
-              <span className="uppercase">{product.supplier}</span>{" "}
-              {product.name}
+            <h3 className="text-[14px] font-normal text-gray-800">
+              <span className="text-gray-900">{product.supplier.name}</span>{" "}
+              {product.name.replace(product.supplier.name + " ", "")}
             </h3>
             {shoppingList.find((item) => item.barcode === product.barcode)
               ?.quantity ?? 0 > 0 ? (

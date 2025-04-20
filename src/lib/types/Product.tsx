@@ -5,6 +5,6 @@ export interface Product {
   name: string;
   image: string;
   category: string[];
-  supplier: string;
+  supplier: { name: string };
   prices: Price[];
 }
