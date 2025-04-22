@@ -1,5 +1,5 @@
-import React, { forwardRef, ReactElement } from "react";
-import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
+import React, { forwardRef } from "react";
+import { PlusIcon, MinusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import ProductImage from "./ProductImage";
 import Image from "next/image";
 import { Product } from "@/lib/types/Product";
@@ -38,6 +38,7 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
       addItem,
       increaseQuantity,
       decreaseQuantity,
+      removeItem,
     } = useShoppingList();
 
     const addToList = () => {
@@ -50,6 +51,10 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
 
     const handleDecrease = () => {
       decreaseQuantity(product.barcode);
+    };
+
+    const handleRemove = () => {
+      removeItem(product.barcode);
     };
 
     return (
@@ -84,6 +89,13 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
                   className="flex items-center justify-center text-xs bg-gray-200 px-2 py-1 rounded-md h-[28px] w-[28px]"
                 >
                   <PlusIcon className="w-4 h-4" />
+                </button>
+
+                <button
+                  onClick={handleRemove}
+                  className="flex items-center justify-center text-xs bg-red-200 px-2 py-1 rounded-md h-[28px] w-[28px] ml-2"
+                >
+                  <TrashIcon className="w-4 h-4" />
                 </button>
               </div>
             ) : (
