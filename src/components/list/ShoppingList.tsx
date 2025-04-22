@@ -44,6 +44,15 @@ export default function ShoppingList({
         {shoppingList.map((product) => (
           <ProductCard key={product.barcode} product={product} />
         ))}
+        {(() => {
+          const date = shoppingList[0]?.prices?.[0]?.date;
+          return date ? (
+            <h2 className="text-center mt-4">
+              Η τιμή των προϊόντων που αναγράφεται αφορά την{" "}
+              {new Date(date).toLocaleDateString("en-GB")}
+            </h2>
+          ) : null;
+        })()}
       </DialogContent>
       <DialogActions className="w-full !rounded-t-lg bg-white !py-4 !px-2 !shadow-lg">
         <Link

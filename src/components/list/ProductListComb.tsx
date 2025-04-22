@@ -44,7 +44,7 @@ export default function ProductListComb({
       }}
     >
       <DialogTitle className="bg-off-white text-center !p-6 page-title">
-        Λίστα
+        To-Do List
       </DialogTitle>
       <DialogContent className="bg-off-white flex flex-col gap-2 overflow-y-auto !px-4 !py-6 sm:!px-6">
         {combination.supermarkets.map((supermarket, index) => {
