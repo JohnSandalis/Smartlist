@@ -18,6 +18,10 @@
   .word-break-break-word {
     word-break: break-word;
   }
+
+  .before-hidden::before {
+    display: none;
+  }
 }
 
 @font-face {

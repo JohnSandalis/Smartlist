@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useState } from 'react';
-import { ShoppingCartItem } from '@/lib/types/ShoppingCartItem';
+import { createContext, useContext, useState } from "react";
+import { ShoppingCartItem } from "@/lib/types/ShoppingCartItem";
 
 interface ShoppingListContextType {
   items: ShoppingCartItem[];
@@ -13,20 +13,26 @@ interface ShoppingListContextType {
   decreaseQuantity: (barcode: string) => void;
 }
 
-const ShoppingListContext = createContext<ShoppingListContextType | undefined>(undefined);
+const ShoppingListContext = createContext<ShoppingListContextType | undefined>(
+  undefined
+);
 
-export function ShoppingListProvider({ children }: { children: React.ReactNode }) {
+export function ShoppingListProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [items, setItems] = useState<ShoppingCartItem[]>([]);
 
   const addItem = (item: ShoppingCartItem) => {
-    setItems(prev => {
-      const exists = prev.find(i => i.barcode === item.barcode);
+    setItems((prev) => {
+      const exists = prev.find((i) => i.barcode === item.barcode);
       return exists ? prev : [...prev, { ...item, quantity: 1 }];
     });
   };
 
   const removeItem = (barcode: string) => {
-    setItems(prev => prev.filter(item => item.barcode !== barcode));
+    setItems((prev) => prev.filter((item) => item.barcode !== barcode));
   };
 
   const clearList = () => {
@@ -34,9 +40,9 @@ export function ShoppingListProvider({ children }: { children: React.ReactNode }
   };
 
   const increaseQuantity = (barcode: string) => {
-    setItems(prev => {
+    setItems((prev) => {
       const newItems = [...prev];
-      const index = newItems.findIndex(i => i.barcode === barcode);
+      const index = newItems.findIndex((i) => i.barcode === barcode);
       if (index !== -1 && (newItems[index].quantity ?? 0) < 20) {
         newItems[index].quantity = (newItems[index].quantity ?? 1) + 1;
       }
@@ -45,8 +51,8 @@ export function ShoppingListProvider({ children }: { children: React.ReactNode }
   };
 
   const decreaseQuantity = (barcode: string) => {
-    setItems(prev => {
-      const index = prev.findIndex(i => i.barcode === barcode);
+    setItems((prev) => {
+      const index = prev.findIndex((i) => i.barcode === barcode);
       if (index !== -1) {
         const current = [...prev];
         const currentQty = current[index].quantity ?? 1;
@@ -55,7 +61,7 @@ export function ShoppingListProvider({ children }: { children: React.ReactNode }
           current[index].quantity = currentQty - 1;
           return current;
         } else {
-          return current.filter(item => item.barcode !== barcode);
+          return current.filter((item) => item.barcode !== barcode);
         }
       }
       return prev;
@@ -81,6 +87,9 @@ export function ShoppingListProvider({ children }: { children: React.ReactNode }
 
 export function useShoppingList() {
   const context = useContext(ShoppingListContext);
-  if (!context) throw new Error('useShoppingList must be used within a ShoppingListProvider');
+  if (!context)
+    throw new Error(
+      "useShoppingList must be used within a ShoppingListProvider"
+    );
   return context;
 }
