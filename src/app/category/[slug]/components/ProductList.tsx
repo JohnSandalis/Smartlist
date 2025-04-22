@@ -24,7 +24,7 @@ export default function ProductList({
               key={`${product.barcode}-${index}`}
               ref={index === products.length - 1 ? lastProductElementRef : null}
             >
-              <ProductCard product={product} />
+              <ProductCard product={product} showRemoveItemButton={false} />
             </div>
           ) : null
         )}

@@ -26,10 +26,11 @@ const SupermarketImage = React.memo(({ src, alt }: SupermarketImageProps) => (
 SupermarketImage.displayName = "SupermarketImage";
 interface ProductCardProps {
   product: Product;
+  showRemoveItemButton?: boolean;
 }
 
 const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
-  ({ product }, ref) => {
+  ({ product, showRemoveItemButton = true }, ref) => {
     const supermarkets = useSupermarkets();
     const { selected: selectedSupermarkets } = useSelectedSupermarkets();
 
@@ -81,7 +82,11 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
           <div className="w-full text-left flex flex-col items-left justify-between gap-2">
             <h3 className="text-[14px] font-normal text-gray-800">
               <span className="text-gray-900">{product.supplier.name}</span>{" "}
-              {product.name.replace(product.supplier.name + " ", "")}
+              <span className="capitalize">
+                {product.name
+                  .replace(product.supplier.name + " ", "")
+                  .toLocaleLowerCase()}
+              </span>
             </h3>
             {shoppingList.find((item) => item.barcode === product.barcode)
               ?.quantity ?? 0 > 0 ? (
@@ -103,12 +108,14 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
                   <PlusIcon className="w-4 h-4" />
                 </button>
 
-                <button
-                  onClick={handleRemove}
-                  className="flex items-center justify-center text-xs bg-red-200 px-2 py-1 rounded-md h-[28px] w-[28px] ml-2"
-                >
-                  <TrashIcon className="w-4 h-4" />
-                </button>
+                {showRemoveItemButton ? (
+                  <button
+                    onClick={handleRemove}
+                    className="flex items-center justify-center text-xs bg-red-200 px-2 py-1 rounded-md h-[28px] w-[28px] ml-3"
+                  >
+                    <TrashIcon className="w-4 h-4" />
+                  </button>
+                ) : null}
               </div>
             ) : (
               <button
