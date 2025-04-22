@@ -8,6 +8,7 @@ import {
   useSupermarketState,
 } from "@/context/SupermarketProvider";
 import SelectedSuperMarketsSkeleton from "./SelectedSuperMarketsSkeleton";
+import SelectedSuperMarketLogos from "./SelectedSuperMarketLogos";
 
 export default function SelectedSuperMarkets() {
   const { supermarkets, isLoaded } = useSupermarketState();
@@ -33,25 +34,10 @@ export default function SelectedSuperMarkets() {
               selected.length > 0 ? "min-h-[36px]" : ""
             }`}
           >
-            {selected.map((storeId) => {
-              const supermarket = supermarkets[storeId];
-              if (!supermarket) return null;
-
-              return (
-                <div
-                  key={storeId}
-                  className="flex items-center justify-center w-9 h-9"
-                >
-                  <Image
-                    src={supermarket.image}
-                    alt={supermarket.display_name}
-                    width={225}
-                    height={225}
-                    className="w-full h-full object-contain rounded-full"
-                  />
-                </div>
-              );
-            })}
+            <SelectedSuperMarketLogos
+              selected={selected}
+              supermarkets={supermarkets}
+            />
           </div>
           {selected.length === 0 && (
             <p className="text-sm text-gray-600">
