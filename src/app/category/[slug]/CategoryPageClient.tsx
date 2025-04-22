@@ -1,18 +1,12 @@
 "use client";
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import Link from "next/link";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
 import IconButton from "@mui/material/IconButton";
 import {
   ArrowLeftIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import { createClient } from "@/utils/supabase/client";
-import ProductCard from "@/components/products/ProductCard";
-import ProductCardSkeleton from "@/components/products/ProductCardSkeleton";
 import ShoppingList from "@/components/list/ShoppingList";
 import Search from "@/components/search/Search";
 import { Category } from "@/lib/types/Category";
@@ -33,7 +27,7 @@ interface Props {
 export default function CategoryPageClient({ category, subcategories }: Props) {
   const params = useParams();
   const { selected: selectedSupermarkets } = useSelectedSupermarkets();
-  const { items: shoppingList } = useShoppingList();
+  const { items: shoppingList, totalItems, totalPrice } = useShoppingList();
 
   const [searchOpen, setSearchOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
@@ -59,19 +53,6 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
     () => subcategories.filter((sub) => sub.category_uuid === category_uuid),
     [subcategories, category_uuid]
   );
-
-  const { listTotalQuantity, listTotalPrice } = useMemo(() => {
-    return shoppingList.reduce(
-      (acc, item) => {
-        const minPrice = Math.min(...item.prices.map((p) => p.price));
-        return {
-          listTotalQuantity: acc.listTotalQuantity + item.quantity,
-          listTotalPrice: acc.listTotalPrice + item.quantity * minPrice,
-        };
-      },
-      { listTotalQuantity: 0, listTotalPrice: 0 }
-    );
-  }, [shoppingList]);
 
   useEffect(() => {
     if (selectedSubCategory && subcategoryRefs.current[selectedSubCategory]) {
@@ -217,12 +198,12 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
         >
           <div className="w-1/3">
             <span className="flex items-center justify-center bg-white rounded w-6 h-6 text-black">
-              {listTotalQuantity}
+              {totalItems}
             </span>
           </div>
           <span className="w-1/3 text-md font-medium">Λίστα</span>
           <span className="w-1/3 text-right text-sm font-medium">
-            {listTotalPrice.toFixed(2)}€
+            {totalPrice.toFixed(2)}€
           </span>
         </button>
       </div>

@@ -3,9 +3,14 @@ import Checkbox from "@mui/joy/Checkbox";
 import ListItem from "@mui/joy/ListItem";
 import ProductImage from "@/components/products/ProductImage";
 import { ShoppingCartItem } from "@/lib/types/ShoppingCartItem";
+import { Price } from "@/lib/types/Price";
+
+interface ShoppingCartItemWithPrices extends ShoppingCartItem {
+  prices: Price[];
+}
 
 interface ProductCheckboxProps {
-  product: ShoppingCartItem;
+  product: ShoppingCartItemWithPrices;
   supermarket: number;
 }
 

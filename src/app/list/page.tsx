@@ -4,9 +4,10 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { IconButton } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useSelectedSupermarkets } from "@/context/SupermarketProvider";
-import { useShoppingList } from "@/context/ShoppingListProvider";
 import { CombinationResult } from "@/lib/types/CombinationResult";
 import SuperMarketCombGroupList from "@/components/list/SuperMarketCombGroupList";
+import { useProductsWithPrices } from "@/context/ProductsWithPricesProvider";
+import { useShoppingList } from "@/context/ShoppingListProvider";
 
 type GroupedCombination = {
   noOfSupermarkets: number;
@@ -15,10 +16,11 @@ type GroupedCombination = {
 
 export default function List() {
   const { items: shoppingList } = useShoppingList();
+  const { productsWithPrices } = useProductsWithPrices();
   const { selected: selectedSupermarkets } = useSelectedSupermarkets();
   const router = useRouter();
 
-  const combinations = getSupermarketSplit(shoppingList);
+  const combinations = getSupermarketSplit(shoppingList, productsWithPrices);
   const sortedCombinations = combinations.sort((a, b) => a.total - b.total);
 
   const filteredCombinations =

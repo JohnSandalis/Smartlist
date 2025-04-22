@@ -1,8 +1,6 @@
 "use client";
-
 import { createContext, useContext, useState } from "react";
 import { ShoppingCartItem } from "@/lib/types/ShoppingCartItem";
-
 interface ShoppingListContextType {
   items: ShoppingCartItem[];
   setItems: (items: ShoppingCartItem[]) => void;
@@ -11,6 +9,8 @@ interface ShoppingListContextType {
   clearList: () => void;
   increaseQuantity: (barcode: string) => void;
   decreaseQuantity: (barcode: string) => void;
+  totalItems: number;
+  totalPrice: number;
 }
 
 const ShoppingListContext = createContext<ShoppingListContextType | undefined>(
@@ -27,7 +27,12 @@ export function ShoppingListProvider({
   const addItem = (item: ShoppingCartItem) => {
     setItems((prev) => {
       const exists = prev.find((i) => i.barcode === item.barcode);
-      return exists ? prev : [...prev, { ...item, quantity: 1 }];
+      if (exists) {
+        return prev.map((i) =>
+          i.barcode === item.barcode ? { ...i, quantity: i.quantity + 1 } : i
+        );
+      }
+      return [...prev, { ...item, quantity: 1 }];
     });
   };
 
@@ -68,6 +73,12 @@ export function ShoppingListProvider({
     });
   };
 
+  const totalItems = items.reduce((total, item) => total + item.quantity, 0);
+  const totalPrice = items.reduce((total, item) => {
+    const price = item.price ?? 0;
+    return total + price * item.quantity;
+  }, 0);
+
   return (
     <ShoppingListContext.Provider
       value={{
@@ -78,6 +89,8 @@ export function ShoppingListProvider({
         clearList,
         increaseQuantity,
         decreaseQuantity,
+        totalItems,
+        totalPrice,
       }}
     >
       {children}

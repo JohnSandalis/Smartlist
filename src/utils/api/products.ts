@@ -1,3 +1,4 @@
+import { Product } from "@/lib/types/Product";
 import { createClient } from "../supabase/client";
 
 export const fetchSubSubCategoryUuids = async (
@@ -51,4 +52,44 @@ export const fetchProducts = async (
   }
 
   return data || [];
+};
+
+export const fetchProductsWithPricesFromList = async (
+  supabase: ReturnType<typeof createClient>,
+  barcodes: string[]
+): Promise<Product[]> => {
+  const { data, error } = await supabase
+    .from("products")
+    .select(
+      `
+        barcode,
+        name,
+        image,
+        category,
+        supplier:suppliers (name),
+        prices (
+          merchant_uuid,
+          price,
+          price_normalized,
+          date,
+          unit
+        )
+      `
+    )
+    .in("barcode", barcodes)
+    .order("barcode");
+
+  if (error) {
+    console.error("Failed to fetch products with prices", error);
+    return [];
+  }
+
+  return data.map((product: any) => ({
+    barcode: product.barcode,
+    name: product.name,
+    image: product.image,
+    category: product.category,
+    supplier: product.supplier,
+    prices: product.prices,
+  }));
 };

@@ -3,6 +3,7 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import { SupermarketProvider } from "@/context/SupermarketProvider";
 import { ShoppingListProvider } from "@/context/ShoppingListProvider";
+import { ProductsWithPricesProvider } from "@/context/ProductsWithPricesProvider";
 
 export const metadata: Metadata = {
   title: "Super Markets  | Βρες τα Φθηνότερα Ψώνια",
@@ -19,7 +20,11 @@ export default function RootLayout({
       <body className="bg-off-white px-4 py-4">
         <main>
           <SupermarketProvider>
-            <ShoppingListProvider>{children}</ShoppingListProvider>
+            <ShoppingListProvider>
+              <ProductsWithPricesProvider>
+                {children}
+              </ProductsWithPricesProvider>
+            </ShoppingListProvider>
           </SupermarketProvider>
         </main>
         <Toaster richColors position="top-right" />

@@ -1,16 +1,24 @@
 import { ShoppingCartItem } from "@/lib/types/ShoppingCartItem";
 import { CombinationResult } from "@/lib/types/CombinationResult";
+import { Product } from "@/lib/types/Product";
 
 export default function getSupermarketSplit(
-  shoppingList: ShoppingCartItem[]
+  shoppingList: ShoppingCartItem[],
+  productsWithPrices: Product[]
 ): CombinationResult[] {
   // Helper function to find all unique supermarkets
   const uniqueSupermarkets = shoppingList.reduce<number[]>((acc, product) => {
-    product.prices.forEach((price) => {
-      if (!acc.includes(price.merchant_uuid)) {
-        acc.push(price.merchant_uuid);
-      }
-    });
+    const productWithPrices = productsWithPrices.find(
+      (p) => p.barcode === product.barcode
+    );
+
+    if (productWithPrices) {
+      productWithPrices.prices.forEach((price) => {
+        if (!acc.includes(price.merchant_uuid)) {
+          acc.push(price.merchant_uuid);
+        }
+      });
+    }
     return acc;
   }, []);
 
@@ -47,24 +55,31 @@ export default function getSupermarketSplit(
       let cheapestPrice = Infinity;
       let cheapestStore: number | null = null;
 
-      product.prices.forEach((price) => {
-        if (
-          combination.includes(price.merchant_uuid) &&
-          price.price < cheapestPrice
-        ) {
-          cheapestPrice = price.price;
-          cheapestStore = price.merchant_uuid;
-        }
-      });
+      // Find the corresponding product in productsWithPrices
+      const productWithPrices = productsWithPrices.find(
+        (p) => p.barcode === product.barcode
+      );
 
-      // Only add the product if a store in the combination offers the cheapest price
-      if (cheapestStore) {
-        result[cheapestStore].push({
-          ...product,
-          price: cheapestPrice,
-          quantity: product.quantity,
+      if (productWithPrices) {
+        productWithPrices.prices.forEach((price) => {
+          if (
+            combination.includes(price.merchant_uuid) &&
+            price.price < cheapestPrice
+          ) {
+            cheapestPrice = price.price;
+            cheapestStore = price.merchant_uuid;
+          }
         });
-        result.total += cheapestPrice * product.quantity;
+
+        // Only add the product if a store in the combination offers the cheapest price
+        if (cheapestStore !== null) {
+          result[cheapestStore].push({
+            ...product,
+            prices: productWithPrices.prices,
+            quantity: product.quantity,
+          });
+          result.total += cheapestPrice * product.quantity;
+        }
       }
     });
 
