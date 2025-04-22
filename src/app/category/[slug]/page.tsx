@@ -10,21 +10,19 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const supabase = createClient();
   const category_uuid = parseInt(params.slug);
 
-  // Get category details
-  const { data: categories } = await supabase.from("categories").select("*");
+  const [categoryData, subcategoriesData] = await Promise.all([
+    supabase.from("categories").select("*").eq("uuid", category_uuid).single(),
+    supabase.from("sub_categories").select("*"),
+  ]);
 
-  const category = categories?.find((c) => c.uuid === category_uuid);
-
-  // Get subcategories of this category
-  const { data: subcategories } = await supabase
-    .from("sub_categories")
-    .select("*")
-    .eq("category_uuid", category_uuid);
+  if (!categoryData.data || !subcategoriesData.data) {
+    throw new Error("Failed to fetch category data");
+  }
 
   return (
     <CategoryPageClient
-      category={category}
-      subcategories={subcategories ?? []}
+      category={categoryData.data}
+      subcategories={subcategoriesData.data ?? []}
     />
   );
 }

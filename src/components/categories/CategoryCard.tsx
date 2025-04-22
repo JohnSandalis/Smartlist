@@ -6,7 +6,8 @@ export default function CategoryCard({ category }: { category: Category }) {
   return (
     <Link
       href={`/category/${category.uuid}`}
-      className="rounded-md h-[200px] p-3 flex flex-col items-center justify-center bg-white"
+      prefetch={true}
+      className="rounded-md h-[200px] p-3 flex flex-col items-center justify-center bg-white hover:bg-gray-200 active:bg-gray-200 transition-colors duration-300 ease-in-out"
     >
       <div className="flex items-center justify-center">
         <Image
