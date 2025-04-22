@@ -1,15 +1,21 @@
 "use client";
-
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { Supermarket } from "@/lib/types/Supermarket";
 import { createClient } from "@/utils/supabase/client";
+import { useUser } from "./UserContext";
 
 type SupermarketMap = Record<string, Supermarket>;
 
 interface SupermarketContextType {
   supermarkets: SupermarketMap;
   selected: number[];
-  setSelected: (ids: number[]) => void;
+  setSelected: (ids: number[]) => Promise<void>;
   isLoaded: boolean;
 }
 
@@ -26,47 +32,110 @@ export function SupermarketProvider({
   const [selected, setSelected] = useState<number[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const supabase = createClient();
+  const { user } = useUser();
 
   useEffect(() => {
-    try {
-      const fetchSupermarkets = async () => {
-        const { data, error } = await supabase.from("supermarkets").select("*");
-        if (error) {
-          console.error("Failed to fetch supermarkets:", error);
-          return;
-        }
-
-        const supermarketMap: SupermarketMap = {};
-        data.forEach((sm) => {
-          supermarketMap[sm.merchant_uuid] = sm;
-        });
-
-        setSupermarkets(supermarketMap);
-      };
-
-      fetchSupermarkets();
-      const saved = localStorage.getItem("selectedSupermarkets");
-      if (saved) {
-        setSelected(JSON.parse(saved));
+    const fetchSupermarkets = async () => {
+      const { data, error } = await supabase.from("supermarkets").select("*");
+      if (error) {
+        console.error("Failed to fetch supermarkets:", error);
+        return;
       }
-    } catch {
-      setSelected([]);
-    } finally {
-      setIsLoaded(true);
-    }
+
+      const supermarketMap: SupermarketMap = {};
+      data.forEach((sm) => {
+        supermarketMap[sm.merchant_uuid] = sm;
+      });
+      setSupermarkets(supermarketMap);
+    };
+
+    fetchSupermarkets();
   }, []);
 
   useEffect(() => {
-    if (selected.length > 0) {
-      localStorage.setItem("selectedSupermarkets", JSON.stringify(selected));
-    } else {
-      localStorage.removeItem("selectedSupermarkets");
-    }
-  }, [selected]);
+    const loadPreferences = async () => {
+      try {
+        let preferences: number[] = [];
+
+        if (user) {
+          const { data, error } = await supabase
+            .from("user_preferences")
+            .select("selected_supermarkets")
+            .eq("user_id", user.id)
+            .single();
+
+          if (!error && data?.selected_supermarkets) {
+            preferences = data.selected_supermarkets;
+          } else if (error && error.code !== "PGRST116") {
+            // Ignore "No rows found" error
+            console.error("Supabase fetch error:", error);
+          }
+        } else {
+          // Fallback to localStorage for anonymous users
+          const saved = localStorage.getItem("selectedSupermarkets");
+          if (saved) {
+            preferences = JSON.parse(saved);
+          }
+        }
+
+        setSelected(preferences);
+      } catch (error) {
+        console.error("Failed to load preferences:", error);
+        setSelected([]);
+      } finally {
+        setIsLoaded(true);
+      }
+    };
+
+    loadPreferences();
+  }, [user]);
+
+  const savePreferences = useCallback(
+    async (ids: number[]) => {
+      try {
+        if (user) {
+          const { error } = await supabase.from("user_preferences").upsert(
+            {
+              user_id: user.id,
+              selected_supermarkets: ids,
+              updated_at: new Date().toISOString(),
+            },
+            {
+              onConflict: "user_id",
+            }
+          );
+
+          if (error) throw error;
+        } else {
+          if (ids.length > 0) {
+            localStorage.setItem("selectedSupermarkets", JSON.stringify(ids));
+          } else {
+            localStorage.removeItem("selectedSupermarkets");
+          }
+        }
+      } catch (error) {
+        console.error("Failed to save preferences:", error);
+      }
+    },
+    [user]
+  );
+
+  const handleSetSelected = useCallback(
+    async (ids: number[]) => {
+      setSelected(ids);
+      await savePreferences(ids);
+    },
+    [savePreferences]
+  );
 
   return (
     <SupermarketContext.Provider
-      value={{ supermarkets, selected, setSelected, isLoaded }}
+      value={{
+        supermarkets,
+        selected,
+        setSelected: handleSetSelected,
+        isLoaded,
+      }}
     >
       {children}
     </SupermarketContext.Provider>

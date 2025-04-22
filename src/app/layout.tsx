@@ -4,6 +4,7 @@ import "./globals.css";
 import { SupermarketProvider } from "@/context/SupermarketProvider";
 import { ShoppingListProvider } from "@/context/ShoppingListProvider";
 import { ProductsWithPricesProvider } from "@/context/ProductsWithPricesProvider";
+import { UserProvider } from "@/context/UserContext";
 
 export const metadata: Metadata = {
   title: "Super Markets  | Βρες τα Φθηνότερα Ψώνια",
@@ -19,13 +20,15 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-off-white px-4 py-4">
         <main>
-          <SupermarketProvider>
-            <ShoppingListProvider>
-              <ProductsWithPricesProvider>
-                {children}
-              </ProductsWithPricesProvider>
-            </ShoppingListProvider>
-          </SupermarketProvider>
+          <UserProvider>
+            <SupermarketProvider>
+              <ShoppingListProvider>
+                <ProductsWithPricesProvider>
+                  {children}
+                </ProductsWithPricesProvider>
+              </ShoppingListProvider>
+            </SupermarketProvider>
+          </UserProvider>
         </main>
         <Toaster richColors position="top-right" />
       </body>
