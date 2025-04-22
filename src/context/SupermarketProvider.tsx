@@ -36,16 +36,12 @@ export function SupermarketProvider({
           return;
         }
 
-        data.sort((a, b) =>
-          a.name.toLowerCase().localeCompare(b.name.toLowerCase())
-        );
-
-        const sortedMap: SupermarketMap = {};
+        const supermarketMap: SupermarketMap = {};
         data.forEach((sm) => {
-          sortedMap[sm.merchant_uuid] = sm;
+          supermarketMap[sm.merchant_uuid] = sm;
         });
 
-        setSupermarkets(sortedMap);
+        setSupermarkets(supermarketMap);
       };
 
       fetchSupermarkets();
@@ -61,8 +57,11 @@ export function SupermarketProvider({
   }, []);
 
   useEffect(() => {
-    if (selected && selected.length > 0)
+    if (selected.length > 0) {
       localStorage.setItem("selectedSupermarkets", JSON.stringify(selected));
+    } else {
+      localStorage.removeItem("selectedSupermarkets");
+    }
   }, [selected]);
 
   return (

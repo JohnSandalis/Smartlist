@@ -28,6 +28,10 @@ const SuperMarketsList: FC<SuperMarketsListProps> = ({
     setOpen(false);
   };
 
+  const sortedSupermarkets = Object.values(supermarkets).sort((a, b) =>
+    a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+  );
+
   return (
     <Dialog
       open={open}
@@ -48,7 +52,7 @@ const SuperMarketsList: FC<SuperMarketsListProps> = ({
           Επίλεξε τα super market που σε εξυπηρετούν καλύτερα.
         </p>
         <div className="grid grid-cols-2 gap-2 mt-4">
-          {Object.values(supermarkets).map((supermarket) => (
+          {sortedSupermarkets.map((supermarket) => (
             <SuperMarketCard
               key={supermarket.merchant_uuid}
               supermarket={supermarket}

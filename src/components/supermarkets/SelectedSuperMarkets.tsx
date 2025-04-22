@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import SuperMarketsList from "@/components/supermarkets/SuperMarketList";
 import {
@@ -13,9 +13,14 @@ import SelectedSuperMarketLogos from "./SelectedSuperMarketLogos";
 export default function SelectedSuperMarkets() {
   const { supermarkets, isLoaded } = useSupermarketState();
   const { selected } = useSelectedSupermarkets();
-  const [superMarketsListOpen, setSuperMarketsListOpen] = useState<boolean>(
-    isLoaded && selected.length === 0
-  );
+  const [superMarketsListOpen, setSuperMarketsListOpen] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    if (isLoaded && selected.length === 0) {
+      setSuperMarketsListOpen(true);
+    }
+  }, [isLoaded, selected]);
 
   if (!isLoaded) return <SelectedSuperMarketsSkeleton />;
 
