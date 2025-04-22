@@ -11,9 +11,7 @@ import { createClient } from "@/utils/supabase/client";
 const Home: React.FC = async () => {
   const supabase = createClient();
 
-  let { data: categories, error } = await supabase
-    .from("categories")
-    .select("*");
+  let { data: categories } = await supabase.from("categories").select("*");
 
   if (!categories) return <h1>Error fetching categories</h1>;
   return (
