@@ -31,7 +31,9 @@ export default function SuperMarketCombGroupList({
         expandIcon={<ChevronDownIcon className="w-8 h-8 color-gray-900" />}
       >
         <div className="flex flex-col">
-          <h2 className="font-medium">{group.noOfSupermarkets} Super Market</h2>
+          <h2 className="font-medium">
+            Έως {group.noOfSupermarkets} Super Market
+          </h2>
           <p className="text-gray-500">Από €{minPrice}</p>
         </div>
       </AccordionSummary>

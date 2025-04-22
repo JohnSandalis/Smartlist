@@ -45,8 +45,8 @@ export default function List() {
       </div>
       <h1 className="text-center page-title mb-2">Φθηνότεροι Συνδιασμοί</h1>
       <p className="text-md text-center mb-4 text-gray-700">
-        Παρακάτω θα βρείτε από που μπορείτε να αγοράσετε τα προϊόντα της λίστας
-        σας πιο φθηνά.
+        Παρακάτω θα βρείτε από ποια super market συμφέρει να αγοράσετε τα
+        προϊόντα της λίστας σας.
       </p>
 
       <div className="grid grid-cols-1 gap-4">
