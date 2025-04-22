@@ -36,7 +36,7 @@ export default function SelectedSuperMarkets() {
           </h2>
           <div
             className={`flex items-center gap-2 ${
-              selected.length > 0 ? "min-h-[36px]" : ""
+              selected.length > 0 ? "min-h-12" : ""
             }`}
           >
             <SelectedSuperMarketLogos
