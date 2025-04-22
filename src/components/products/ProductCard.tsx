@@ -98,6 +98,7 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
         </div>
         <ul className="flex gap-2 min-w-[68px] text-left w-full overflow-auto">
           {product.prices
+            .sort((a, b) => a.price - b.price)
             .filter((priceObj) =>
               selectedSupermarkets.includes(priceObj.merchant_uuid)
             )
