@@ -17,11 +17,7 @@ export default function LogInForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    validateForm();
-  }, [email, password]);
-
-  const validateForm = () => {
-    let errors: Errors = {};
+    const errors: Errors = {};
 
     if (!email) {
       errors.email = "Το email απαιτείται.";
@@ -37,7 +33,7 @@ export default function LogInForm() {
 
     setErrors(errors);
     setIsFormValid(Object.keys(errors).length === 0);
-  };
+  }, [email, password]);
 
   const handleSubmit = async () => {
     if (isFormValid) {

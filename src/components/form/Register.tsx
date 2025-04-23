@@ -19,33 +19,31 @@ export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    validateForm();
-  }, [email, password, confirmPassword]);
-
-  const validateForm = () => {
-    let errors: Errors = {};
+    let validationErrors: Errors = {};
 
     if (!email) {
-      errors.email = "Το email απαιτείται.";
+      validationErrors.email = "Το email απαιτείται.";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = "Το email δεν είναι έγκυρο.";
+      validationErrors.email = "Το email δεν είναι έγκυρο.";
     }
 
     if (!password) {
-      errors.password = "Ο κωδικός απαιτείται.";
+      validationErrors.password = "Ο κωδικός απαιτείται.";
     } else if (password.length < 6) {
-      errors.password = "Ο κωδικός πρέπει να είναι τουλάχιστον 6 χαρακτήρες.";
+      validationErrors.password =
+        "Ο κωδικός πρέπει να είναι τουλάχιστον 6 χαρακτήρες.";
     }
 
     if (!confirmPassword) {
-      errors.confirmPassword = "Η επαλήθευση κωδικού είναι απαραίτητη.";
+      validationErrors.confirmPassword =
+        "Η επαλήθευση κωδικού είναι απαραίτητη.";
     } else if (confirmPassword !== password) {
-      errors.confirmPassword = "Οι κωδικοί δεν ταιριάζουν.";
+      validationErrors.confirmPassword = "Οι κωδικοί δεν ταιριάζουν.";
     }
 
-    setErrors(errors);
-    setIsFormValid(Object.keys(errors).length === 0);
-  };
+    setErrors(validationErrors);
+    setIsFormValid(Object.keys(validationErrors).length === 0);
+  }, [email, password, confirmPassword]);
 
   const handleSubmit = async () => {
     if (isFormValid) {

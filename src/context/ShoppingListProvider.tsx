@@ -1,10 +1,12 @@
 "use client";
+
 import {
   createContext,
   useContext,
   useState,
   useEffect,
   useCallback,
+  useMemo,
 } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useUser } from "@/context/UserContext";
@@ -33,11 +35,55 @@ export function ShoppingListProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const { user } = useUser();
   const [items, setItems] = useState<ShoppingCartItem[]>([]);
   const [currentListId, setCurrentListId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const loadItemsFromDb = useCallback(
+    async (itemsFromDb: { barcode: string; quantity: number }[]) => {
+      if (!itemsFromDb.length) return setItems([]);
+
+      const barcodes = itemsFromDb.map((item) => item.barcode);
+      const { data: products, error } = await supabase
+        .from("products")
+        .select(
+          `
+        barcode,
+        name,
+        image,
+        category,
+        supplier:suppliers(name),
+        prices(barcode, merchant_uuid, price, price_normalized, date, unit)
+      `
+        )
+        .in("barcode", barcodes);
+
+      if (error) {
+        console.error("Failed to load products:", error);
+        return;
+      }
+
+      const loadedItems = products.map((product) => {
+        const quantity =
+          itemsFromDb.find((item) => item.barcode === product.barcode)
+            ?.quantity || 1;
+        const supplier = Array.isArray(product.supplier)
+          ? product.supplier[0] || { name: "Unknown" }
+          : product.supplier || { name: "Unknown" };
+
+        return {
+          ...product,
+          supplier,
+          quantity,
+        };
+      });
+
+      setItems(loadedItems);
+    },
+    [supabase]
+  );
 
   useEffect(() => {
     const loadShoppingList = async () => {
@@ -51,6 +97,8 @@ export function ShoppingListProvider({
             .order("updated_at", { ascending: false })
             .limit(1)
             .single();
+
+          if (error) throw error;
 
           if (data) {
             setCurrentListId(data.id);
@@ -71,73 +119,21 @@ export function ShoppingListProvider({
     };
 
     loadShoppingList();
-  }, [user]);
-
-  const loadItemsFromDb = useCallback(
-    async (itemsFromDb: { barcode: string; quantity: number }[]) => {
-      if (!itemsFromDb || itemsFromDb.length === 0) {
-        setItems([]);
-        return;
-      }
-
-      const barcodes = itemsFromDb.map((item) => item.barcode);
-
-      const { data: products, error } = await supabase
-        .from("products")
-        .select(
-          `
-          barcode,
-          name,
-          image,
-          category,
-          supplier:suppliers(name),
-          prices(barcode, merchant_uuid, price, price_normalized, date, unit)
-        `
-        )
-        .in("barcode", barcodes);
-
-      if (error) {
-        console.error("Failed to load products:", error);
-        return;
-      }
-
-      const loadedItems: ShoppingCartItem[] = products.map((product) => {
-        const quantity =
-          itemsFromDb.find((item) => item.barcode === product.barcode)
-            ?.quantity || 1;
-
-        const supplier = Array.isArray(product.supplier)
-          ? product.supplier[0] || { name: "Unknown" }
-          : product.supplier || { name: "Unknown" };
-
-        return {
-          ...product,
-          supplier,
-          quantity,
-        };
-      });
-
-      setItems(loadedItems);
-    },
-    []
-  );
+  }, [user, loadItemsFromDb, supabase]);
 
   const saveShoppingList = useCallback(
     async (itemsToSave: ShoppingCartItem[]) => {
       try {
-        const payload = itemsToSave.map((item) => ({
-          barcode: item.barcode,
-          quantity: item.quantity,
+        const payload = itemsToSave.map(({ barcode, quantity }) => ({
+          barcode,
+          quantity,
         }));
 
         if (user) {
           if (currentListId) {
             const { error } = await supabase
               .from("shopping_lists")
-              .update({
-                items: payload,
-                updated_at: new Date().toISOString(),
-              })
+              .update({ items: payload, updated_at: new Date().toISOString() })
               .eq("id", currentListId);
 
             if (error) throw error;
@@ -165,37 +161,41 @@ export function ShoppingListProvider({
         console.error("Failed to save shopping list:", error);
       }
     },
-    [user, currentListId]
+    [user, currentListId, supabase]
+  );
+
+  const updateItems = useCallback(
+    async (updater: (prev: ShoppingCartItem[]) => ShoppingCartItem[]) => {
+      setItems((prev) => {
+        const updated = updater(prev);
+        saveShoppingList(updated);
+        return updated;
+      });
+    },
+    [saveShoppingList]
   );
 
   const addItem = useCallback(
     async (item: ShoppingCartItem) => {
-      setItems((prev) => {
+      updateItems((prev) => {
         const exists = prev.find((i) => i.barcode === item.barcode);
-        const newItems = exists
+        return exists
           ? prev.map((i) =>
               i.barcode === item.barcode
                 ? { ...i, quantity: i.quantity + 1 }
                 : i
             )
           : [...prev, { ...item, quantity: 1 }];
-
-        saveShoppingList(newItems);
-        return newItems;
       });
     },
-    [saveShoppingList]
+    [updateItems]
   );
 
   const removeItem = useCallback(
     async (barcode: string) => {
-      setItems((prev) => {
-        const newItems = prev.filter((i) => i.barcode !== barcode);
-        saveShoppingList(newItems);
-        return newItems;
-      });
+      updateItems((prev) => prev.filter((i) => i.barcode !== barcode));
     },
-    [saveShoppingList]
+    [updateItems]
   );
 
   const clearList = useCallback(async () => {
@@ -205,37 +205,31 @@ export function ShoppingListProvider({
 
   const increaseQuantity = useCallback(
     async (barcode: string) => {
-      setItems((prev) => {
-        const newItems = prev.map((item) =>
+      updateItems((prev) =>
+        prev.map((item) =>
           item.barcode === barcode && item.quantity < 20
             ? { ...item, quantity: item.quantity + 1 }
             : item
-        );
-        saveShoppingList(newItems);
-        return newItems;
-      });
+        )
+      );
     },
-    [saveShoppingList]
+    [updateItems]
   );
 
   const decreaseQuantity = useCallback(
     async (barcode: string) => {
-      setItems((prev) => {
+      updateItems((prev) => {
         const item = prev.find((i) => i.barcode === barcode);
         if (!item) return prev;
 
-        const newItems =
-          item.quantity > 1
-            ? prev.map((i) =>
-                i.barcode === barcode ? { ...i, quantity: i.quantity - 1 } : i
-              )
-            : prev.filter((i) => i.barcode !== barcode);
-
-        saveShoppingList(newItems);
-        return newItems;
+        return item.quantity > 1
+          ? prev.map((i) =>
+              i.barcode === barcode ? { ...i, quantity: i.quantity - 1 } : i
+            )
+          : prev.filter((i) => i.barcode !== barcode);
       });
     },
-    [saveShoppingList]
+    [updateItems]
   );
 
   const setItemsPersist = useCallback(

@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
   useCallback,
+  useMemo,
 } from "react";
 import { Supermarket } from "@/lib/types/Supermarket";
 import { createClient } from "@/utils/supabase/client";
@@ -28,10 +29,10 @@ export function SupermarketProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const supabase = useMemo(() => createClient(), []);
   const [supermarkets, setSupermarkets] = useState<SupermarketMap>({});
   const [selected, setSelected] = useState<number[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
-  const supabase = createClient();
   const { user } = useUser();
 
   useEffect(() => {
@@ -50,7 +51,7 @@ export function SupermarketProvider({
     };
 
     fetchSupermarkets();
-  }, []);
+  }, [supabase]);
 
   useEffect(() => {
     const loadPreferences = async () => {
@@ -88,7 +89,7 @@ export function SupermarketProvider({
     };
 
     loadPreferences();
-  }, [user]);
+  }, [user, supabase]);
 
   const savePreferences = useCallback(
     async (ids: number[]) => {
@@ -117,7 +118,7 @@ export function SupermarketProvider({
         console.error("Failed to save preferences:", error);
       }
     },
-    [user]
+    [user, supabase]
   );
 
   const handleSetSelected = useCallback(
