@@ -17,10 +17,10 @@ export default function SelectedSuperMarketLogos({
     .filter(Boolean)
     .sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 
-  return sortedSelected.length > 5 ? (
+  return sortedSelected.length > 4 ? (
     <>
-      {/* Display first 5 logos */}
-      {sortedSelected.slice(0, 5).map((supermarket) => (
+      {/* Display first 4 logos */}
+      {sortedSelected.slice(0, 4).map((supermarket) => (
         <div
           key={supermarket.merchant_uuid}
           className="flex items-center justify-center w-12 h-12"
@@ -36,9 +36,9 @@ export default function SelectedSuperMarketLogos({
       ))}
 
       {/* Show the count of additional supermarkets */}
-      <div className="flex items-center justify-center w-12 h-12">
-        <span className="text-sm font-semibold">
-          +{sortedSelected.length - 5}
+      <div className="flex items-center justify-center w-8 h-12">
+        <span className="text-md font-normal">
+          +{sortedSelected.length - 4}
         </span>
       </div>
     </>
