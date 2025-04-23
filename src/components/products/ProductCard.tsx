@@ -43,18 +43,9 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
     } = useShoppingList();
 
     const addToList = () => {
-      const { prices, ...productWithoutPrices } = product;
-
-      const filteredPrices = product.prices.filter((price) =>
-        selectedSupermarkets.includes(price.merchant_uuid)
-      );
-
-      const minPrice = Math.min(...filteredPrices.map((price) => price.price));
-
       addItem({
-        ...productWithoutPrices,
+        ...product,
         quantity: 1,
-        price: minPrice,
       });
     };
 

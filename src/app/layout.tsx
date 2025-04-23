@@ -3,7 +3,6 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import { SupermarketProvider } from "@/context/SupermarketProvider";
 import { ShoppingListProvider } from "@/context/ShoppingListProvider";
-import { ProductsWithPricesProvider } from "@/context/ProductsWithPricesProvider";
 import { UserProvider } from "@/context/UserContext";
 
 export const metadata: Metadata = {
@@ -22,11 +21,7 @@ export default function RootLayout({
         <main>
           <UserProvider>
             <SupermarketProvider>
-              <ShoppingListProvider>
-                <ProductsWithPricesProvider>
-                  {children}
-                </ProductsWithPricesProvider>
-              </ShoppingListProvider>
+              <ShoppingListProvider>{children}</ShoppingListProvider>
             </SupermarketProvider>
           </UserProvider>
         </main>

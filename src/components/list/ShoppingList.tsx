@@ -5,16 +5,12 @@ import {
   DialogActions,
   Slide,
   IconButton,
-  CircularProgress,
 } from "@mui/material";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import ProductCard from "@/components/products/ProductCard";
 import Link from "next/link";
 import { useShoppingList } from "@/context/ShoppingListProvider";
-import { useEffect, useState } from "react";
-import { fetchProductsWithPricesFromList } from "@/utils/api/products";
-import { useProductsWithPrices } from "@/context/ProductsWithPricesProvider";
-import { createClient } from "@/utils/supabase/client";
+import { useState } from "react";
 
 export default function ShoppingList({
   open,
@@ -24,58 +20,10 @@ export default function ShoppingList({
   setOpen: (open: boolean) => void;
 }) {
   const { items: shoppingList } = useShoppingList();
-  const { productsWithPrices, setProductsWithPrices } = useProductsWithPrices();
-  const [error, setError] = useState<string | null>(null);
 
   const handleClose = () => {
     setOpen(false);
   };
-
-  const supabase = createClient();
-
-  useEffect(() => {
-    const barcodes = shoppingList.map((item) => item.barcode);
-
-    const fetchPrices = async () => {
-      try {
-        const products = await fetchProductsWithPricesFromList(
-          supabase,
-          barcodes
-        );
-        setProductsWithPrices(products);
-      } catch (err) {
-        setError("Δεν ήταν δυνατή η φόρτωση των προϊόντων");
-      }
-    };
-
-    if (shoppingList.length > 0) {
-      fetchPrices();
-    }
-  }, [shoppingList]);
-
-  if (error) {
-    return (
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        TransitionComponent={Slide}
-        // @ts-ignore
-        TransitionProps={{ direction: "up" }}
-        fullScreen
-        className="!bg-off-white"
-        PaperProps={{
-          style: { backgroundColor: "#f4f4f4" },
-        }}
-      >
-        <DialogTitle className="bg-off-white text-center !p-6 page-title">
-          Λίστα
-        </DialogTitle>
-        <DialogContent className="bg-off-white flex flex-col gap-2 overflow-y-auto !px-4 !py-6 sm:!px-6">
-          <h2 className="text-center text-red-500">{error}</h2>
-        </DialogContent>
-      </Dialog>
-    );
-  }
 
   return (
     <Dialog
@@ -95,16 +43,14 @@ export default function ShoppingList({
       </DialogTitle>
       <DialogContent className="bg-off-white flex flex-col gap-2 overflow-y-auto !px-4 !py-6 sm:!px-6">
         {shoppingList.map((item) => {
-          const product = productsWithPrices.find(
-            (p) => p.barcode === item.barcode
-          );
+          const product = shoppingList.find((p) => p.barcode === item.barcode);
 
           return product ? (
             <ProductCard key={item.barcode} product={product} />
           ) : null;
         })}
         {(() => {
-          const date = productsWithPrices[0]?.prices?.[0]?.date;
+          const date = shoppingList[0]?.prices?.[0]?.date;
           return date ? (
             <h2 className="text-center mt-4">
               Η τιμή των προϊόντων που αναγράφεται αφορά την{" "}

@@ -3,12 +3,11 @@ import { CombinationResult } from "@/lib/types/CombinationResult";
 import { Product } from "@/lib/types/Product";
 
 export default function getSupermarketSplit(
-  shoppingList: ShoppingCartItem[],
-  productsWithPrices: Product[]
+  shoppingList: ShoppingCartItem[]
 ): CombinationResult[] {
   // Helper function to find all unique supermarkets
   const uniqueSupermarkets = shoppingList.reduce<number[]>((acc, product) => {
-    const productWithPrices = productsWithPrices.find(
+    const productWithPrices = shoppingList.find(
       (p) => p.barcode === product.barcode
     );
 
@@ -55,13 +54,8 @@ export default function getSupermarketSplit(
       let cheapestPrice = Infinity;
       let cheapestStore: number | null = null;
 
-      // Find the corresponding product in productsWithPrices
-      const productWithPrices = productsWithPrices.find(
-        (p) => p.barcode === product.barcode
-      );
-
-      if (productWithPrices) {
-        productWithPrices.prices.forEach((price) => {
+      if (product) {
+        product.prices.forEach((price) => {
           if (
             combination.includes(price.merchant_uuid) &&
             price.price < cheapestPrice
@@ -73,11 +67,7 @@ export default function getSupermarketSplit(
 
         // Only add the product if a store in the combination offers the cheapest price
         if (cheapestStore !== null) {
-          result[cheapestStore].push({
-            ...product,
-            prices: productWithPrices.prices,
-            quantity: product.quantity,
-          });
+          result[cheapestStore].push(product);
           result.total += cheapestPrice * product.quantity;
         }
       }

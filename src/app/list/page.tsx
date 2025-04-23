@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useSelectedSupermarkets } from "@/context/SupermarketProvider";
 import { CombinationResult } from "@/lib/types/CombinationResult";
 import SuperMarketCombGroupList from "@/components/list/SuperMarketCombGroupList";
-import { useProductsWithPrices } from "@/context/ProductsWithPricesProvider";
 import { useShoppingList } from "@/context/ShoppingListProvider";
 
 type GroupedCombination = {
@@ -16,11 +15,10 @@ type GroupedCombination = {
 
 export default function List() {
   const { items: shoppingList } = useShoppingList();
-  const { productsWithPrices } = useProductsWithPrices();
   const { selected: selectedSupermarkets } = useSelectedSupermarkets();
   const router = useRouter();
 
-  const combinations = getSupermarketSplit(shoppingList, productsWithPrices);
+  const combinations = getSupermarketSplit(shoppingList);
   const sortedCombinations = combinations.sort((a, b) => a.total - b.total);
 
   const filteredCombinations =

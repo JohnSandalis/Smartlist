@@ -1,3 +1,5 @@
+import { Price } from "./Price";
+
 export interface ShoppingCartItem {
   barcode: string;
   name: string;
@@ -5,5 +7,5 @@ export interface ShoppingCartItem {
   category: string[];
   supplier: { name: string };
   quantity: number;
-  price: number;
+  prices: Price[];
 }
