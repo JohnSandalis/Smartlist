@@ -1,9 +1,8 @@
-'use client';
+"use client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { login } from "@/app/(auth)/login/actions";
 import LoadingButton from "@/components/ui/LoadingButton";
-import Link from "next/link";
 
 interface Errors {
   email?: string;
@@ -25,15 +24,15 @@ export default function LogInForm() {
     let errors: Errors = {};
 
     if (!email) {
-      errors.email = 'Το email απαιτείται.';
+      errors.email = "Το email απαιτείται.";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = 'Το email δεν είναι έγκυρο.';
+      errors.email = "Το email δεν είναι έγκυρο.";
     }
 
     if (!password) {
-      errors.password = 'Ο κωδικός απαιτείται.';
+      errors.password = "Ο κωδικός απαιτείται.";
     } else if (password.length < 6) {
-      errors.password = 'Ο κωδικός πρέπει να είναι τουλάχιστον 6 χαρακτήρες.';
+      errors.password = "Ο κωδικός πρέπει να είναι τουλάχιστον 6 χαρακτήρες.";
     }
 
     setErrors(errors);
@@ -49,7 +48,7 @@ export default function LogInForm() {
           toast.error(errorMessage);
         }
       } catch (error) {
-        console.error('Unexpected error:', error);
+        console.error("Unexpected error:", error);
       } finally {
         setIsLoading(false);
       }
@@ -60,9 +59,18 @@ export default function LogInForm() {
   };
 
   return (
-    <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+    <form
+      className="space-y-6"
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit();
+      }}
+    >
       <div>
-        <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+        <label
+          htmlFor="email"
+          className="block text-sm font-medium leading-6 text-gray-900"
+        >
           Email
         </label>
         <div>
@@ -80,7 +88,10 @@ export default function LogInForm() {
 
       <div>
         <div className="flex items-center justify-between">
-          <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium leading-6 text-gray-900"
+          >
             Κωδικός
           </label>
           {/* <div className="text-sm">

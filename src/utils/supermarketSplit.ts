@@ -1,6 +1,5 @@
 import { ShoppingCartItem } from "@/lib/types/ShoppingCartItem";
 import { CombinationResult } from "@/lib/types/CombinationResult";
-import { Product } from "@/lib/types/Product";
 
 export default function getSupermarketSplit(
   shoppingList: ShoppingCartItem[]

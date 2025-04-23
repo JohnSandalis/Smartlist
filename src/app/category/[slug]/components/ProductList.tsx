@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useRef, useCallback } from "react";
 import ProductCard from "@/components/products/ProductCard";
 import ProductCardSkeleton from "@/components/products/ProductCardSkeleton";
 import { Product } from "@/lib/types/Product";

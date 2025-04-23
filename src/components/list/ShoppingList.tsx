@@ -10,7 +10,6 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import ProductCard from "@/components/products/ProductCard";
 import Link from "next/link";
 import { useShoppingList } from "@/context/ShoppingListProvider";
-import { useState } from "react";
 
 export default function ShoppingList({
   open,

@@ -1,9 +1,8 @@
-'use client';
+"use client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { signup } from "@/app/(auth)/login/actions";
 import LoadingButton from "@/components/ui/LoadingButton";
-import Link from "next/link";
 
 interface Errors {
   email?: string;
@@ -27,21 +26,21 @@ export default function RegisterForm() {
     let errors: Errors = {};
 
     if (!email) {
-      errors.email = 'Το email απαιτείται.';
+      errors.email = "Το email απαιτείται.";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = 'Το email δεν είναι έγκυρο.';
+      errors.email = "Το email δεν είναι έγκυρο.";
     }
 
     if (!password) {
-      errors.password = 'Ο κωδικός απαιτείται.';
+      errors.password = "Ο κωδικός απαιτείται.";
     } else if (password.length < 6) {
-      errors.password = 'Ο κωδικός πρέπει να είναι τουλάχιστον 6 χαρακτήρες.';
+      errors.password = "Ο κωδικός πρέπει να είναι τουλάχιστον 6 χαρακτήρες.";
     }
 
     if (!confirmPassword) {
-      errors.confirmPassword = 'Η επαλήθευση κωδικού είναι απαραίτητη.';
+      errors.confirmPassword = "Η επαλήθευση κωδικού είναι απαραίτητη.";
     } else if (confirmPassword !== password) {
-      errors.confirmPassword = 'Οι κωδικοί δεν ταιριάζουν.';
+      errors.confirmPassword = "Οι κωδικοί δεν ταιριάζουν.";
     }
 
     setErrors(errors);
@@ -57,7 +56,7 @@ export default function RegisterForm() {
           toast.error(errorMessage);
         }
       } catch (error) {
-        console.error('Unexpected error:', error);
+        console.error("Unexpected error:", error);
       } finally {
         setIsLoading(false);
       }
@@ -69,9 +68,18 @@ export default function RegisterForm() {
   };
 
   return (
-    <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+    <form
+      className="space-y-4"
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit();
+      }}
+    >
       <div>
-        <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+        <label
+          htmlFor="email"
+          className="block text-sm font-medium leading-6 text-gray-900"
+        >
           Email
         </label>
         <div>
@@ -88,7 +96,10 @@ export default function RegisterForm() {
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium leading-6 text-gray-900"
+        >
           Κωδικός
         </label>
         <div>
@@ -105,7 +116,10 @@ export default function RegisterForm() {
       </div>
 
       <div>
-        <label htmlFor="confirmPassword" className="block text-sm font-medium leading-6 text-gray-900">
+        <label
+          htmlFor="confirmPassword"
+          className="block text-sm font-medium leading-6 text-gray-900"
+        >
           Επαλήθευση Κωδικού
         </label>
         <div>

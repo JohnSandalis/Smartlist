@@ -1,4 +1,3 @@
-import { FC } from "react";
 import { CombinationResult } from "@/lib/types/CombinationResult";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
