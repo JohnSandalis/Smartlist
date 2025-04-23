@@ -19,7 +19,7 @@ export default function CategoryCard({ category }: { category: Category }) {
         />
       </div>
       <div className="mt-4 text-center">
-        <h3 className="text-lg font-medium text-gray-900 leading-tight word-break-break-word">
+        <h3 className="text-md font-medium text-gray-900 leading-tight word-break-break-word">
           {category.name}
         </h3>
       </div>
