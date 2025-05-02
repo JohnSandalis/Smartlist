@@ -12,7 +12,7 @@ coverage/
 # -------------------------
 # Build / Runtime output
 # -------------------------
-apps/**/.next
+apps/**/.next/
 apps/**/out/
 apps/**/build/
 packages/**/build/
