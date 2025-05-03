@@ -1,19 +1,23 @@
 import { Request, Response, NextFunction } from "express";
 import { fetchCategories, fetchCategory } from "../services/category.service";
 import { ApiError } from "../utils/ApiError";
+import { Category } from "@smartlist/types";
 
 // @desc  Get all categories
 // @route GET /api/categories
-export const getCategories = async (req: Request, res: Response) => {
+export const getCategories = async (
+  req: Request,
+  res: Response<Category[]>,
+  next: NextFunction
+) => {
   try {
-    const uuid = parseInt(req.params.uuid);
     const data = await fetchCategories();
     if (!data) {
       throw new ApiError(404, `Categories not found in the database`);
     }
-    res.json(data);
+    res.json(data.categories);
   } catch (err) {
-    res.status(500).json({ error: "Internal Server Error" });
+    next(err);
   }
 };
 
@@ -21,7 +25,7 @@ export const getCategories = async (req: Request, res: Response) => {
 // @route GET /api/categories/:uuid
 export const getCategory = async (
   req: Request,
-  res: Response,
+  res: Response<Category>,
   next: NextFunction
 ) => {
   try {
@@ -35,7 +39,7 @@ export const getCategory = async (
       throw new ApiError(404, `No category with id ${uuid} found`);
     }
 
-    res.json(data);
+    res.json(data.category);
   } catch (err) {
     next(err);
   }
