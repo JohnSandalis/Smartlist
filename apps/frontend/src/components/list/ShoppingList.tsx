@@ -10,6 +10,7 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import ProductCard from "@/components/products/ProductCard";
 import Link from "next/link";
 import { useShoppingList } from "@/context/ShoppingListProvider";
+import { useMemo } from "react";
 
 export default function ShoppingList({
   open,
@@ -19,6 +20,17 @@ export default function ShoppingList({
   setOpen: (open: boolean) => void;
 }) {
   const { items: shoppingList } = useShoppingList();
+
+  const latestPriceDate = useMemo(() => {
+    const allDates = shoppingList
+      .flatMap((item) => item.prices?.map((price) => price.date) || [])
+      .filter(Boolean)
+      .map((date) => new Date(date));
+
+    if (allDates.length === 0) return null;
+
+    return new Date(Math.max(...allDates.map((d) => d.getTime())));
+  }, [shoppingList]);
 
   const handleClose = () => {
     setOpen(false);
@@ -48,15 +60,12 @@ export default function ShoppingList({
             <ProductCard key={item.barcode} product={product} />
           ) : null;
         })}
-        {(() => {
-          const date = shoppingList[0]?.prices?.[0]?.date;
-          return date ? (
-            <h2 className="text-center mt-4">
-              Η τιμή των προϊόντων που αναγράφεται αφορά την{" "}
-              {new Date(date).toLocaleDateString("en-GB")}
-            </h2>
-          ) : null;
-        })()}
+        {latestPriceDate && (
+          <h2 className="text-center mt-4">
+            Η τιμή των προϊόντων που αναγράφεται αφορά την{" "}
+            {latestPriceDate.toLocaleDateString("en-GB")}
+          </h2>
+        )}
       </DialogContent>
       <DialogActions className="w-full !rounded-t-lg bg-white !py-4 !px-2 !shadow-lg">
         <Link

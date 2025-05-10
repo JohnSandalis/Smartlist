@@ -11,8 +11,8 @@ import Link from "next/link";
 interface SubcategoryDrawerProps {
   drawerOpen: boolean;
   setDrawerOpen: (open: boolean) => void;
-  subcategoryList: { uuid: string; name: string }[];
-  handleSubcategorySelect: (uuid: string) => void;
+  subcategoryList: { uuid: number; name: string }[];
+  handleSubcategorySelect: (uuid: number) => void;
 }
 
 export default function SubcategoryDrawer({

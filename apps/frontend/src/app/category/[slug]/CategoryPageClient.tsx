@@ -1,5 +1,12 @@
 "use client";
-import { useEffect, useState, useRef, useCallback, useMemo } from "react";
+import {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+  cache,
+} from "react";
 import Link from "next/link";
 import IconButton from "@mui/material/IconButton";
 import {
@@ -9,12 +16,11 @@ import {
 import { createClient } from "@/utils/supabase/client";
 import ShoppingList from "@/components/list/ShoppingList";
 import Search from "@/components/search/Search";
-import { Category } from "@smartlist/types";
+import { Category, Product } from "@smartlist/types";
 import { SubCategory } from "@smartlist/types";
 import { useParams } from "next/navigation";
 import { useSelectedSupermarkets } from "@/context/SupermarketProvider";
 import { useShoppingList } from "@/context/ShoppingListProvider";
-import { fetchProducts, fetchSubSubCategoryUuids } from "@/utils/api/products";
 import SubcategoryDrawer from "./components/SubcategoryDrawer";
 import SubcategoryTabs from "./components/SubcategoryTabs";
 import ProductList from "./components/ProductList";
@@ -31,7 +37,7 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
 
   const [searchOpen, setSearchOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
-  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(
+  const [selectedSubCategory, setSelectedSubCategory] = useState<number | null>(
     null
   );
   const [products, setProducts] = useState<any[]>([]);
@@ -75,23 +81,16 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
     const endOffset = currentOffset + PRODUCTS_PER_PAGE - 1;
 
     try {
-      const subSubCategoryUuids = await fetchSubSubCategoryUuids(
-        supabase,
-        selectedSubCategory
+      const productsRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/products?subCategoryId=${selectedSubCategory}&start=${currentOffset}&end=${endOffset}`,
+        {
+          cache: "no-store",
+        }
       );
 
-      if (subSubCategoryUuids.length === 0) {
-        setHasMore(false);
-        setLoading(false);
-        return;
-      }
+      if (!productsRes.ok) throw new Error("Failed to fetch category");
 
-      const fetchedProducts = await fetchProducts(
-        supabase,
-        subSubCategoryUuids,
-        currentOffset,
-        endOffset
-      );
+      const fetchedProducts: Product[] = await productsRes.json();
 
       const filtered = fetchedProducts.filter((product) =>
         product.prices?.some((price) =>
@@ -140,7 +139,7 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
     [loading, hasMore, getProducts]
   );
 
-  const handleSubcategorySelect = (subcategoryId: string) => {
+  const handleSubcategorySelect = (subcategoryId: number) => {
     setSelectedSubCategory(subcategoryId);
     setDrawerOpen(false);
     setOffsets((prev) => ({ ...prev, [subcategoryId]: 0 }));

@@ -2,8 +2,8 @@ import { SubCategory } from "@smartlist/types";
 
 interface Props {
   subcategoryList: SubCategory[];
-  selectedSubCategory: string | null;
-  setSelectedSubCategory: (uuid: string) => void;
+  selectedSubCategory: number | null;
+  setSelectedSubCategory: (uuid: number) => void;
   subcategoryRefs: React.MutableRefObject<
     Record<string, HTMLButtonElement | null>
   >;

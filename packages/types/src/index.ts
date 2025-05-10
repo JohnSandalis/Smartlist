@@ -39,13 +39,19 @@ export interface ShoppingCartItem {
 }
 
 export interface SubCategory {
-  uuid: string;
+  uuid: number;
   name: string;
   category_uuid: number;
 }
 
 export interface SubCategories {
   [key: string]: SubCategory[];
+}
+
+export interface SubSubCategory {
+  uuid: number;
+  name: string;
+  sub_category_uuid: number;
 }
 
 export interface Supermarket {
