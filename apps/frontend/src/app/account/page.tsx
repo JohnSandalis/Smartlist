@@ -20,7 +20,7 @@ export default function AccountPage() {
   return (
     <>
       <div className="flex justify-between items-center w-full mb-4">
-        <BackButton />
+        <BackButton href="/" />
         <button onClick={signOut} className="btn-white text-sm">
           Log out
         </button>
