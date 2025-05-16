@@ -1,29 +1,20 @@
 "use client";
-import {
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-  useMemo,
-  cache,
-} from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import Link from "next/link";
 import IconButton from "@mui/material/IconButton";
 import {
   ArrowLeftIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import { createClient } from "@/utils/supabase/client";
-import ShoppingList from "@/components/list/ShoppingList";
 import Search from "@/components/search/Search";
 import { Category, Product } from "@smartlist/types";
 import { SubCategory } from "@smartlist/types";
 import { useParams } from "next/navigation";
 import { useSelectedSupermarkets } from "@/context/SupermarketProvider";
-import { useShoppingList } from "@/context/ShoppingListProvider";
 import SubcategoryDrawer from "./components/SubcategoryDrawer";
 import SubcategoryTabs from "./components/SubcategoryTabs";
 import ProductList from "./components/ProductList";
+import ShoppingListButton from "@/components/list/ShoppingListButton";
 
 interface Props {
   category: Category;
@@ -33,8 +24,6 @@ interface Props {
 export default function CategoryPageClient({ category, subcategories }: Props) {
   const params = useParams();
   const { selected: selectedSupermarkets } = useSelectedSupermarkets();
-  const { items: shoppingList, totalItems, totalPrice } = useShoppingList();
-
   const [searchOpen, setSearchOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
   const [selectedSubCategory, setSelectedSubCategory] = useState<number | null>(
@@ -44,7 +33,6 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [offsets, setOffsets] = useState<Record<string, number>>({});
-  const [listOpen, setListOpen] = useState<boolean>(false);
 
   const PRODUCTS_PER_PAGE = 10;
 
@@ -75,7 +63,6 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
     if (loading || !selectedSubCategory) return;
 
     setLoading(true);
-    const supabase = createClient();
 
     const currentOffset = offsets[selectedSubCategory] || 0;
     const endOffset = currentOffset + PRODUCTS_PER_PAGE - 1;
@@ -190,24 +177,7 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
         lastProductElementRef={lastProductElementRef}
       />
 
-      <div className="fixed bottom-0 left-0 w-full rounded-t-lg bg-white py-4 px-2 shadow-lg">
-        <button
-          onClick={() => setListOpen((prev) => !prev)}
-          className="w-full bg-primary text-white p-4 rounded-xl flex justify-between items-center"
-        >
-          <div className="w-1/3">
-            <span className="flex items-center justify-center bg-white rounded w-6 h-6 text-black">
-              {totalItems}
-            </span>
-          </div>
-          <span className="w-1/3 text-md font-medium">Λίστα</span>
-          <span className="w-1/3 text-right text-sm font-medium">
-            {totalPrice.toFixed(2)}€
-          </span>
-        </button>
-      </div>
-
-      <ShoppingList open={listOpen} setOpen={setListOpen} />
+      <ShoppingListButton />
     </>
   );
 }

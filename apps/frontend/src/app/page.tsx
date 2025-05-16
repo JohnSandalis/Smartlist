@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import CategoryCard from "@/components/categories/CategoryCard";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import SearchButton from "@/components/search/SearchButton";
@@ -6,6 +7,11 @@ import { Category } from "@smartlist/types";
 import SelectedSuperMarkets from "@/components/supermarkets/SelectedSuperMarkets";
 import Link from "next/link";
 import Image from "next/image";
+
+const ShoppingListButton = dynamic(
+  () => import("@/components/list/ShoppingListButton"),
+  { ssr: false }
+);
 
 const Home = async () => {
   try {
@@ -46,6 +52,8 @@ const Home = async () => {
             <CategoryCard key={category.uuid} category={category} />
           ))}
         </div>
+
+        <ShoppingListButton />
       </>
     );
   } catch (err) {
