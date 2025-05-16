@@ -61,6 +61,22 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
       removeItem(product.barcode);
     };
 
+    function stripDiacritics(str: string) {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function stripSupplierName(productName: string, supplierName: string) {
+      const normalizedProductName = stripDiacritics(productName).toLowerCase();
+      const normalizedSupplierName =
+        stripDiacritics(supplierName).toLowerCase();
+
+      if (normalizedProductName.startsWith(normalizedSupplierName)) {
+        return productName.slice(supplierName.length).trimStart();
+      }
+
+      return productName;
+    }
+
     return (
       <div
         ref={ref}
@@ -72,13 +88,23 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
           </div>
           <div className="w-full text-left flex flex-col items-left justify-between gap-2">
             <h3 className="text-[14px] font-normal text-gray-800">
-              <span className="text-gray-900">{product.supplier.name}</span>{" "}
-              <span className="capitalize">
-                {product.name
-                  .replace(product.supplier.name + " ", "")
-                  .toLocaleLowerCase()}
-              </span>
+              {product.supplier?.name ? (
+                <>
+                  <span className="text-gray-900">{product.supplier.name}</span>{" "}
+                  <span className="capitalize">
+                    {stripSupplierName(
+                      product.name,
+                      product.supplier.name
+                    ).toLocaleLowerCase()}
+                  </span>
+                </>
+              ) : (
+                <span className="capitalize">
+                  {product.name.toLocaleLowerCase()}
+                </span>
+              )}
             </h3>
+
             {shoppingList.find((item) => item.barcode === product.barcode)
               ?.quantity ?? 0 > 0 ? (
               <div className="flex items-center">
