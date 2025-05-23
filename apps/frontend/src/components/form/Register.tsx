@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { signup } from "@/app/(auth)/login/actions";
+import { useSignup } from "@/app/(auth)/login/actions";
 import LoadingButton from "@/components/ui/LoadingButton";
 
 interface Errors {
@@ -17,6 +17,7 @@ export default function RegisterForm() {
   const [errors, setErrors] = useState<Errors>({});
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const signup = useSignup();
 
   useEffect(() => {
     let validationErrors: Errors = {};
@@ -49,12 +50,12 @@ export default function RegisterForm() {
     if (isFormValid) {
       try {
         setIsLoading(true);
-        const errorMessage = await signup({ email, password });
-        if (errorMessage) {
-          toast.error(errorMessage);
-        }
-      } catch (error) {
-        console.error("Unexpected error:", error);
+        await signup({ email, password });
+        toast.success(
+          "Ελέγξτε το email σας για να επιβεβαιώσετε την εγγραφή σας."
+        );
+      } catch (error: any) {
+        toast.error(error.message || "Αποτυχία σύνδεσης.");
       } finally {
         setIsLoading(false);
       }
