@@ -8,6 +8,7 @@ import { errorHandler } from "./middleware/error.middleware";
 import categoryRoutes from "./routes/category.routes";
 import subcategoryRoutes from "./routes/subcategory.routes";
 import productRoutes from "./routes/product.routes";
+import supermarketRoutes from "./routes/supermarket.routes";
 
 import { setupSwagger } from "./swagger";
 
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/api/categories", categoryRoutes);
 app.use("/api/subcategories", subcategoryRoutes);
+app.use("/api/supermarkets", supermarketRoutes);
 app.use("/api/products", productRoutes);
 
 app.use(errorHandler);

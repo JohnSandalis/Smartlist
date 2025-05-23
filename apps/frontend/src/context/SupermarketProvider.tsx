@@ -37,21 +37,30 @@ export function SupermarketProvider({
 
   useEffect(() => {
     const fetchSupermarkets = async () => {
-      const { data, error } = await supabase.from("supermarkets").select("*");
-      if (error) {
-        console.error("Failed to fetch supermarkets:", error);
-        return;
-      }
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/supermarkets`,
+          {
+            cache: "force-cache",
+          }
+        );
+        if (!res.ok) {
+          throw new Error(`Failed to fetch supermarkets: ${res.statusText}`);
+        }
+        const data: Supermarket[] = await res.json();
 
-      const supermarketMap: SupermarketMap = {};
-      data.forEach((sm) => {
-        supermarketMap[sm.merchant_uuid] = sm;
-      });
-      setSupermarkets(supermarketMap);
+        const supermarketMap: SupermarketMap = {};
+        data.forEach((sm) => {
+          supermarketMap[sm.merchant_uuid] = sm;
+        });
+        setSupermarkets(supermarketMap);
+      } catch (error) {
+        console.error("Failed to fetch supermarkets:", error);
+      }
     };
 
     fetchSupermarkets();
-  }, [supabase]);
+  }, []);
 
   useEffect(() => {
     const loadPreferences = async () => {

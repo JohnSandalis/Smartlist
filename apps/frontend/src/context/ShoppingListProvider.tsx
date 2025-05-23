@@ -50,7 +50,7 @@ export function ShoppingListProvider({
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/products/by-barcodes`,
         {
-          cache: "force-cache",
+          cache: "no-store",
           body: JSON.stringify({ barcodes }),
           method: "POST",
           headers: {
