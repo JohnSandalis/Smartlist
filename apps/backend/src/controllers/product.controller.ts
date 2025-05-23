@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { fetchProducts } from "../services/product.service";
+import {
+  fetchProducts,
+  fetchProductsByBarcodes,
+} from "../services/product.service";
 import { ApiError } from "../utils/ApiError";
 import { Product } from "@smartlist/types";
 import { fetchSubSubCategoryUuids } from "../services/subsubcategory.service";
@@ -40,6 +43,30 @@ export const getProducts = async (
     );
     if (!data) {
       throw new ApiError(404, `Products not found in the database`);
+    }
+    res.json(data.products);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @desc  Get products by a list of barcodes
+// @route POST /api/products/by-barcodes
+export const getProductsByBarcodes = async (
+  req: Request,
+  res: Response<Product[]>,
+  next: NextFunction
+) => {
+  const { barcodes } = req.body;
+
+  if (!Array.isArray(barcodes) || barcodes.length === 0) {
+    return next(new ApiError(400, "Barcodes must be a non-empty array"));
+  }
+
+  try {
+    const data = await fetchProductsByBarcodes(barcodes);
+    if (!data) {
+      throw new ApiError(404, "No products found for the given barcodes");
     }
     res.json(data.products);
   } catch (err) {

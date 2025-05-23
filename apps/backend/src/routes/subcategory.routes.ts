@@ -7,6 +7,8 @@ const router = Router();
  * @openapi
  * /api/subcategories:
  *   get:
+ *     tags:
+ *       - SubCategories
  *     summary: Get all subcategories
  *     description: Returns a list of all subcategories.
  *     responses:

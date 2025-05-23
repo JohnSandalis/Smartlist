@@ -7,6 +7,8 @@ const router = Router();
  * @openapi
  * /api/categories:
  *   get:
+ *     tags:
+ *       - Categories
  *     summary: Get all categories
  *     description: Returns a list of all categories.
  *     responses:
@@ -36,6 +38,8 @@ router.get("/", getCategories);
  * @openapi
  * /api/categories/{uuid}:
  *   get:
+ *     tags:
+ *       - Categories
  *     summary: Get a category by UUID
  *     description: Returns a category's name and image URL by its UUID.
  *     parameters:

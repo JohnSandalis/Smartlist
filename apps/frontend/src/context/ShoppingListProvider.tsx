@@ -10,7 +10,7 @@ import {
 } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useUser } from "@/context/UserContext";
-import { ShoppingCartItem } from "@smartlist/types";
+import { Product, ShoppingCartItem } from "@smartlist/types";
 
 interface ShoppingListContextType {
   items: ShoppingCartItem[];
@@ -46,36 +46,30 @@ export function ShoppingListProvider({
       if (!itemsFromDb.length) return setItems([]);
 
       const barcodes = itemsFromDb.map((item) => item.barcode);
-      const { data: products, error } = await supabase
-        .from("products")
-        .select(
-          `
-        barcode,
-        name,
-        image,
-        category,
-        supplier:suppliers(name),
-        prices(barcode, merchant_uuid, price, price_normalized, date, unit)
-      `
-        )
-        .in("barcode", barcodes);
 
-      if (error) {
-        console.error("Failed to load products:", error);
-        return;
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/products/by-barcodes`,
+        {
+          cache: "force-cache",
+          body: JSON.stringify({ barcodes }),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch categories");
       }
+      const products: Product[] = await res.json();
 
       const loadedItems = products.map((product) => {
         const quantity =
           itemsFromDb.find((item) => item.barcode === product.barcode)
             ?.quantity || 1;
-        const supplier = Array.isArray(product.supplier)
-          ? product.supplier[0] || { name: "Unknown" }
-          : product.supplier || { name: "Unknown" };
 
         return {
           ...product,
-          supplier,
           quantity,
         };
       });

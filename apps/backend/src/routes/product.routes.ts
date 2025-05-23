@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { getProducts } from "../controllers/product.controller";
+import {
+  getProducts,
+  getProductsByBarcodes,
+} from "../controllers/product.controller";
 
 const router = Router();
 
@@ -7,6 +10,8 @@ const router = Router();
  * @openapi
  * /api/products:
  *   get:
+ *     tags:
+ *       - Products
  *     summary: Get all products of specific sub-category and specific range
  *     description: Returns a list of all products of specific sub-category and specific range.
  *     parameters:
@@ -72,5 +77,78 @@ const router = Router();
  *         description: Internal server error
  */
 router.get("/", getProducts);
+
+/**
+ * @openapi
+ * /api/products/by-barcodes:
+ *   post:
+ *     tags:
+ *       - Products
+ *     summary: Get products by barcodes
+ *     description: Returns a list of products matching the provided barcodes.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               barcodes:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *             required:
+ *               - barcodes
+ *     responses:
+ *       200:
+ *         description: A list of products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   barcode:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                   image:
+ *                     type: string
+ *                   category:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                   supplier:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                   prices:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         barcode:
+ *                           type: string
+ *                         merchant_uuid:
+ *                           type: integer
+ *                         price:
+ *                           type: number
+ *                         price_normalized:
+ *                           type: number
+ *                         date:
+ *                           type: string
+ *                           format: date
+ *                         unit:
+ *                           type: string
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: No products found for the given barcodes
+ *       500:
+ *         description: Internal server error
+ */
+router.post("/by-barcodes", getProductsByBarcodes);
 
 export default router;
