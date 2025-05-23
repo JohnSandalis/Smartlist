@@ -5,10 +5,8 @@ import {
   useEffect,
   useState,
   useCallback,
-  useMemo,
 } from "react";
 import { Supermarket } from "@smartlist/types";
-import { createClient } from "@/utils/supabase/client";
 import { useUser } from "./UserContext";
 
 type SupermarketMap = Record<string, Supermarket>;
@@ -29,7 +27,6 @@ export function SupermarketProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = useMemo(() => createClient(), []);
   const [supermarkets, setSupermarkets] = useState<SupermarketMap>({});
   const [selected, setSelected] = useState<number[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -68,20 +65,18 @@ export function SupermarketProvider({
         let preferences: number[] = [];
 
         if (user) {
-          const { data, error } = await supabase
-            .from("user_preferences")
-            .select("selected_supermarkets")
-            .eq("user_id", user.id)
-            .single();
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/user-preferences`,
+            {
+              credentials: "include",
+            }
+          );
+          const { selected_supermarkets } = await res.json();
 
-          if (!error && data?.selected_supermarkets) {
-            preferences = data.selected_supermarkets;
-          } else if (error && error.code !== "PGRST116") {
-            // Ignore "No rows found" error
-            console.error("Supabase fetch error:", error);
+          if (res.ok && selected_supermarkets) {
+            preferences = selected_supermarkets;
           }
         } else {
-          // Fallback to localStorage for anonymous users
           const saved = localStorage.getItem("selectedSupermarkets");
           if (saved) {
             preferences = JSON.parse(saved);
@@ -98,24 +93,21 @@ export function SupermarketProvider({
     };
 
     loadPreferences();
-  }, [user, supabase]);
+  }, [user]);
 
   const savePreferences = useCallback(
     async (ids: number[]) => {
       try {
         if (user) {
-          const { error } = await supabase.from("user_preferences").upsert(
+          await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/user-preferences`,
             {
-              user_id: user.id,
-              selected_supermarkets: ids,
-              updated_at: new Date().toISOString(),
-            },
-            {
-              onConflict: "user_id",
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({ selected_supermarkets: ids }),
             }
           );
-
-          if (error) throw error;
         } else {
           if (ids.length > 0) {
             localStorage.setItem("selectedSupermarkets", JSON.stringify(ids));
@@ -127,7 +119,7 @@ export function SupermarketProvider({
         console.error("Failed to save preferences:", error);
       }
     },
-    [user, supabase]
+    [user]
   );
 
   const handleSetSelected = useCallback(

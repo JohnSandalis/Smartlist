@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { login } from "@/app/(auth)/login/actions";
+import { useLogin } from "@/app/(auth)/login/actions";
 import LoadingButton from "@/components/ui/LoadingButton";
 
 interface Errors {
@@ -15,6 +15,7 @@ export default function LogInForm() {
   const [errors, setErrors] = useState<Errors>({});
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const login = useLogin();
 
   useEffect(() => {
     const errors: Errors = {};
@@ -39,12 +40,10 @@ export default function LogInForm() {
     if (isFormValid) {
       try {
         setIsLoading(true);
-        const errorMessage = await login({ email, password });
-        if (errorMessage) {
-          toast.error(errorMessage);
-        }
-      } catch (error) {
-        console.error("Unexpected error:", error);
+        await login({ email, password });
+        toast.success("Επιτυχής σύνδεση!");
+      } catch (error: any) {
+        toast.error(error.message || "Αποτυχία σύνδεσης.");
       } finally {
         setIsLoading(false);
       }

@@ -1,51 +1,74 @@
-"use server";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
+import { useUser } from "@/context/UserContext";
 
 interface AuthParams {
   email: string;
   password: string;
 }
 
-export async function login({
-  email,
-  password,
-}: AuthParams): Promise<string | void> {
-  const supabase = createClient();
+export function useLogin() {
+  const router = useRouter();
+  const { refreshSession } = useUser();
 
-  const data = {
-    email,
-    password,
-  };
+  const login = useCallback(
+    async ({ email, password }: AuthParams) => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
-  const { error } = await supabase.auth.signInWithPassword(data);
+      if (res.ok) {
+        await refreshSession();
+        router.push("/");
+      } else {
+        const errorData = await res.json();
+        throw new Error(errorData?.error || "Login failed");
+      }
+    },
+    [router, refreshSession]
+  );
 
-  if (error) {
-    return error.message;
-  }
-
-  revalidatePath("/", "layout");
-  redirect("/");
+  return login;
 }
 
-export async function signup({
-  email,
-  password,
-}: AuthParams): Promise<string | void> {
-  const supabase = createClient();
+export function useSignup() {
+  const router = useRouter();
+  const { refreshSession } = useUser();
 
-  const data = {
-    email,
-    password,
-  };
+  const signup = useCallback(
+    async ({ email, password }: AuthParams) => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/signup`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
-  const { error } = await supabase.auth.signUp(data);
+      if (res.ok) {
+        await refreshSession();
+        router.push("/");
+      } else {
+        const errorData = await res.json();
+        throw new Error(errorData?.error || "Signup failed");
+      }
+    },
+    [router, refreshSession]
+  );
 
-  if (error) {
-    return error.message;
-  }
-
-  revalidatePath("/", "layout");
-  redirect("/");
+  return signup;
 }

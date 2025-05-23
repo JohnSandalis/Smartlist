@@ -1,6 +1,12 @@
 "use client";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { createClient } from "@/utils/supabase/client";
+
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { useRouter } from "next/navigation";
 
 type User = {
@@ -18,63 +24,35 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const supabase = useMemo(() => createClient(), []);
   const router = useRouter();
   const [user, setUser] = useState<User>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (session?.user) {
-          setUser({
-            id: session.user.id,
-            email: session.user.email,
-          });
-        } else {
-          setUser(null);
-        }
-        setIsLoading(false);
-      }
-    );
-
-    const getSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (session?.user) {
-        setUser({
-          id: session.user.id,
-          email: session.user.email,
-        });
-      }
-      setIsLoading(false);
-    };
-
-    getSession();
-
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
-  }, [supabase]);
-
-  const signOut = async () => {
-    await supabase.auth.signOut();
-    router.refresh();
-  };
-
-  const refreshSession = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (session?.user) {
-      setUser({
-        id: session.user.id,
-        email: session.user.email,
-      });
+  const refreshSession = useCallback(async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`, {
+      credentials: "include",
+    });
+    if (res.ok) {
+      const { user } = await res.json();
+      setUser(user);
     } else {
       setUser(null);
     }
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    refreshSession();
+  }, [refreshSession]);
+
+  const signOut = async () => {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+    setUser(null);
+    router.push("/");
+    router.refresh();
   };
 
   return (

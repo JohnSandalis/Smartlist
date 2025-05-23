@@ -78,3 +78,29 @@ export const fetchProductsByBarcodes = async (
     })) as Product[],
   };
 };
+
+export const searchProductsService = async (query: string) => {
+  const { data, error } = await supabase
+    .from("products")
+    .select(
+      `
+      barcode,
+      name,
+      image,
+      category,
+      supplier:suppliers (name),
+      prices (
+        merchant_uuid,
+        price,
+        price_normalized,
+        date,
+        unit
+      )
+    `
+    )
+    .ilike("name", `%${query}%`)
+    .limit(10);
+
+  if (error) throw error;
+  return data;
+};

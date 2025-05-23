@@ -1,18 +1,19 @@
-"use server";
+"use client";
 
-import { createClient } from "@/utils/supabase/server";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-export async function logout() {
-  const supabase = createClient();
+export function useLogout() {
+  const router = useRouter();
 
-  const { error } = await supabase.auth.signOut();
+  const logout = async () => {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
 
-  if (error) {
-    redirect("/error");
-  }
+    router.refresh();
+    router.push("/");
+  };
 
-  revalidatePath("/", "layout");
-  redirect("/");
+  return logout;
 }

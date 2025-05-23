@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   getProducts,
   getProductsByBarcodes,
+  searchProducts,
 } from "../controllers/product.controller";
 
 const router = Router();
@@ -150,5 +151,7 @@ router.get("/", getProducts);
  *         description: Internal server error
  */
 router.post("/by-barcodes", getProductsByBarcodes);
+
+router.get("/search", searchProducts);
 
 export default router;

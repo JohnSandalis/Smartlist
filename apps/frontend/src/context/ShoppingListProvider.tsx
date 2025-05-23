@@ -6,9 +6,7 @@ import {
   useState,
   useEffect,
   useCallback,
-  useMemo,
 } from "react";
-import { createClient } from "@/utils/supabase/client";
 import { useUser } from "@/context/UserContext";
 import { Product, ShoppingCartItem } from "@smartlist/types";
 
@@ -35,7 +33,6 @@ export function ShoppingListProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = useMemo(() => createClient(), []);
   const { user } = useUser();
   const [items, setItems] = useState<ShoppingCartItem[]>([]);
   const [currentListId, setCurrentListId] = useState<string | null>(null);
@@ -76,7 +73,7 @@ export function ShoppingListProvider({
 
       setItems(loadedItems);
     },
-    [supabase]
+    []
   );
 
   useEffect(() => {
@@ -84,16 +81,14 @@ export function ShoppingListProvider({
       setIsLoading(true);
       try {
         if (user) {
-          const { data, error } = await supabase
-            .from("shopping_lists")
-            .select("id, items")
-            .eq("user_id", user.id)
-            .order("updated_at", { ascending: false })
-            .limit(1)
-            .single();
-
-          if (error) throw error;
-
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/shopping-lists`,
+            {
+              credentials: "include",
+            }
+          );
+          if (!res.ok) throw new Error("Failed to fetch shopping list");
+          const data = await res.json();
           if (data) {
             setCurrentListId(data.id);
             await loadItemsFromDb(data.items || []);
@@ -113,7 +108,7 @@ export function ShoppingListProvider({
     };
 
     loadShoppingList();
-  }, [user, loadItemsFromDb, supabase]);
+  }, [user, loadItemsFromDb]);
 
   const saveShoppingList = useCallback(
     async (itemsToSave: ShoppingCartItem[]) => {
@@ -124,27 +119,21 @@ export function ShoppingListProvider({
         }));
 
         if (user) {
-          if (currentListId) {
-            const { error } = await supabase
-              .from("shopping_lists")
-              .update({ items: payload, updated_at: new Date().toISOString() })
-              .eq("id", currentListId);
-
-            if (error) throw error;
-          } else {
-            const { data, error } = await supabase
-              .from("shopping_lists")
-              .insert({
-                user_id: user.id,
-                name: "My Shopping List",
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/shopping-lists`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({
                 items: payload,
-              })
-              .select()
-              .single();
-
-            if (error) throw error;
-            setCurrentListId(data.id);
-          }
+                listId: currentListId,
+              }),
+            }
+          );
+          if (!res.ok) throw new Error("Failed to save shopping list");
+          const data = await res.json().catch(() => null);
+          if (data && data.id) setCurrentListId(data.id);
         } else {
           localStorage.setItem(
             "shoppingList",
@@ -155,7 +144,7 @@ export function ShoppingListProvider({
         console.error("Failed to save shopping list:", error);
       }
     },
-    [user, currentListId, supabase]
+    [user, currentListId]
   );
 
   const updateItems = useCallback(

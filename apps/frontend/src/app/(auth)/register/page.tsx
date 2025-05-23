@@ -1,16 +1,32 @@
+"use client";
+
 import Link from "next/link";
 import BackButton from "@/components/ui/BackButton";
 import RegisterForm from "@/components/form/Register";
-import { redirect } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-export default async function RegisterPage() {
-  const supabase = createClient();
+export default function RegisterPage() {
+  const router = useRouter();
 
-  const { data, error } = await supabase.auth.getUser();
-  if (!error && data?.user) {
-    redirect("/");
-  }
+  useEffect(() => {
+    const checkAuth = async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`,
+        {
+          credentials: "include",
+        }
+      );
+      if (res.ok) {
+        const { user } = await res.json();
+        if (user) {
+          router.push("/");
+        }
+      }
+    };
+    checkAuth();
+  }, [router]);
+
   return (
     <>
       <BackButton href="/" />

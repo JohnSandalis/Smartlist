@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import {
   fetchProducts,
   fetchProductsByBarcodes,
+  searchProductsService,
 } from "../services/product.service";
 import { ApiError } from "../utils/ApiError";
 import { Product } from "@smartlist/types";
@@ -71,5 +72,24 @@ export const getProductsByBarcodes = async (
     res.json(data.products);
   } catch (err) {
     next(err);
+  }
+};
+
+// @desc  Search products by name
+// @route GET /api/products/search?query=milk
+export const searchProducts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const query = req.query.query as string;
+  if (!query) {
+    return res.status(400).json({ error: "Missing search query" });
+  }
+  try {
+    const data = await searchProductsService(query);
+    res.json(data || []);
+  } catch (err) {
+    next(new ApiError(500, "Internal server error"));
   }
 };

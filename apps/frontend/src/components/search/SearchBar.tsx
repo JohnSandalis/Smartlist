@@ -15,7 +15,9 @@ export const SearchBar = ({ setLoading, setResults }: SearchBarProps) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `/api/search?query=${encodeURIComponent(value)}`
+        `${
+          process.env.NEXT_PUBLIC_API_URL
+        }/api/products/search?query=${encodeURIComponent(value)}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
