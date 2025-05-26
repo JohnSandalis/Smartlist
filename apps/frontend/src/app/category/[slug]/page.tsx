@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import CategoryPageClient from "./CategoryPageClient";
 import { Category } from "@smartlist/types";
+import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
 
 interface CategoryPageProps {
   params: { slug: string };
@@ -26,12 +27,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
     const [categoryRes, subcategoriesRes] = await Promise.all([
       fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/categories/${category_uuid}`,
+        `${getApiBaseUrl()}/api/categories/${category_uuid}`,
         {
           cache: "force-cache",
         }
       ),
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subcategories`, {
+      fetch(`${getApiBaseUrl()}/api/subcategories`, {
         cache: "force-cache",
       }),
     ]);

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { useUser } from "@/context/UserContext";
+import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
 
 interface AuthParams {
   email: string;
@@ -16,7 +17,7 @@ export function useLogin() {
   const login = useCallback(
     async ({ email, password }: AuthParams) => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
+        `${getApiBaseUrl()}/api/auth/login`,
         {
           method: "POST",
           credentials: "include",
@@ -48,7 +49,7 @@ export function useSignup() {
   const signup = useCallback(
     async ({ email, password }: AuthParams) => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/signup`,
+        `${getApiBaseUrl()}/api/auth/signup`,
         {
           method: "POST",
           credentials: "include",

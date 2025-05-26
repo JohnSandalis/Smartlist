@@ -8,6 +8,7 @@ import {
   useCallback,
 } from "react";
 import { useRouter } from "next/navigation";
+import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
 
 type User = {
   id: string;
@@ -29,7 +30,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const refreshSession = useCallback(async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`, {
+    const res = await fetch(`${getApiBaseUrl()}/api/auth/me`, {
       credentials: "include",
     });
     if (res.ok) {
@@ -46,7 +47,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   }, [refreshSession]);
 
   const signOut = async () => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/logout`, {
+    await fetch(`${getApiBaseUrl()}/api/auth/logout`, {
       method: "POST",
       credentials: "include",
     });

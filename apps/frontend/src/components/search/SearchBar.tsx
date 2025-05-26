@@ -2,6 +2,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState, FormEvent, ChangeEvent } from "react";
 import { Product } from "@smartlist/types";
 import { debounce } from "@mui/material";
+import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
 
 interface SearchBarProps {
   setLoading: (loading: boolean) => void;
@@ -15,9 +16,7 @@ export const SearchBar = ({ setLoading, setResults }: SearchBarProps) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${
-          process.env.NEXT_PUBLIC_API_URL
-        }/api/products/search?query=${encodeURIComponent(value)}`
+        `${getApiBaseUrl()}/api/products/search?query=${encodeURIComponent(value)}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");

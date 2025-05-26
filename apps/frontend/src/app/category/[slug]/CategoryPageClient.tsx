@@ -15,6 +15,7 @@ import SubcategoryDrawer from "./components/SubcategoryDrawer";
 import SubcategoryTabs from "./components/SubcategoryTabs";
 import ProductList from "./components/ProductList";
 import ShoppingListButton from "@/components/list/ShoppingListButton";
+import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
 
 interface Props {
   category: Category;
@@ -69,7 +70,7 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
 
     try {
       const productsRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products?subCategoryId=${selectedSubCategory}&start=${currentOffset}&end=${endOffset}`,
+        `${getApiBaseUrl()}/api/products?subCategoryId=${selectedSubCategory}&start=${currentOffset}&end=${endOffset}`,
         {
           cache: "no-store",
         }

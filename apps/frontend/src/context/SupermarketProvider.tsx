@@ -8,6 +8,7 @@ import {
 } from "react";
 import { Supermarket } from "@smartlist/types";
 import { useUser } from "./UserContext";
+import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
 
 type SupermarketMap = Record<string, Supermarket>;
 
@@ -36,7 +37,7 @@ export function SupermarketProvider({
     const fetchSupermarkets = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/supermarkets`,
+          `${getApiBaseUrl()}/api/supermarkets`,
           {
             cache: "force-cache",
           }
@@ -66,7 +67,7 @@ export function SupermarketProvider({
 
         if (user) {
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/user-preferences`,
+            `${getApiBaseUrl()}/api/user-preferences`,
             {
               credentials: "include",
             }
@@ -100,7 +101,7 @@ export function SupermarketProvider({
       try {
         if (user) {
           await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/user-preferences`,
+            `${getApiBaseUrl()}/api/user-preferences`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },

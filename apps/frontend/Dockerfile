@@ -2,18 +2,18 @@ FROM node:23
 
 WORKDIR /app
 
-# Copy root files and frontend workspace
+# Copy metadata
 COPY package.json package-lock.json tsconfig.base.json ./
 COPY apps/frontend/package.json ./apps/frontend/
-COPY apps/frontend ./apps/frontend
+COPY packages/types/package.json ./packages/types/
 
-# Copy shared types (or any other workspace you import from)
-COPY packages/types ./packages/types
-
-# Install dependencies only for frontend
+# Install deps (cached)
 RUN npm install --workspace=apps/frontend
 
-# Build the frontend
-RUN npm run --workspace=apps/frontend build
+# Copy source
+COPY apps/frontend ./apps/frontend
+COPY packages/types ./packages/types
 
-CMD ["npm", "--workspace=apps/frontend", "start"]
+# Wait for backend, then build and start
+CMD sh -c "until curl -s http://backend:8080/api/categories > /dev/null; do echo 'Waiting for backend...'; sleep 2; done && npm run --workspace=apps/frontend build && npm run --workspace=apps/frontend start"
+

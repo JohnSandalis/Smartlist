@@ -24,7 +24,13 @@ const isProduction = process.env.NODE_ENV === "production";
 
 app.use(
   cors({
-    origin: isProduction ? "https://smartlist.gr" : "http://localhost:3000",
+    origin: isProduction
+      ? [
+          "https://smartlist.gr",
+          "https://www.smartlist.gr",
+          "https://api.smartlist.gr",
+        ]
+      : "http://localhost:3000",
     credentials: true,
   })
 );

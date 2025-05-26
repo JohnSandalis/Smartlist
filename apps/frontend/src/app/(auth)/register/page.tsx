@@ -5,6 +5,7 @@ import BackButton from "@/components/ui/BackButton";
 import RegisterForm from "@/components/form/Register";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function RegisterPage() {
   useEffect(() => {
     const checkAuth = async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`,
+        `${getApiBaseUrl()}/api/auth/me`,
         {
           credentials: "include",
         }

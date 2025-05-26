@@ -9,6 +9,7 @@ import {
 } from "react";
 import { useUser } from "@/context/UserContext";
 import { Product, ShoppingCartItem } from "@smartlist/types";
+import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
 
 interface ShoppingListContextType {
   items: ShoppingCartItem[];
@@ -45,7 +46,7 @@ export function ShoppingListProvider({
       const barcodes = itemsFromDb.map((item) => item.barcode);
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products/by-barcodes`,
+        `${getApiBaseUrl()}/api/products/by-barcodes`,
         {
           cache: "no-store",
           body: JSON.stringify({ barcodes }),
@@ -82,7 +83,7 @@ export function ShoppingListProvider({
       try {
         if (user) {
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/shopping-lists`,
+            `${getApiBaseUrl()}/api/shopping-lists`,
             {
               credentials: "include",
             }
@@ -120,7 +121,7 @@ export function ShoppingListProvider({
 
         if (user) {
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/shopping-lists`,
+            `${getApiBaseUrl()}/api/shopping-lists`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },

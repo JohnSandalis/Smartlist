@@ -7,6 +7,7 @@ import { Category } from "@smartlist/types";
 import SelectedSuperMarkets from "@/components/supermarkets/SelectedSuperMarkets";
 import Link from "next/link";
 import Image from "next/image";
+import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
 
 const ShoppingListButton = dynamic(
   () => import("@/components/list/ShoppingListButton"),
@@ -16,7 +17,7 @@ const ShoppingListButton = dynamic(
 const Home = async () => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/categories`,
+      `${getApiBaseUrl()}/api/categories`,
       {
         cache: "force-cache",
       }
