@@ -1,9 +1,14 @@
 export const getApiBaseUrl = () => {
-  if (typeof window !== 'undefined') {
+  const env = process.env.NEXT_PUBLIC_ENV;
+
+  if (typeof window !== "undefined") {
     // Client-side (browser)
-    return 'https://api.smartlist.gr';
+    if (env === "PRODUCTION") {
+      return "https://api.smartlist.gr";
+    }
+    return "http://localhost:8080";
   }
-  
+
   // Server-side (SSR/SSG)
-  return process.env.NEXT_PUBLIC_API_URL || 'http://backend:8080';
+  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 };

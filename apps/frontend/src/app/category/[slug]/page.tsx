@@ -8,7 +8,7 @@ interface CategoryPageProps {
 }
 
 export async function generateStaticParams() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`);
+  const res = await fetch(`${getApiBaseUrl()}/api/categories`);
   if (!res.ok) {
     throw new Error("Failed to fetch categories for static generation");
   }
