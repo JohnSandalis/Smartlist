@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./apps/backend/.env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/categories"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=${EXTERNAL_API_URL:-http://backend:8080}
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
