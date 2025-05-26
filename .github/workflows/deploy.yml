@@ -9,6 +9,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    environment: production
+
     steps:
       - name: Connect to Droplet and deploy
         uses: appleboy/ssh-action@v1.0.3
