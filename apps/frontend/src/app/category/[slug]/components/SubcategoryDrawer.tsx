@@ -29,13 +29,21 @@ export default function SubcategoryDrawer({
     >
       <Link href="/">
         <IconButton
-          sx={{ position: "absolute", top: 8, left: 8, zIndex: 1000 }}
+          sx={{
+            position: "absolute",
+            top: 8,
+            left: {
+              xs: "20px",
+              lg: `max(20px, calc((100vw - 1400px) / 2 + 20px))`,
+            },
+            zIndex: 1000,
+          }}
         >
           <ArrowLeftIcon className="h-5 w-5" />
         </IconButton>
       </Link>
       <List
-        className="w-full"
+        className="w-full container-default px-4"
         style={{ width: "100vw", height: "100vh", paddingTop: "3rem" }}
       >
         {subcategoryList.map((subcategory) => (

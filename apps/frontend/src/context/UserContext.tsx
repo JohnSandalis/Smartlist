@@ -13,6 +13,7 @@ import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
 type User = {
   id: string;
   email?: string;
+  created_at: string;
 } | null;
 
 interface UserContextType {
@@ -35,6 +36,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     });
     if (res.ok) {
       const { user } = await res.json();
+      console.log(user);
       setUser(user);
     } else {
       setUser(null);

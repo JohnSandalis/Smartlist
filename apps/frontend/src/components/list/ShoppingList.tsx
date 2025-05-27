@@ -52,7 +52,7 @@ export default function ShoppingList({
       <DialogTitle className="bg-off-white text-center !p-6 page-title">
         Λίστα
       </DialogTitle>
-      <DialogContent className="bg-off-white flex flex-col gap-2 overflow-y-auto !px-4 !py-6 sm:!px-6">
+      <DialogContent className="bg-off-white grid grid-cols-1 md:grid-cols-2 gap-2 overflow-y-auto !px-4 !py-6 sm:!px-6 auto-rows-min container-default w-full">
         {shoppingList.map((item) => {
           const product = shoppingList.find((p) => p.barcode === item.barcode);
 
@@ -61,13 +61,13 @@ export default function ShoppingList({
           ) : null;
         })}
         {latestPriceDate && (
-          <h2 className="text-center mt-4">
+          <h2 className="text-center mt-4 col-span-2">
             Η τιμή των προϊόντων που αναγράφεται αφορά την{" "}
             {latestPriceDate.toLocaleDateString("en-GB")}
           </h2>
         )}
       </DialogContent>
-      <DialogActions className="w-full !rounded-t-lg bg-white !py-4 !px-2 !shadow-lg">
+      <DialogActions className="w-full !rounded-t-lg bg-white !py-4 !px-2 shadow-actions container-default">
         <Link
           href="/list"
           className="w-full bg-primary text-white p-4 rounded-xl text-center font-semibold"
@@ -76,7 +76,15 @@ export default function ShoppingList({
         </Link>
         <IconButton
           onClick={handleClose}
-          sx={{ zIndex: 1000, position: "absolute", top: "20px", left: "20px" }}
+          sx={{
+            zIndex: 1000,
+            position: "absolute",
+            top: "20px",
+            left: {
+              xs: "20px",
+              lg: `max(20px, calc((100vw - 1400px) / 2 + 20px))`,
+            },
+          }}
         >
           <ArrowLeftIcon width="24px" height="24px" />
         </IconButton>

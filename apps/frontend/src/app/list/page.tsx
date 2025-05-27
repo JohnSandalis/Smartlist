@@ -37,17 +37,30 @@ export default function List() {
   return (
     <>
       <div className="w-full">
-        <IconButton onClick={() => router.back()}>
+        <IconButton
+          onClick={() => router.back()}
+          sx={{
+            zIndex: 1000,
+            position: "absolute",
+            top: "20px",
+            left: {
+              xs: "20px",
+              lg: `max(20px, calc((100vw - 1400px) / 2))`,
+            },
+          }}
+        >
           <ArrowLeftIcon width="24px" height="24px" />
         </IconButton>
       </div>
-      <h1 className="text-center page-title mb-2">Φθηνότεροι Συνδιασμοί</h1>
-      <p className="text-md text-center mb-4 text-gray-700">
+      <h1 className="text-center page-title mb-2 mt-8">
+        Φθηνότεροι Συνδιασμοί
+      </h1>
+      <p className="text-md text-center mb-6 text-gray-700">
         Παρακάτω θα βρείτε από ποια super market συμφέρει να αγοράσετε τα
         προϊόντα της λίστας σας.
       </p>
 
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 gap-4 container-default">
         {grouped.map((group, groupIndex) => (
           <SuperMarketCombGroupList
             key={`sm-group-${groupIndex}`}

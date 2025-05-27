@@ -26,7 +26,7 @@ export default function SelectedSuperMarkets() {
   return (
     <>
       <button
-        className="w-full bg-white rounded-md mb-2 p-3 flex items-center justify-between gap-2 hover:bg-gray-200 active:bg-gray-200 transition-colors duration-300 ease-in-out"
+        className="w-full bg-white rounded-md mb-2 p-3 flex items-center justify-between gap-2 hover:bg-gray-200 active:bg-gray-200 transition-colors duration-300 ease-in-out container-default"
         onClick={() => setSuperMarketsListOpen(true)}
       >
         <div className="flex flex-col gap-2 text-start">

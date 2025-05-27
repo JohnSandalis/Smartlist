@@ -145,7 +145,7 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
       />
 
       <div className="sticky top-0 left-0 w-full bg-off-white z-10">
-        <div className="flex items-center pt-4 gap-2">
+        <div className="flex items-center pt-4 gap-2 container-default">
           <Link href="/" className="max-w-10 w-10">
             <IconButton sx={{ zIndex: 1000 }}>
               <ArrowLeftIcon width="24px" height="24px" />

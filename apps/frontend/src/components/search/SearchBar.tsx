@@ -16,7 +16,9 @@ export const SearchBar = ({ setLoading, setResults }: SearchBarProps) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${getApiBaseUrl()}/api/products/search?query=${encodeURIComponent(value)}`
+        `${getApiBaseUrl()}/api/products/search?query=${encodeURIComponent(
+          value
+        )}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -44,7 +46,7 @@ export const SearchBar = ({ setLoading, setResults }: SearchBarProps) => {
   };
 
   return (
-    <div className="relative w-full pl-10 pr-5">
+    <div className="relative w-full pl-10">
       <form onSubmit={handleSearch}>
         <label htmlFor="search" className="sr-only">
           Αναζήτηση
@@ -61,7 +63,7 @@ export const SearchBar = ({ setLoading, setResults }: SearchBarProps) => {
         />
         <button
           type="submit"
-          className="absolute top-1/2 right-7 -translate-y-1/2 w-6 h-6"
+          className="absolute top-1/2 right-4 -translate-y-1/2 w-6 h-6"
           aria-label="Search"
         >
           <MagnifyingGlassIcon className="w-6 h-6" />

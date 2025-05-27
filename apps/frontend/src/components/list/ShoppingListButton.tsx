@@ -9,7 +9,7 @@ export default function ShoppingListButton() {
 
   return totalItems > 0 ? (
     <>
-      <div className="fixed bottom-0 left-0 w-full rounded-t-lg bg-white py-4 px-2 shadow-lg">
+      <div className="fixed bottom-0 left-[50%] transform -translate-x-1/2 w-full rounded-t-lg bg-white py-4 px-2 shadow-[0_0_10px_rgba(0,0,0,0.1)] w-full container-default">
         <button
           onClick={() => setListOpen(true)}
           className="w-full bg-primary text-white p-4 rounded-xl flex justify-between items-center"
