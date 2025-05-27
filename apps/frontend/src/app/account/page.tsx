@@ -17,7 +17,7 @@ export default function AccountPage() {
     }
   }, [isLoading, user, router]);
 
-  if (isLoading) return <AccountLoading />;
+  if (isLoading || !user) return <AccountLoading />;
 
   return (
     <>
