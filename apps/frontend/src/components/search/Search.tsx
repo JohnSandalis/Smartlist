@@ -41,16 +41,24 @@ export default function Search({
     >
       <IconButton
         onClick={handleClose}
-        sx={{ zIndex: 1000, position: "absolute", top: "24px", left: "20px" }}
+        sx={{
+          zIndex: 1000,
+          position: "absolute",
+          top: "24px",
+          left: {
+            xs: "20px",
+            lg: `max(20px, calc((100vw - 1400px) / 2))`,
+          },
+        }}
       >
         <ArrowLeftIcon width="24px" height="24px" />
       </IconButton>
-      <DialogTitle className="bg-off-white text-center !p-6 page-title">
+      <DialogTitle className="bg-off-white text-center !px-0 !py-6 page-title w-full container-default">
         <SearchBar setLoading={setLoading} setResults={setResults} />
       </DialogTitle>
       <DialogContent className="bg-off-white flex flex-col gap-2 overflow-y-auto !px-4 !pb-6 sm:!px-6">
         {loading && (
-          <div className="grid grid-cols-1 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 grid-rows-min gap-2 w-full container-default">
             {Array.from({ length: 8 }).map((_, index) => (
               <ProductCardSkeleton key={`skeleton-${index}`} />
             ))}

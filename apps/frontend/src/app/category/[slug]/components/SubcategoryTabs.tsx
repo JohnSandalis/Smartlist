@@ -16,7 +16,7 @@ export default function SubcategoryTabs({
   subcategoryRefs,
 }: Props) {
   return (
-    <div className="overflow-x-auto whitespace-nowrap scroll-smooth scrollbar-hide mb-2 py-2">
+    <div className="overflow-x-auto whitespace-nowrap scroll-smooth scrollbar-hide mb-2 py-2 container-default">
       {subcategoryList.map((subcategory) => (
         <button
           key={subcategory.uuid}

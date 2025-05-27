@@ -16,12 +16,9 @@ const ShoppingListButton = dynamic(
 
 const Home = async () => {
   try {
-    const res = await fetch(
-      `${getApiBaseUrl()}/api/categories`,
-      {
-        cache: "force-cache",
-      }
-    );
+    const res = await fetch(`${getApiBaseUrl()}/api/categories`, {
+      cache: "force-cache",
+    });
     if (!res.ok) {
       throw new Error("Failed to fetch categories");
     }
@@ -29,7 +26,7 @@ const Home = async () => {
 
     return (
       <>
-        <header className="flex items-center justify-between gap-2 mb-2">
+        <header className="sticky top-0 left-0 right-0 z-50 bg-white mb-2 mx-[-1rem] my-[-1rem] p-3 rounded-b-lg flex items-center justify-between gap-2  container-default shadow-actions">
           <Link href="/account">
             <IconButton>
               <UserCircleIcon
@@ -48,7 +45,7 @@ const Home = async () => {
           <SearchButton />
         </header>
         <SelectedSuperMarkets />
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-20 container-default">
           {categories.map((category: Category) => (
             <CategoryCard key={category.uuid} category={category} />
           ))}

@@ -16,7 +16,7 @@ export default function ProductList({
 }: Props) {
   if (products.length > 0) {
     return (
-      <div className="grid grid-cols-1 gap-2 pb-20">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pb-20 container-default">
         {products.map((product, index) =>
           product.prices && product.prices.length > 0 ? (
             <div
@@ -33,7 +33,7 @@ export default function ProductList({
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pb-20 container-default">
         {Array.from({ length: 8 }).map((_, index) => (
           <ProductCardSkeleton key={`skeleton-${index}`} />
         ))}

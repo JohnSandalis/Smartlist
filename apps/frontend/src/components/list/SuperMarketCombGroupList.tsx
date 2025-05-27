@@ -23,7 +23,7 @@ export default function SuperMarketCombGroupList({
 
   return (
     <Accordion
-      className="rounded-lg shadow-none before-hidden overflow-hidden
+      className="!rounded-lg !shadow-none before-hidden overflow-hidden
 "
     >
       <AccordionSummary

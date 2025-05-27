@@ -54,7 +54,7 @@ export default function ProductListComb({
           return (
             <div
               key={`sm-comb-${combinationIndex}-${index}`}
-              className="flex flex-col items-center justify-center mb-4 gap-2"
+              className="flex flex-col items-center justify-center mb-4 gap-2 container-default w-full"
             >
               <div className="w-full flex items-start gap-2">
                 <div className="flex items-center justify-center w-8 h-8 mb-2">
@@ -81,10 +81,18 @@ export default function ProductListComb({
           );
         })}
       </DialogContent>
-      <DialogActions className="w-full !rounded-t-lg bg-white !py-4 !px-2 !shadow-lg">
+      <DialogActions>
         <IconButton
           onClick={handleClose}
-          sx={{ zIndex: 1000, position: "absolute", top: "20px", left: "20px" }}
+          sx={{
+            zIndex: 1000,
+            position: "absolute",
+            top: "20px",
+            left: {
+              xs: "20px",
+              lg: `max(20px, calc((100vw - 1400px) / 2))`,
+            },
+          }}
         >
           <ArrowLeftIcon width="24px" height="24px" />
         </IconButton>

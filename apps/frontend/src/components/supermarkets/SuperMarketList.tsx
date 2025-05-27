@@ -44,14 +44,14 @@ const SuperMarketsList: FC<SuperMarketsListProps> = ({
         style: { backgroundColor: "#f4f4f4" },
       }}
     >
-      <DialogContent className="bg-off-white flex flex-col gap-2 overflow-y-auto !px-4 !py-6 sm:!px-6">
-        <span className="text-xl text-center font-semibold mt-12 px-16">
+      <DialogContent className="bg-off-white flex flex-col gap-2 overflow-y-auto !px-4 !py-6 sm:!px-6 w-full container-default">
+        <span className="text-xl text-center font-semibold mt-8 px-16">
           Διάλεξε Super Market
         </span>
         <p className="text-md text-center px-4">
           Επίλεξε τα super market που σε εξυπηρετούν καλύτερα.
         </p>
-        <div className="grid grid-cols-2 gap-2 mt-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 grid-rows-min gap-2 mt-4">
           {sortedSupermarkets.map((supermarket) => (
             <SuperMarketCard
               key={supermarket.merchant_uuid}
@@ -60,13 +60,21 @@ const SuperMarketsList: FC<SuperMarketsListProps> = ({
           ))}
         </div>
       </DialogContent>
-      <DialogActions className="w-full !rounded-t-lg bg-white !py-4 !px-2 !shadow-lg">
+      <DialogActions className="w-full !rounded-t-lg bg-white !py-4 !px-2 !shadow-lg container-default">
         <button onClick={() => setOpen(false)} className="w-full btn-primary">
           Αποθήκευση
         </button>
         <IconButton
           onClick={handleClose}
-          sx={{ zIndex: 1000, position: "absolute", top: "20px", left: "20px" }}
+          sx={{
+            zIndex: 1000,
+            position: "absolute",
+            top: "20px",
+            left: {
+              xs: "20px",
+              lg: `max(20px, calc((100vw - 1400px) / 2 + 20px))`,
+            },
+          }}
         >
           <ArrowLeftIcon width="24px" height="24px" />
         </IconButton>
