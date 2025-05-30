@@ -61,7 +61,7 @@ export default function ShoppingList({
           ) : null;
         })}
         {latestPriceDate && (
-          <h2 className="text-center mt-4 col-span-2">
+          <h2 className="text-center mt-4 md:col-span-2">
             Η τιμή των προϊόντων που αναγράφεται αφορά την{" "}
             {latestPriceDate.toLocaleDateString("en-GB")}
           </h2>
