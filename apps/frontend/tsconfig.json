@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@smartlist/types": ["../../packages/types/src"]
+      "@smartlist/types": ["../../packages/shared/types/src"],
+      "@smartlist/schemas": ["../../packages/shared/schemas/src"]
     },
     "plugins": [
       {
