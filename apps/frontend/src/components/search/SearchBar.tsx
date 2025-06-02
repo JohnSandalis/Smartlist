@@ -1,12 +1,12 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState, FormEvent, ChangeEvent } from "react";
-import { Product } from "@smartlist/types";
+import { type Products } from "@smartlist/schemas";
 import { debounce } from "@mui/material";
-import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
+import { searchProducts } from "@/lib/api/product";
 
 interface SearchBarProps {
   setLoading: (loading: boolean) => void;
-  setResults: (results: Product[]) => void;
+  setResults: (results: Products) => void;
 }
 
 export const SearchBar = ({ setLoading, setResults }: SearchBarProps) => {
@@ -15,15 +15,7 @@ export const SearchBar = ({ setLoading, setResults }: SearchBarProps) => {
   const fetchData = async (value: string) => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `${getApiBaseUrl()}/api/products/search?query=${encodeURIComponent(
-          value
-        )}`
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data: Product[] = await response.json();
+      const data = await searchProducts(value);
       setResults(data);
     } catch (error) {
       console.error("Error:", error);

@@ -5,19 +5,16 @@ import BackButton from "@/components/ui/BackButton";
 import RegisterForm from "@/components/form/Register";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
+import { getApiBaseUrl } from "@/lib/api/getApiBaseUrl";
 
 export default function RegisterPage() {
   const router = useRouter();
 
   useEffect(() => {
     const checkAuth = async () => {
-      const res = await fetch(
-        `${getApiBaseUrl()}/api/auth/me`,
-        {
-          credentials: "include",
-        }
-      );
+      const res = await fetch(`${getApiBaseUrl()}/auth/me`, {
+        credentials: "include",
+      });
       if (res.ok) {
         const { user } = await res.json();
         if (user) {

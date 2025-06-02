@@ -3,11 +3,11 @@ import CategoryCard from "@/components/categories/CategoryCard";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import SearchButton from "@/components/search/SearchButton";
 import { IconButton } from "@mui/material";
-import { Category } from "@smartlist/types";
+import { type Category } from "@smartlist/schemas";
 import SelectedSuperMarkets from "@/components/supermarkets/SelectedSuperMarkets";
 import Link from "next/link";
 import Image from "next/image";
-import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
+import { fetchCategories } from "@/lib/api/categories";
 
 const ShoppingListButton = dynamic(
   () => import("@/components/list/ShoppingListButton"),
@@ -16,13 +16,9 @@ const ShoppingListButton = dynamic(
 
 const Home = async () => {
   try {
-    const res = await fetch(`${getApiBaseUrl()}/api/categories`, {
+    const categories = await fetchCategories({
       cache: "force-cache",
     });
-    if (!res.ok) {
-      throw new Error("Failed to fetch categories");
-    }
-    const categories: Category[] = await res.json();
 
     return (
       <>

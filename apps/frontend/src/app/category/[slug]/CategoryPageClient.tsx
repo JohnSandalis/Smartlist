@@ -15,7 +15,7 @@ import SubcategoryDrawer from "./components/SubcategoryDrawer";
 import SubcategoryTabs from "./components/SubcategoryTabs";
 import ProductList from "./components/ProductList";
 import ShoppingListButton from "@/components/list/ShoppingListButton";
-import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
+import { fetchProducts } from "@/lib/api/product";
 
 interface Props {
   category: Category;
@@ -69,16 +69,16 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
     const endOffset = currentOffset + PRODUCTS_PER_PAGE - 1;
 
     try {
-      const productsRes = await fetch(
-        `${getApiBaseUrl()}/api/products?subCategoryId=${selectedSubCategory}&start=${currentOffset}&end=${endOffset}`,
+      const fetchedProducts = await fetchProducts(
+        {
+          subCategoryId: selectedSubCategory,
+          start: currentOffset,
+          end: endOffset,
+        },
         {
           cache: "no-store",
         }
       );
-
-      if (!productsRes.ok) throw new Error("Failed to fetch category");
-
-      const fetchedProducts: Product[] = await productsRes.json();
 
       const filtered = fetchedProducts.filter((product) =>
         product.prices?.some((price) =>

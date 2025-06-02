@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { useUser } from "@/context/UserContext";
-import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
+import { getApiBaseUrl } from "@/lib/api/getApiBaseUrl";
 
 interface AuthParams {
   email: string;
@@ -16,17 +16,14 @@ export function useLogin() {
 
   const login = useCallback(
     async ({ email, password }: AuthParams) => {
-      const res = await fetch(
-        `${getApiBaseUrl()}/api/auth/login`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const res = await fetch(`${getApiBaseUrl()}/auth/login`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
       if (res.ok) {
         await refreshSession();
@@ -48,17 +45,14 @@ export function useSignup() {
 
   const signup = useCallback(
     async ({ email, password }: AuthParams) => {
-      const res = await fetch(
-        `${getApiBaseUrl()}/api/auth/signup`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const res = await fetch(`${getApiBaseUrl()}/auth/signup`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
       if (res.ok) {
         await refreshSession();

@@ -1,6 +1,6 @@
 "use client";
 
-import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
+import { getApiBaseUrl } from "@/lib/api/getApiBaseUrl";
 import { useRouter } from "next/navigation";
 
 export function useLogout() {

@@ -15,5 +15,5 @@ COPY apps/frontend ./apps/frontend
 COPY packages/types ./packages/types
 
 # Wait for backend, then build and start
-CMD sh -c "until curl -s http://backend:8080/api/categories > /dev/null; do echo 'Waiting for backend...'; sleep 2; done && npm run --workspace=apps/frontend build && npm run --workspace=apps/frontend start"
+CMD sh -c "until curl -s http://backend:8080/categories > /dev/null; do echo 'Waiting for backend...'; sleep 2; done && npm run --workspace=apps/frontend build && npm run --workspace=apps/frontend start"
 

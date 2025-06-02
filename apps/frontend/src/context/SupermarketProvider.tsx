@@ -8,7 +8,7 @@ import {
 } from "react";
 import { Supermarket } from "@smartlist/types";
 import { useUser } from "./UserContext";
-import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
+import { getApiBaseUrl } from "@/lib/api/getApiBaseUrl";
 
 type SupermarketMap = Record<string, Supermarket>;
 
@@ -36,12 +36,9 @@ export function SupermarketProvider({
   useEffect(() => {
     const fetchSupermarkets = async () => {
       try {
-        const res = await fetch(
-          `${getApiBaseUrl()}/api/supermarkets`,
-          {
-            cache: "force-cache",
-          }
-        );
+        const res = await fetch(`${getApiBaseUrl()}/supermarkets`, {
+          cache: "force-cache",
+        });
         if (!res.ok) {
           throw new Error(`Failed to fetch supermarkets: ${res.statusText}`);
         }
@@ -66,12 +63,9 @@ export function SupermarketProvider({
         let preferences: number[] = [];
 
         if (user) {
-          const res = await fetch(
-            `${getApiBaseUrl()}/api/user-preferences`,
-            {
-              credentials: "include",
-            }
-          );
+          const res = await fetch(`${getApiBaseUrl()}/user-preferences`, {
+            credentials: "include",
+          });
           const { selected_supermarkets } = await res.json();
 
           if (res.ok && selected_supermarkets) {
@@ -100,15 +94,12 @@ export function SupermarketProvider({
     async (ids: number[]) => {
       try {
         if (user) {
-          await fetch(
-            `${getApiBaseUrl()}/api/user-preferences`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              credentials: "include",
-              body: JSON.stringify({ selected_supermarkets: ids }),
-            }
-          );
+          await fetch(`${getApiBaseUrl()}/user-preferences`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ selected_supermarkets: ids }),
+          });
         } else {
           if (ids.length > 0) {
             localStorage.setItem("selectedSupermarkets", JSON.stringify(ids));

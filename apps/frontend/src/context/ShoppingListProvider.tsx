@@ -8,12 +8,16 @@ import {
   useCallback,
 } from "react";
 import { useUser } from "@/context/UserContext";
-import { Product, ShoppingCartItem } from "@smartlist/types";
-import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
+import { getApiBaseUrl } from "@/lib/api/getApiBaseUrl";
+import { fetchProductsByBarcodes } from "@/lib/api/product";
+import {
+  type ShoppingCartItem,
+  type ShoppingCartItems,
+} from "@smartlist/schemas";
 
 interface ShoppingListContextType {
-  items: ShoppingCartItem[];
-  setItems: (items: ShoppingCartItem[]) => Promise<void>;
+  items: ShoppingCartItems;
+  setItems: (items: ShoppingCartItems) => Promise<void>;
   addItem: (item: ShoppingCartItem) => Promise<void>;
   removeItem: (barcode: string) => Promise<void>;
   clearList: () => Promise<void>;
@@ -45,21 +49,9 @@ export function ShoppingListProvider({
 
       const barcodes = itemsFromDb.map((item) => item.barcode);
 
-      const res = await fetch(
-        `${getApiBaseUrl()}/api/products/by-barcodes`,
-        {
-          cache: "no-store",
-          body: JSON.stringify({ barcodes }),
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!res.ok) {
-        throw new Error("Failed to fetch categories");
-      }
-      const products: Product[] = await res.json();
+      const products = await fetchProductsByBarcodes(barcodes, {
+        cache: "no-store",
+      });
 
       const loadedItems = products.map((product) => {
         const quantity =
@@ -82,12 +74,9 @@ export function ShoppingListProvider({
       setIsLoading(true);
       try {
         if (user) {
-          const res = await fetch(
-            `${getApiBaseUrl()}/api/shopping-lists`,
-            {
-              credentials: "include",
-            }
-          );
+          const res = await fetch(`${getApiBaseUrl()}/shopping-lists`, {
+            credentials: "include",
+          });
           if (!res.ok) throw new Error("Failed to fetch shopping list");
           const data = await res.json();
           if (data) {
@@ -120,18 +109,15 @@ export function ShoppingListProvider({
         }));
 
         if (user) {
-          const res = await fetch(
-            `${getApiBaseUrl()}/api/shopping-lists`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              credentials: "include",
-              body: JSON.stringify({
-                items: payload,
-                listId: currentListId,
-              }),
-            }
-          );
+          const res = await fetch(`${getApiBaseUrl()}/shopping-lists`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+              items: payload,
+              listId: currentListId,
+            }),
+          });
           if (!res.ok) throw new Error("Failed to save shopping list");
           const data = await res.json().catch(() => null);
           if (data && data.id) setCurrentListId(data.id);
