@@ -1,7 +1,7 @@
 "use client";
 import ProductCard from "@/components/products/ProductCard";
 import ProductCardSkeleton from "@/components/products/ProductCardSkeleton";
-import { Product } from "@smartlist/types";
+import { type Product } from "@smartlist/schemas";
 
 interface Props {
   products: Product[];

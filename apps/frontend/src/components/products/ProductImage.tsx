@@ -1,4 +1,4 @@
-import { Product } from "@smartlist/types";
+import { type Product } from "@smartlist/schemas";
 import React from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 

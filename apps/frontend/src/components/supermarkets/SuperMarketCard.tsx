@@ -3,7 +3,7 @@
 import Checkbox from "@mui/joy/Checkbox";
 import ListItem from "@mui/joy/ListItem";
 import Image from "next/image";
-import { Supermarket } from "@smartlist/types";
+import { type Supermarket } from "@smartlist/schemas";
 import { useSelectedSupermarkets } from "@/context/SupermarketProvider";
 
 interface SuperMarketCardProps {

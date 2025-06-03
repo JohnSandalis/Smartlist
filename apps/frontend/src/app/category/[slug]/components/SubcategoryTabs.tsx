@@ -1,4 +1,4 @@
-import { SubCategory } from "@smartlist/types";
+import { type SubCategory } from "@smartlist/schemas";
 
 interface Props {
   subcategoryList: SubCategory[];

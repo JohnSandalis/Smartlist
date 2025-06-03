@@ -5,10 +5,20 @@
     "module": "CommonJS",
     "moduleResolution": "Node",
     "outDir": "./dist",
+    "rootDir": "../../",
     "esModuleInterop": true,
     "strict": true,
-    "noEmitOnError": true
+    "noEmitOnError": true,
+    "baseUrl": "../../",
+    "paths": {
+      "@smartlist/types": ["packages/shared/types/src"],
+      "@smartlist/schemas": ["packages/shared/schemas/src"]
+    }
   },
-  "include": ["src/**/*.ts"],
+  "include": [
+    "src/**/*.ts",
+    "../../packages/shared/types/src/**/*.ts",
+    "../../packages/shared/schemas/src/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }

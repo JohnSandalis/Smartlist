@@ -1,4 +1,4 @@
-import { CombinationResult } from "@smartlist/types";
+import { type CombinationResult } from "@smartlist/schemas";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import SupermarketCombCard from "./SuperMarketCombCard";

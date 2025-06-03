@@ -7,8 +7,7 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import Search from "@/components/search/Search";
-import { Category, Product } from "@smartlist/types";
-import { SubCategory } from "@smartlist/types";
+import { type Category, type SubCategory } from "@smartlist/schemas";
 import { useParams } from "next/navigation";
 import { useSelectedSupermarkets } from "@/context/SupermarketProvider";
 import SubcategoryDrawer from "./components/SubcategoryDrawer";

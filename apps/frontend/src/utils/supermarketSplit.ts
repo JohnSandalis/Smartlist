@@ -1,5 +1,7 @@
-import { ShoppingCartItem } from "@smartlist/types";
-import { CombinationResult } from "@smartlist/types";
+import {
+  type CombinationResult,
+  type ShoppingCartItem,
+} from "@smartlist/schemas";
 
 export default function getSupermarketSplit(
   shoppingList: ShoppingCartItem[]

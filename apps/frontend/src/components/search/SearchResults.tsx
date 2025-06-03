@@ -1,5 +1,5 @@
 import ProductCard from "@/components/products/ProductCard";
-import { Product } from "@smartlist/types";
+import { type Product } from "@smartlist/schemas";
 
 export const SearchResults = ({ results }: { results: Product[] }) => {
   return (

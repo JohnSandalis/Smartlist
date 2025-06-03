@@ -2,7 +2,7 @@ import React, { forwardRef } from "react";
 import { PlusIcon, MinusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import ProductImage from "./ProductImage";
 import Image from "next/image";
-import { Product } from "@smartlist/types";
+import { type Product } from "@smartlist/schemas";
 import {
   useSelectedSupermarkets,
   useSupermarkets,

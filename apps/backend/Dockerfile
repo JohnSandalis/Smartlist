@@ -6,7 +6,8 @@ WORKDIR /app
 COPY package.json package-lock.json tsconfig.base.json ./
 
 # Copy all packages needed by backend
-COPY packages/types ./packages/types
+COPY packages/shared/types ./packages/shared/types
+COPY packages/shared/schemas ./packages/shared/schemas
 
 # Copy backend source and package.json
 COPY apps/backend ./apps/backend
@@ -16,7 +17,6 @@ RUN npm install
 
 # Build backend
 RUN npm run --workspace=apps/backend build
-
 
 # === Production image ===
 FROM node:23
@@ -28,10 +28,11 @@ COPY package.json package-lock.json ./
 
 # Copy backend package.json and built dist
 COPY apps/backend/package.json ./apps/backend/package.json
-COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
+COPY --from=builder /app/apps/backend/dist/apps/backend/src ./apps/backend/dist
 
-# Copy local packages needed at runtime (if any)
-COPY packages/types ./packages/types
+# Copy local packages needed at runtime
+COPY packages/shared/types ./packages/shared/types
+COPY packages/shared/schemas ./packages/shared/schemas
 
 # Install only production dependencies (no dev)
 RUN npm install --workspace=apps/backend --omit=dev

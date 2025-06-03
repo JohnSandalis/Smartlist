@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import CategoryPageClient from "./CategoryPageClient";
-import { Category } from "@smartlist/types";
-import { getApiBaseUrl } from "@/lib/api/getApiBaseUrl";
+import { type Category } from "@smartlist/schemas";
 import {
   fetchCategories,
   fetchCategory,

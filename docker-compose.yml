@@ -10,7 +10,7 @@ services:
       - ./apps/backend/.env
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/api/categories"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/categories"]
       interval: 5s
       timeout: 3s
       retries: 5
@@ -27,4 +27,3 @@ services:
       backend:
         condition: service_healthy
     restart: unless-stopped
-
