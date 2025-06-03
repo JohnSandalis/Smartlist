@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import ProductListComb from "./ProductListComb";
-import { CombinationResult } from "@smartlist/types";
+import { type CombinationResult } from "@smartlist/schemas";
 import Image from "next/image";
 import { useSupermarkets } from "@/context/SupermarketProvider";
 import { PlusIcon } from "@heroicons/react/24/outline";

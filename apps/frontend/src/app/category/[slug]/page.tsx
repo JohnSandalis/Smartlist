@@ -1,19 +1,18 @@
 import { notFound } from "next/navigation";
 import CategoryPageClient from "./CategoryPageClient";
-import { Category } from "@smartlist/types";
-import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
+import { type Category } from "@smartlist/schemas";
+import {
+  fetchCategories,
+  fetchCategory,
+  fetchSubcategories,
+} from "@/lib/api/categories";
 
 interface CategoryPageProps {
   params: { slug: string };
 }
 
 export async function generateStaticParams() {
-  const res = await fetch(`${getApiBaseUrl()}/api/categories`);
-  if (!res.ok) {
-    throw new Error("Failed to fetch categories for static generation");
-  }
-
-  const categories = await res.json();
+  const categories = await fetchCategories();
 
   return categories.map((category: Category) => ({
     slug: category.uuid.toString(),
@@ -25,23 +24,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     const category_uuid = Number(params.slug);
     if (isNaN(category_uuid)) return notFound();
 
-    const [categoryRes, subcategoriesRes] = await Promise.all([
-      fetch(
-        `${getApiBaseUrl()}/api/categories/${category_uuid}`,
-        {
-          cache: "force-cache",
-        }
-      ),
-      fetch(`${getApiBaseUrl()}/api/subcategories`, {
+    const [category, subcategories] = await Promise.all([
+      fetchCategory(category_uuid, {
+        cache: "force-cache",
+      }),
+      fetchSubcategories({
         cache: "force-cache",
       }),
     ]);
-
-    if (!categoryRes.ok) throw new Error("Failed to fetch category");
-    if (!subcategoriesRes.ok) throw new Error("Failed to fetch subcategories");
-
-    const category = await categoryRes.json();
-    const subcategories = await subcategoriesRes.json();
 
     return (
       <CategoryPageClient

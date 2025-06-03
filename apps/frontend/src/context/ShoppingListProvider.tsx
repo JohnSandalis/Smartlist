@@ -8,12 +8,16 @@ import {
   useCallback,
 } from "react";
 import { useUser } from "@/context/UserContext";
-import { Product, ShoppingCartItem } from "@smartlist/types";
-import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
+import { fetchProductsByBarcodes } from "@/lib/api/product";
+import {
+  type ShoppingCartItem,
+  type ShoppingCartItems,
+} from "@smartlist/schemas";
+import { fetchShoppingList, saveShoppingList } from "@/lib/api/shoppingLists";
 
 interface ShoppingListContextType {
-  items: ShoppingCartItem[];
-  setItems: (items: ShoppingCartItem[]) => Promise<void>;
+  items: ShoppingCartItems;
+  setItems: (items: ShoppingCartItems) => Promise<void>;
   addItem: (item: ShoppingCartItem) => Promise<void>;
   removeItem: (barcode: string) => Promise<void>;
   clearList: () => Promise<void>;
@@ -45,21 +49,9 @@ export function ShoppingListProvider({
 
       const barcodes = itemsFromDb.map((item) => item.barcode);
 
-      const res = await fetch(
-        `${getApiBaseUrl()}/api/products/by-barcodes`,
-        {
-          cache: "no-store",
-          body: JSON.stringify({ barcodes }),
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!res.ok) {
-        throw new Error("Failed to fetch categories");
-      }
-      const products: Product[] = await res.json();
+      const products = await fetchProductsByBarcodes(barcodes, {
+        cache: "no-store",
+      });
 
       const loadedItems = products.map((product) => {
         const quantity =
@@ -82,14 +74,9 @@ export function ShoppingListProvider({
       setIsLoading(true);
       try {
         if (user) {
-          const res = await fetch(
-            `${getApiBaseUrl()}/api/shopping-lists`,
-            {
-              credentials: "include",
-            }
-          );
-          if (!res.ok) throw new Error("Failed to fetch shopping list");
-          const data = await res.json();
+          const data = await fetchShoppingList({
+            credentials: "include",
+          });
           if (data) {
             setCurrentListId(data.id);
             await loadItemsFromDb(data.items || []);
@@ -111,7 +98,7 @@ export function ShoppingListProvider({
     loadShoppingList();
   }, [user, loadItemsFromDb]);
 
-  const saveShoppingList = useCallback(
+  const updateShoppingList = useCallback(
     async (itemsToSave: ShoppingCartItem[]) => {
       try {
         const payload = itemsToSave.map(({ barcode, quantity }) => ({
@@ -120,20 +107,9 @@ export function ShoppingListProvider({
         }));
 
         if (user) {
-          const res = await fetch(
-            `${getApiBaseUrl()}/api/shopping-lists`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              credentials: "include",
-              body: JSON.stringify({
-                items: payload,
-                listId: currentListId,
-              }),
-            }
-          );
-          if (!res.ok) throw new Error("Failed to save shopping list");
-          const data = await res.json().catch(() => null);
+          const data = await saveShoppingList(payload, currentListId, {
+            credentials: "include",
+          });
           if (data && data.id) setCurrentListId(data.id);
         } else {
           localStorage.setItem(
@@ -152,11 +128,11 @@ export function ShoppingListProvider({
     async (updater: (prev: ShoppingCartItem[]) => ShoppingCartItem[]) => {
       setItems((prev) => {
         const updated = updater(prev);
-        saveShoppingList(updated);
+        updateShoppingList(updated);
         return updated;
       });
     },
-    [saveShoppingList]
+    [updateShoppingList]
   );
 
   const addItem = useCallback(
@@ -184,7 +160,7 @@ export function ShoppingListProvider({
 
   const clearList = useCallback(async () => {
     setItems([]);
-    await saveShoppingList([]);
+    await saveShoppingList([], null);
   }, [saveShoppingList]);
 
   const increaseQuantity = useCallback(
@@ -219,7 +195,7 @@ export function ShoppingListProvider({
   const setItemsPersist = useCallback(
     async (newItems: ShoppingCartItem[]) => {
       setItems(newItems);
-      await saveShoppingList(newItems);
+      await saveShoppingList(newItems, null);
     },
     [saveShoppingList]
   );

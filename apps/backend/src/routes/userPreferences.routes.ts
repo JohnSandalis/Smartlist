@@ -8,6 +8,6 @@ import { authenticateJWT } from "../middleware/auth.middleware";
 const router = Router();
 
 router.get("/", authenticateJWT, fetchUserPreferences);
-router.post("/", authenticateJWT, saveUserPreferences);
+router.put("/", authenticateJWT, saveUserPreferences);
 
 export default router;

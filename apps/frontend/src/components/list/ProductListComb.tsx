@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import ProductCheckbox from "@/components/list/ProductCheckbox";
-import { CombinationResult } from "@smartlist/types";
+import { type CombinationResult } from "@smartlist/schemas";
 import Image from "next/image";
 import { useSupermarkets } from "@/context/SupermarketProvider";
 

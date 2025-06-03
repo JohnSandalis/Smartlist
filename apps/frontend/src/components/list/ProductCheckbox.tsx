@@ -2,8 +2,7 @@ import { useState } from "react";
 import Checkbox from "@mui/joy/Checkbox";
 import ListItem from "@mui/joy/ListItem";
 import ProductImage from "@/components/products/ProductImage";
-import { ShoppingCartItem } from "@smartlist/types";
-import { Price } from "@smartlist/types";
+import { type ShoppingCartItem, type Price } from "@smartlist/schemas";
 
 interface ShoppingCartItemWithPrices extends ShoppingCartItem {
   prices: Price[];

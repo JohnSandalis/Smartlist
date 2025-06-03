@@ -8,7 +8,8 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@smartlist/types": ["packages/types/src"]
+      "@smartlist/types": ["packages/shared/types/src"],
+      "@smartlist/schemas": ["packages/shared/schemas/src"]
     }
   }
 }

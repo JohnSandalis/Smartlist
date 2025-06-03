@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Category } from "@smartlist/types";
+import { type Category } from "@smartlist/schemas";
 
 export default function CategoryCard({ category }: { category: Category }) {
   return (

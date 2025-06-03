@@ -8,7 +8,8 @@ import {
   useCallback,
 } from "react";
 import { useRouter } from "next/navigation";
-import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
+import { getApiBaseUrl } from "@/lib/api/getApiBaseUrl";
+import { authLogout, authMe } from "@/lib/api/auth";
 
 type User = {
   id: string;
@@ -31,31 +32,37 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const refreshSession = useCallback(async () => {
-    const res = await fetch(`${getApiBaseUrl()}/api/auth/me`, {
-      credentials: "include",
-    });
-    if (res.ok) {
-      const { user } = await res.json();
-      console.log(user);
-      setUser(user);
-    } else {
-      setUser(null);
-    }
-    setIsLoading(false);
+    await authMe(
+      {
+        credentials: "include",
+      },
+      async (parsedData) => {
+        setUser(parsedData.user || null);
+      },
+      async (error) => {
+        setUser(null);
+      }
+    );
   }, []);
 
   useEffect(() => {
-    refreshSession();
+    try {
+      refreshSession();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   }, [refreshSession]);
 
   const signOut = async () => {
-    await fetch(`${getApiBaseUrl()}/api/auth/logout`, {
-      method: "POST",
-      credentials: "include",
-    });
-    setUser(null);
-    router.push("/");
-    router.refresh();
+    try {
+      await authLogout(undefined, async () => {
+        setUser(null);
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

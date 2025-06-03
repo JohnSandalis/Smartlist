@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { useUser } from "@/context/UserContext";
-import { getApiBaseUrl } from "@/utils/getApiBaseUrl";
+import { getApiBaseUrl } from "@/lib/api/getApiBaseUrl";
+import { authLogin, authSignup } from "@/lib/api/auth";
 
 interface AuthParams {
   email: string;
@@ -16,25 +17,16 @@ export function useLogin() {
 
   const login = useCallback(
     async ({ email, password }: AuthParams) => {
-      const res = await fetch(
-        `${getApiBaseUrl()}/api/auth/login`,
+      const res = await authLogin(
+        { email, password },
         {
-          method: "POST",
           credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
+        },
+        async () => {
+          await refreshSession();
+          router.push("/");
         }
       );
-
-      if (res.ok) {
-        await refreshSession();
-        router.push("/");
-      } else {
-        const errorData = await res.json();
-        throw new Error(errorData?.error || "Login failed");
-      }
     },
     [router, refreshSession]
   );
@@ -48,25 +40,16 @@ export function useSignup() {
 
   const signup = useCallback(
     async ({ email, password }: AuthParams) => {
-      const res = await fetch(
-        `${getApiBaseUrl()}/api/auth/signup`,
+      const res = await authSignup(
+        { email, password },
         {
-          method: "POST",
           credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
+        },
+        async () => {
+          await refreshSession();
+          router.push("/");
         }
       );
-
-      if (res.ok) {
-        await refreshSession();
-        router.push("/");
-      } else {
-        const errorData = await res.json();
-        throw new Error(errorData?.error || "Signup failed");
-      }
     },
     [router, refreshSession]
   );

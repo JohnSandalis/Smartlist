@@ -1,4 +1,4 @@
-import { Supermarket } from "@smartlist/types";
+import { type Supermarket } from "@smartlist/schemas";
 import Image from "next/image";
 
 type SupermarketMap = Record<string, Supermarket>;

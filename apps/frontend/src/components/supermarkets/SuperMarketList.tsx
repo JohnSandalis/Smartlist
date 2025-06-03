@@ -9,7 +9,7 @@ import {
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import SuperMarketCard from "./SuperMarketCard";
 import { FC } from "react";
-import { Supermarket } from "@smartlist/types";
+import { type Supermarket } from "@smartlist/schemas";
 
 type SupermarketMap = Record<string, Supermarket>;
 

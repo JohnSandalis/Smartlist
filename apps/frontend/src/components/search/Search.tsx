@@ -10,7 +10,7 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { SearchBar } from "@/components/search/SearchBar";
 import { SearchResults } from "@/components/search/SearchResults";
 import ProductCardSkeleton from "@/components/products/ProductCardSkeleton";
-import { Product } from "@smartlist/types";
+import { type Product } from "@smartlist/schemas";
 
 export default function Search({
   open,

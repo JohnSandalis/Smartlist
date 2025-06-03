@@ -4,7 +4,7 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { IconButton } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useSelectedSupermarkets } from "@/context/SupermarketProvider";
-import { CombinationResult } from "@smartlist/types";
+import { type CombinationResult } from "@smartlist/schemas";
 import SuperMarketCombGroupList from "@/components/list/SuperMarketCombGroupList";
 import { useShoppingList } from "@/context/ShoppingListProvider";
 

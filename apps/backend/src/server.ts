@@ -38,13 +38,13 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use("/api/auth", authRoutes);
-app.use("/api/categories", categoryRoutes);
-app.use("/api/subcategories", subcategoryRoutes);
-app.use("/api/supermarkets", supermarketRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/user-preferences", userPreferencesRoutes);
-app.use("/api/shopping-lists", shoppingListRoutes);
+app.use("/auth", authRoutes);
+app.use("/categories", categoryRoutes);
+app.use("/subcategories", subcategoryRoutes);
+app.use("/supermarkets", supermarketRoutes);
+app.use("/products", productRoutes);
+app.use("/user-preferences", userPreferencesRoutes);
+app.use("/shopping-lists", shoppingListRoutes);
 
 app.use(errorHandler);
 
