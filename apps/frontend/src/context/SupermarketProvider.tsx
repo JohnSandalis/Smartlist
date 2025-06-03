@@ -6,9 +6,14 @@ import {
   useState,
   useCallback,
 } from "react";
-import { Supermarket } from "@smartlist/types";
+import { type Supermarket, type Supermarkets } from "@smartlist/schemas";
 import { useUser } from "./UserContext";
 import { getApiBaseUrl } from "@/lib/api/getApiBaseUrl";
+import { fetchSupermarkets } from "@/lib/api/supermarkets";
+import {
+  fetchUserPreferences,
+  updateUserPreferences,
+} from "@/lib/api/userPreferences";
 
 type SupermarketMap = Record<string, Supermarket>;
 
@@ -34,15 +39,11 @@ export function SupermarketProvider({
   const { user } = useUser();
 
   useEffect(() => {
-    const fetchSupermarkets = async () => {
+    const getSupermarkets = async () => {
       try {
-        const res = await fetch(`${getApiBaseUrl()}/supermarkets`, {
+        const data = await fetchSupermarkets({
           cache: "force-cache",
         });
-        if (!res.ok) {
-          throw new Error(`Failed to fetch supermarkets: ${res.statusText}`);
-        }
-        const data: Supermarket[] = await res.json();
 
         const supermarketMap: SupermarketMap = {};
         data.forEach((sm) => {
@@ -54,7 +55,7 @@ export function SupermarketProvider({
       }
     };
 
-    fetchSupermarkets();
+    getSupermarkets();
   }, []);
 
   useEffect(() => {
@@ -63,14 +64,10 @@ export function SupermarketProvider({
         let preferences: number[] = [];
 
         if (user) {
-          const res = await fetch(`${getApiBaseUrl()}/user-preferences`, {
+          const { selected_supermarkets } = await fetchUserPreferences({
             credentials: "include",
           });
-          const { selected_supermarkets } = await res.json();
-
-          if (res.ok && selected_supermarkets) {
-            preferences = selected_supermarkets;
-          }
+          preferences = selected_supermarkets;
         } else {
           const saved = localStorage.getItem("selectedSupermarkets");
           if (saved) {
@@ -94,11 +91,8 @@ export function SupermarketProvider({
     async (ids: number[]) => {
       try {
         if (user) {
-          await fetch(`${getApiBaseUrl()}/user-preferences`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
+          await updateUserPreferences(ids, {
             credentials: "include",
-            body: JSON.stringify({ selected_supermarkets: ids }),
           });
         } else {
           if (ids.length > 0) {
