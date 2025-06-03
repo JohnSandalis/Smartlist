@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { useUser } from "@/context/UserContext";
 import { getApiBaseUrl } from "@/lib/api/getApiBaseUrl";
+import { authLogin, authSignup } from "@/lib/api/auth";
 
 interface AuthParams {
   email: string;
@@ -16,22 +17,16 @@ export function useLogin() {
 
   const login = useCallback(
     async ({ email, password }: AuthParams) => {
-      const res = await fetch(`${getApiBaseUrl()}/auth/login`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await authLogin(
+        { email, password },
+        {
+          credentials: "include",
         },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (res.ok) {
-        await refreshSession();
-        router.push("/");
-      } else {
-        const errorData = await res.json();
-        throw new Error(errorData?.error || "Login failed");
-      }
+        async () => {
+          await refreshSession();
+          router.push("/");
+        }
+      );
     },
     [router, refreshSession]
   );
@@ -45,22 +40,16 @@ export function useSignup() {
 
   const signup = useCallback(
     async ({ email, password }: AuthParams) => {
-      const res = await fetch(`${getApiBaseUrl()}/auth/signup`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await authSignup(
+        { email, password },
+        {
+          credentials: "include",
         },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (res.ok) {
-        await refreshSession();
-        router.push("/");
-      } else {
-        const errorData = await res.json();
-        throw new Error(errorData?.error || "Signup failed");
-      }
+        async () => {
+          await refreshSession();
+          router.push("/");
+        }
+      );
     },
     [router, refreshSession]
   );

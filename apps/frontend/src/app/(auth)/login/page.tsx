@@ -5,24 +5,30 @@ import BackButton from "@/components/ui/BackButton";
 import LogInForm from "@/components/form/LogIn";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { getApiBaseUrl } from "@/lib/api/getApiBaseUrl";
+import { authMe } from "@/lib/api/auth";
 
 export default function LoginPage() {
   const router = useRouter();
 
   useEffect(() => {
     const checkAuth = async () => {
-      const res = await fetch(`${getApiBaseUrl()}/auth/me`, {
-        credentials: "include",
-      });
-      if (res.ok) {
-        const { user } = await res.json();
-        if (user) {
-          router.push("/");
+      const res = await authMe(
+        {
+          credentials: "include",
+        },
+        async (parsedData) => {
+          if (parsedData.user) {
+            router.push("/");
+          }
         }
-      }
+      );
     };
-    checkAuth();
+
+    try {
+      checkAuth();
+    } catch (error) {
+      console.error(error);
+    }
   }, [router]);
 
   return (
