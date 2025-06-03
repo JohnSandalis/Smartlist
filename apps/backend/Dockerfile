@@ -5,18 +5,24 @@ WORKDIR /app
 # Copy root package files
 COPY package.json package-lock.json tsconfig.base.json ./
 
-# Copy all packages needed by backend
-COPY packages/shared/types ./packages/shared/types
-COPY packages/shared/schemas ./packages/shared/schemas
+# Copy all packages needed by backend with their configs
+COPY packages/shared/types/package.json packages/shared/types/tsconfig.json ./packages/shared/types/
+COPY packages/shared/types/src ./packages/shared/types/src
+COPY packages/shared/schemas/package.json packages/shared/schemas/tsconfig.json ./packages/shared/schemas/
+COPY packages/shared/schemas/src ./packages/shared/schemas/src
 
 # Copy backend source and package.json
 COPY apps/backend ./apps/backend
 
-# Install all dependencies and link local packages properly
-RUN npm install
+# Install dependencies
+RUN cd /app/packages/shared/types && npm install && \
+    cd /app/packages/shared/schemas && npm install && \
+    cd /app/apps/backend && npm install
 
-# Build backend
-RUN npm run --workspace=apps/backend build
+# Build shared packages first
+RUN cd /app/packages/shared/types && npm run build && \
+    cd /app/packages/shared/schemas && npm run build && \
+    cd /app/apps/backend && npm run build
 
 # === Production image ===
 FROM node:23
@@ -30,11 +36,13 @@ COPY package.json package-lock.json ./
 COPY apps/backend/package.json ./apps/backend/package.json
 COPY --from=builder /app/apps/backend/dist/apps/backend/src ./apps/backend/dist
 
-# Copy local packages needed at runtime
-COPY packages/shared/types ./packages/shared/types
-COPY packages/shared/schemas ./packages/shared/schemas
+# Copy built shared packages
+COPY --from=builder /app/packages/shared/types/dist ./packages/shared/types/dist
+COPY --from=builder /app/packages/shared/schemas/dist ./packages/shared/schemas/dist
+COPY packages/shared/types/package.json ./packages/shared/types/package.json
+COPY packages/shared/schemas/package.json ./packages/shared/schemas/package.json
 
-# Install only production dependencies (no dev)
-RUN npm install --workspace=apps/backend --omit=dev
+# Install only production dependencies
+RUN cd apps/backend && npm install --omit=dev
 
 CMD ["npm", "--workspace=apps/backend", "start"]
