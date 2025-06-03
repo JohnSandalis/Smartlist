@@ -16,3 +16,15 @@ export const shoppingCartItemsSchema = z.array(shoppingCartItemSchema);
 
 export type ShoppingCartItem = z.infer<typeof shoppingCartItemSchema>;
 export type ShoppingCartItems = z.infer<typeof shoppingCartItemsSchema>;
+
+export const shoppingListSchema = z.object({
+  id: z.string(),
+  items: z.array(
+    z.object({
+      barcode: z.string(),
+      quantity: z.number(),
+    })
+  ),
+});
+
+export type ShoppingList = z.infer<typeof shoppingListSchema>;
