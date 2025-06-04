@@ -2,10 +2,13 @@ import { Router } from "express";
 import {
   getProducts,
   getProductsByBarcodes,
+  getProductsByCategory,
   searchProducts,
 } from "../controllers/product.controller";
 
 const router = Router();
+
+router.get("/by-category", getProductsByCategory);
 
 /**
  * @openapi
