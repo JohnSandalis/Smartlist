@@ -26,6 +26,8 @@ export default function SubcategoryDrawer({
       anchor="bottom"
       open={drawerOpen}
       onClose={() => setDrawerOpen(false)}
+      className="lg:hidden"
+      transitionDuration={0}
     >
       <Link href="/">
         <IconButton

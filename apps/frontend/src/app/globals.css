@@ -162,3 +162,7 @@ code {
 .shadow-actions {
   @apply shadow-[0_0_10px_rgba(0,0,0,0.1)];
 }
+
+.text-hover-transition {
+  @apply transition-colors duration-200;
+}

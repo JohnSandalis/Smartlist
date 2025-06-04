@@ -7,9 +7,14 @@ import { searchProducts } from "@/lib/api/product";
 interface SearchBarProps {
   setLoading: (loading: boolean) => void;
   setResults: (results: Products) => void;
+  className?: string;
 }
 
-export const SearchBar = ({ setLoading, setResults }: SearchBarProps) => {
+export const SearchBar = ({
+  setLoading,
+  setResults,
+  className,
+}: SearchBarProps) => {
   const [input, setInput] = useState<string>("");
 
   const fetchData = async (value: string) => {
@@ -38,7 +43,7 @@ export const SearchBar = ({ setLoading, setResults }: SearchBarProps) => {
   };
 
   return (
-    <div className="relative w-full pl-10">
+    <div className={`relative w-full ${className}`}>
       <form onSubmit={handleSearch}>
         <label htmlFor="search" className="sr-only">
           Αναζήτηση

@@ -44,7 +44,7 @@ export default function Search({
         sx={{
           zIndex: 1000,
           position: "absolute",
-          top: "24px",
+          top: "26px",
           left: {
             xs: "20px",
             lg: `max(20px, calc((100vw - 1400px) / 2))`,
@@ -53,7 +53,7 @@ export default function Search({
       >
         <ArrowLeftIcon width="24px" height="24px" />
       </IconButton>
-      <DialogTitle className="bg-off-white text-center !px-0 !py-6 page-title w-full container-default">
+      <DialogTitle className="bg-off-white text-center !px-0 !py-6 !pl-10 page-title w-full container-default !w-[90%]">
         <SearchBar setLoading={setLoading} setResults={setResults} />
       </DialogTitle>
       <DialogContent className="bg-off-white flex flex-col gap-2 overflow-y-auto !px-4 !pb-6 sm:!px-6">

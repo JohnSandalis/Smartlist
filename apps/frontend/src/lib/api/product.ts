@@ -1,11 +1,32 @@
 import baseAPI from "@/lib/api/baseAPI";
 import { productsSchema, type Products } from "@smartlist/schemas";
 
+type FetchProductsByCategoryParams = {
+  categoryId: number;
+  start: number;
+  end: number;
+};
+
 type FetchProductsParams = {
   subCategoryId: number;
   start: number;
   end: number;
 };
+
+export async function fetchProductsByCategory(
+  { categoryId, start, end }: FetchProductsByCategoryParams,
+  options?: RequestInit
+): Promise<Products> {
+  const query = new URLSearchParams({
+    categoryId: String(categoryId),
+    start: String(start),
+    end: String(end),
+  }).toString();
+
+  const url = `/products/by-category?${query}`;
+
+  return baseAPI<Products>(url, productsSchema).get(options);
+}
 
 export async function fetchProducts(
   { subCategoryId, start, end }: FetchProductsParams,

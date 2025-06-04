@@ -2,7 +2,7 @@ import React from "react";
 
 const ProductCardSkeleton = () => {
   return (
-    <div className="rounded-md p-4 flex flex-col items-start justify-start bg-white self-stretch gap-2 animate-pulse">
+    <div className="w-full rounded-md p-4 flex flex-col items-start justify-start bg-white self-stretch gap-2 animate-pulse">
       <div className="w-full flex gap-2">
         <div className="flex items-center justify-center">
           <div className="min-w-[80px] w-[80px] min-h-[80px] h-[80px] bg-gray-300 rounded-md"></div>

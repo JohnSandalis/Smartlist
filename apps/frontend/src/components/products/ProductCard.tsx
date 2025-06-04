@@ -80,7 +80,7 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
     return (
       <div
         ref={ref}
-        className="rounded-md p-4 flex flex-col items-start justify-start bg-white self-stretch gap-2"
+        className="w-full rounded-md p-4 flex flex-col items-start justify-start bg-white self-stretch gap-2"
       >
         <div className="w-full flex gap-2">
           <div className="flex items-center justify-center">
@@ -144,7 +144,7 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
             )}
           </div>
         </div>
-        <ul className="flex gap-2 min-w-[68px] text-left w-full overflow-auto">
+        <ul className="flex gap-2 min-w-[68px] text-left w-full overflow-auto scrollbar-hide">
           {product.prices
             .sort((a, b) => a.price - b.price)
             .filter((priceObj) =>

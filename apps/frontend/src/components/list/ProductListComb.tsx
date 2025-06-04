@@ -54,7 +54,7 @@ export default function ProductListComb({
           return (
             <div
               key={`sm-comb-${combinationIndex}-${index}`}
-              className="flex flex-col items-center justify-center mb-4 gap-2 container-default w-full"
+              className="flex flex-col items-center justify-center mb-4 gap-2 max-w-[600px] mx-auto w-full"
             >
               <div className="w-full flex items-start gap-2">
                 <div className="flex items-center justify-center w-8 h-8 mb-2">

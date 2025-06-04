@@ -4,6 +4,7 @@ import "./globals.css";
 import { SupermarketProvider } from "@/context/SupermarketProvider";
 import { ShoppingListProvider } from "@/context/ShoppingListProvider";
 import { UserProvider } from "@/context/UserContext";
+import Header from "@/components/layout/Header";
 
 export const metadata: Metadata = {
   title: "Super Markets  | Βρες τα Φθηνότερα Ψώνια",
@@ -21,7 +22,10 @@ export default function RootLayout({
         <main>
           <UserProvider>
             <SupermarketProvider>
-              <ShoppingListProvider>{children}</ShoppingListProvider>
+              <ShoppingListProvider>
+                <Header />
+                {children}
+              </ShoppingListProvider>
             </SupermarketProvider>
           </UserProvider>
         </main>
