@@ -15,8 +15,7 @@ COPY packages/shared/schemas/src ./packages/shared/schemas/src
 COPY apps/backend ./apps/backend
 
 # Install dependencies
-RUN cd /app/packages/shared/types && npm install && \
-    cd /app/packages/shared/schemas && npm install && \
+RUN cd /app && npm install && \
     cd /app/apps/backend && npm install
 
 # Build shared packages first
@@ -42,7 +41,7 @@ COPY --from=builder /app/packages/shared/schemas/dist ./packages/shared/schemas/
 COPY packages/shared/types/package.json ./packages/shared/types/package.json
 COPY packages/shared/schemas/package.json ./packages/shared/schemas/package.json
 
-# Install only production dependencies
-RUN cd apps/backend && npm install --omit=dev
+# Install production dependencies
+RUN cd /app && npm install --omit=dev
 
 CMD ["npm", "--workspace=apps/backend", "start"]
