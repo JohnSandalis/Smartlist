@@ -1,16 +1,18 @@
+"use client";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   Slide,
-  IconButton,
+  SlideProps,
 } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import ProductCard from "@/components/products/ProductCard";
 import Link from "next/link";
 import { useShoppingList } from "@/context/ShoppingListProvider";
-import { useMemo } from "react";
+import { useMediaQuery } from "@mui/material";
 
 export default function ShoppingList({
   open,
@@ -20,39 +22,58 @@ export default function ShoppingList({
   setOpen: (open: boolean) => void;
 }) {
   const { items: shoppingList } = useShoppingList();
-
-  const latestPriceDate = useMemo(() => {
-    const allDates = shoppingList
-      .flatMap((item) => item.prices?.map((price) => price.date) || [])
-      .filter(Boolean)
-      .map((date) => new Date(date));
-
-    if (allDates.length === 0) return null;
-
-    return new Date(Math.max(...allDates.map((d) => d.getTime())));
-  }, [shoppingList]);
+  const isMdUp = useMediaQuery("(min-width: 768px)");
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  const latestPriceDate = shoppingList.reduce((latest, item) => {
+    const itemDate = item.prices?.[0]?.date
+      ? new Date(item.prices[0].date)
+      : null;
+    return itemDate && (!latest || itemDate > latest) ? itemDate : latest;
+  }, null as Date | null);
 
   return (
     <Dialog
       open={open}
       onClose={handleClose}
       TransitionComponent={Slide}
-      // @ts-ignore
-      TransitionProps={{ direction: "up" }}
-      fullScreen
-      className="!bg-off-white"
+      TransitionProps={{ direction: isMdUp ? "left" : "up" } as SlideProps}
+      fullScreen={!isMdUp}
+      className="!bg-transparent"
+      sx={{
+        "& .MuiDialog-container": {
+          bgcolor: "transparent",
+        },
+        "& .MuiBackdrop-root": {
+          bgcolor: "rgba(0, 0, 0, 0.5)",
+        },
+        "& .MuiPaper-root": {
+          display: "flex",
+          flexDirection: "column",
+        },
+      }}
       PaperProps={{
-        style: { backgroundColor: "#f4f4f4" },
+        style: {
+          backgroundColor: "#f4f4f4",
+          ...(isMdUp && {
+            position: "fixed",
+            right: 0,
+            left: "auto",
+            minHeight: "100vh",
+            maxWidth: "600px",
+            margin: 0,
+            borderRadius: 0,
+          }),
+        },
       }}
     >
       <DialogTitle className="bg-off-white text-center !p-6 page-title">
         Λίστα
       </DialogTitle>
-      <DialogContent className="bg-off-white grid grid-cols-1 md:grid-cols-2 gap-2 overflow-y-auto !px-4 !py-6 sm:!px-6 auto-rows-min container-default w-full">
+      <DialogContent className="bg-off-white flex-1 grid grid-cols-1 gap-2 overflow-y-auto !px-4 !py-6 sm:!px-6 auto-rows-min container-default w-full">
         {shoppingList.map((item) => {
           const product = shoppingList.find((p) => p.barcode === item.barcode);
 
@@ -61,15 +82,16 @@ export default function ShoppingList({
           ) : null;
         })}
         {latestPriceDate && (
-          <h2 className="text-center mt-4 md:col-span-2">
+          <h2 className="text-center mt-4">
             Η τιμή των προϊόντων που αναγράφεται αφορά την{" "}
             {latestPriceDate.toLocaleDateString("en-GB")}
           </h2>
         )}
       </DialogContent>
-      <DialogActions className="w-full !rounded-t-lg bg-white !py-4 !px-2 shadow-actions container-default">
+      <DialogActions className="w-full !m-0 !p-2 !rounded-t-lg bg-white shadow-actions container-default">
         <Link
           href="/list"
+          onClick={handleClose}
           className="w-full bg-primary text-white p-4 rounded-xl text-center font-semibold"
         >
           Επόμενο
@@ -82,7 +104,7 @@ export default function ShoppingList({
             top: "20px",
             left: {
               xs: "20px",
-              lg: `max(20px, calc((100vw - 1400px) / 2 + 20px))`,
+              lg: `20px`,
             },
           }}
         >

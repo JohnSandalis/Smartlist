@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
-import BackButton from "@/components/ui/BackButton";
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
 import AccountLoading from "./AccountLoading";
 
@@ -21,19 +20,18 @@ export default function AccountPage() {
 
   return (
     <>
-      <div className="flex justify-end items-center w-full mb-4 py-1 container-default">
-        <BackButton href="/" noOffset={true} />
-        <button
-          onClick={signOut}
-          className="btn-white text-sm flex items-center gap-2"
-        >
-          <ArrowLeftStartOnRectangleIcon className="h-5 w-5" />
-          Αποσύνδεση
-        </button>
-      </div>
-
       <div className="flex flex-col items-start container-default">
-        <h1 className="text-2xl font-bold mb-6">Ο Λογαριασμός μου</h1>
+        <div className="flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center w-full mb-4 py-1 container-default gap-4">
+          <h1 className="text-2xl font-bold">Ο Λογαριασμός μου</h1>
+
+          <button
+            onClick={signOut}
+            className="btn-white text-sm flex items-center gap-2"
+          >
+            <ArrowLeftStartOnRectangleIcon className="h-5 w-5" />
+            Αποσύνδεση
+          </button>
+        </div>
 
         <div className="w-full max-w-2xl">
           {/* Personal Information Section */}
