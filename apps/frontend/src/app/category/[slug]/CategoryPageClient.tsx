@@ -24,7 +24,7 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
     null
   );
   const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [offsets, setOffsets] = useState<Record<string, number>>({});
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(
@@ -72,8 +72,6 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
   }, [selectedSubCategory]);
 
   const fetchProductsData = useCallback(async () => {
-    if (loading) return;
-
     setLoading(true);
     try {
       const key = selectedSubCategory
@@ -105,11 +103,14 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
         return;
       }
 
-      const filtered = fetchedProducts.filter((product) =>
-        product.prices?.some((price) =>
-          selectedSupermarkets.includes(price.merchant_uuid)
-        )
-      );
+      const filtered =
+        selectedSupermarkets.length === 0
+          ? fetchedProducts
+          : fetchedProducts.filter((product) =>
+              product.prices?.some((price) =>
+                selectedSupermarkets.includes(price.merchant_uuid)
+              )
+            );
 
       setProducts((prev) => [...prev, ...filtered]);
       setHasMore(filtered.length === PRODUCTS_PER_PAGE);
@@ -157,6 +158,7 @@ export default function CategoryPageClient({ category, subcategories }: Props) {
   );
 
   const handleSubcategorySelect = (subcategoryId: number | null) => {
+    window.scrollTo(0, 0);
     setSelectedSubCategory(subcategoryId);
     setDrawerOpen(false);
     setOffsets((prev) => ({
