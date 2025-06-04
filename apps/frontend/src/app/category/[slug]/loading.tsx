@@ -48,8 +48,8 @@ export default function Loading() {
           </ul>
         </div>
 
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 pb-20 container-default lg:mx-0 lg:max-w-none">
-          <div className="h-6 bg-gray-200 rounded animate-pulse w-48 mb-2 col-span-2 xl:col-span-3" />
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2 pb-20 container-default lg:mx-0 lg:max-w-none">
+          <div className="h-6 bg-gray-200 rounded animate-pulse w-48 mb-2 col-span-2" />
 
           {Array.from({ length: 20 }).map((_, index) => (
             <ProductCardSkeleton key={`skeleton-${index}`} />
