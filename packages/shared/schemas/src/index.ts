@@ -5,3 +5,4 @@ export * from "./shoppingList.schema";
 export * from "./supermarket.schema";
 export * from "./combinationResult.schema";
 export * from "./userPreferences.schema";
+export * from "./auth.schema";

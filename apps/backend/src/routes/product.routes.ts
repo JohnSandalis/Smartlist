@@ -5,10 +5,15 @@ import {
   getProductsByCategory,
   searchProducts,
 } from "../controllers/product.controller";
+import { validate } from "../middleware/validate.middleware";
+import {
+  getProductsSchema,
+  getProductsByBarcodesSchema,
+  searchProductsSchema,
+  getProductsByCategorySchema,
+} from "../schemas/product.schema";
 
 const router = Router();
-
-router.get("/by-category", getProductsByCategory);
 
 /**
  * @openapi
@@ -80,7 +85,7 @@ router.get("/by-category", getProductsByCategory);
  *       500:
  *         description: Internal server error
  */
-router.get("/", getProducts);
+router.get("/", validate(getProductsSchema), getProducts);
 
 /**
  * @openapi
@@ -153,8 +158,18 @@ router.get("/", getProducts);
  *       500:
  *         description: Internal server error
  */
-router.post("/by-barcodes", getProductsByBarcodes);
+router.post(
+  "/by-barcodes",
+  validate(getProductsByBarcodesSchema),
+  getProductsByBarcodes
+);
 
-router.get("/search", searchProducts);
+router.get(
+  "/by-category",
+  validate(getProductsByCategorySchema),
+  getProductsByCategory
+);
+
+router.get("/search", validate(searchProductsSchema), searchProducts);
 
 export default router;

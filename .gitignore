@@ -15,7 +15,10 @@ coverage/
 apps/**/.next/
 apps/**/out/
 apps/**/build/
+apps/**/dist/
 packages/**/build/
+packages/**/dist/
+**/dist/
 
 # -------------------------
 # Environment files (any level)
