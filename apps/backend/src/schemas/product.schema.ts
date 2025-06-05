@@ -5,7 +5,7 @@ export const getProductsSchema = z.object({
     subCategoryId: z
       .string()
       .transform(Number)
-      .pipe(z.number().min(0, "Sub-category ID is required")),
+      .pipe(z.number().min(0, "Positive integer sub-category id is required")),
     start: z
       .string()
       .transform(Number)
@@ -22,7 +22,7 @@ export const getProductsByCategorySchema = z.object({
     categoryId: z
       .string()
       .transform(Number)
-      .pipe(z.number().min(0, "Category ID is required")),
+      .pipe(z.number().min(1, "Positive integer category id is required")),
     start: z
       .string()
       .transform(Number)
@@ -42,6 +42,6 @@ export const getProductsByBarcodesSchema = z.object({
 
 export const searchProductsSchema = z.object({
   query: z.object({
-    query: z.string().min(1, "Query is required"),
+    query: z.string().min(1, "Search query is required"),
   }),
 });

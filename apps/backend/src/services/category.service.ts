@@ -1,30 +1,63 @@
 import supabase from "../utils/supabase";
 import { Category } from "@smartlist/types";
 
-export const fetchCategories = async (): Promise<{
-  categories: Category[];
-} | null> => {
-  const categoriesRes = await supabase.from("categories").select("*");
+class CategoryServiceError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "CategoryServiceError";
+  }
+}
 
-  if (categoriesRes.error) return null;
+export const fetchCategories = async (): Promise<Category[]> => {
+  try {
+    const { data, error } = await supabase.from("categories").select("*");
 
-  return {
-    categories: categoriesRes.data as Category[],
-  };
+    if (error) {
+      throw new CategoryServiceError(
+        `Failed to fetch categories: ${error.message}`
+      );
+    }
+
+    if (!data) {
+      return [];
+    }
+
+    return data as Category[];
+  } catch (error) {
+    if (error instanceof CategoryServiceError) {
+      throw error;
+    }
+    throw new CategoryServiceError(
+      "An unexpected error occurred while fetching categories"
+    );
+  }
 };
 
-export const fetchCategory = async (
-  uuid: number
-): Promise<{ category: Category } | null> => {
-  const categoryRes = await supabase
-    .from("categories")
-    .select("*")
-    .eq("uuid", uuid)
-    .single();
+export const fetchCategory = async (uuid: number): Promise<Category> => {
+  try {
+    const { data, error } = await supabase
+      .from("categories")
+      .select("*")
+      .eq("uuid", uuid)
+      .single();
 
-  if (categoryRes.error) return null;
+    if (error) {
+      throw new CategoryServiceError(
+        `Failed to fetch category: ${error.message}`
+      );
+    }
 
-  return {
-    category: categoryRes.data as Category,
-  };
+    if (!data) {
+      throw new CategoryServiceError(`Category with UUID ${uuid} not found`);
+    }
+
+    return data as Category;
+  } catch (error) {
+    if (error instanceof CategoryServiceError) {
+      throw error;
+    }
+    throw new CategoryServiceError(
+      "An unexpected error occurred while fetching category"
+    );
+  }
 };
