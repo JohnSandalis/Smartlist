@@ -1,12 +1,24 @@
 import supabase from "../utils/supabase";
 
+class UserPreferencesServiceError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "UserPreferencesServiceError";
+  }
+}
+
 export async function getUserPreferences(userId: string) {
   const { data, error } = await supabase
     .from("user_preferences")
     .select("selected_supermarkets")
     .eq("user_id", userId)
     .single();
-  return { data, error };
+  if (error) {
+    throw new UserPreferencesServiceError(
+      `Failed to fetch user preferences: ${error.message}`
+    );
+  }
+  return data;
 }
 
 export async function upsertUserPreferences(
@@ -23,5 +35,9 @@ export async function upsertUserPreferences(
       onConflict: "user_id",
     }
   );
-  return { error };
+  if (error) {
+    throw new UserPreferencesServiceError(
+      `Failed to upsert user preferences: ${error.message}`
+    );
+  }
 }

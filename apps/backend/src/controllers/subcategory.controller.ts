@@ -3,11 +3,16 @@ import { fetchSubcategories } from "../services/subcategory.service";
 import { ApiError } from "../utils/ApiError";
 import { SubCategory } from "@smartlist/types";
 
+interface ErrorResponse {
+  status: number;
+  message: string;
+}
+
 // @desc  Get all subcategories
 // @route GET /api/subcategories
 export const getSubcategories = async (
   req: Request,
-  res: Response<SubCategory[]>,
+  res: Response<SubCategory[] | ErrorResponse>,
   next: NextFunction
 ) => {
   try {
@@ -15,8 +20,13 @@ export const getSubcategories = async (
     if (!data) {
       throw new ApiError(404, `Subcategories not found in the database`);
     }
-    res.json(data.subcategories);
-  } catch (err) {
-    next(err);
+    res.status(200).json(data.subcategories);
+  } catch (error) {
+    next(
+      new ApiError(
+        500,
+        error instanceof Error ? error.message : "Failed to fetch subcategories"
+      )
+    );
   }
 };

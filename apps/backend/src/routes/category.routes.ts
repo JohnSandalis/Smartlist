@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { getCategories, getCategory } from "../controllers/category.controller";
+import { getCategorySchema } from "../schemas/category.schema";
+import { validate } from "../middleware/validate.middleware";
 
 const router = Router();
 
@@ -70,6 +72,6 @@ router.get("/", getCategories);
  *       500:
  *         description: Internal server error
  */
-router.get("/:uuid", getCategory);
+router.get("/:uuid", validate(getCategorySchema), getCategory);
 
 export default router;

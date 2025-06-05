@@ -9,5 +9,5 @@ export function errorHandler(
 ) {
   const status = err instanceof ApiError ? err.status : 500;
   const message = err.message || "Internal Server Error";
-  res.status(status).json({ error: message });
+  res.status(status).json({ message });
 }

@@ -3,21 +3,28 @@ import { fetchCategories, fetchCategory } from "../services/category.service";
 import { ApiError } from "../utils/ApiError";
 import { Category } from "@smartlist/types";
 
+interface ErrorResponse {
+  status: number;
+  message: string;
+}
+
 // @desc  Get all categories
 // @route GET /api/categories
 export const getCategories = async (
   req: Request,
-  res: Response<Category[]>,
+  res: Response<Category[] | ErrorResponse>,
   next: NextFunction
 ) => {
   try {
-    const data = await fetchCategories();
-    if (!data) {
-      throw new ApiError(404, `Categories not found in the database`);
-    }
-    res.json(data.categories);
-  } catch (err) {
-    next(err);
+    const categories = await fetchCategories();
+    res.status(200).json(categories);
+  } catch (error) {
+    next(
+      new ApiError(
+        500,
+        error instanceof Error ? error.message : "Failed to fetch categories"
+      )
+    );
   }
 };
 
@@ -25,22 +32,27 @@ export const getCategories = async (
 // @route GET /api/categories/:uuid
 export const getCategory = async (
   req: Request,
-  res: Response<Category>,
+  res: Response<Category | ErrorResponse>,
   next: NextFunction
 ) => {
   try {
-    const uuid = parseInt(req.params.uuid);
-    if (isNaN(uuid) || uuid <= 0) {
-      throw new ApiError(400, "Invalid UUID parameter");
+    const category = await fetchCategory(Number(req.params.uuid));
+    res.status(200).json(category);
+  } catch (error) {
+    if (error instanceof Error) {
+      // Handle specific error cases
+      if (error.message.includes("not found")) {
+        next(
+          new ApiError(404, `Category with id ${req.params.uuid} not found`)
+        );
+        return;
+      }
     }
-
-    const data = await fetchCategory(uuid);
-    if (!data) {
-      throw new ApiError(404, `No category with id ${uuid} found`);
-    }
-
-    res.json(data.category);
-  } catch (err) {
-    next(err);
+    next(
+      new ApiError(
+        500,
+        error instanceof Error ? error.message : "Failed to fetch category"
+      )
+    );
   }
 };

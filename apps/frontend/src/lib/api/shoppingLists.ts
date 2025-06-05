@@ -4,9 +4,10 @@ import { shoppingListSchema, type ShoppingList } from "@smartlist/schemas";
 export async function fetchShoppingList(
   options?: RequestInit
 ): Promise<ShoppingList> {
-  return baseAPI<ShoppingList>(`/shopping-lists`, shoppingListSchema).get(
-    options
-  );
+  return baseAPI<ShoppingList>(
+    `/shopping-lists/latest`,
+    shoppingListSchema
+  ).get(options);
 }
 
 export async function saveShoppingList(
