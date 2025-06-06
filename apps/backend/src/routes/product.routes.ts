@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  getProductByBarcode,
   getProducts,
   getProductsByBarcodes,
   getProductsByCategory,
@@ -11,6 +12,7 @@ import {
   getProductsByBarcodesSchema,
   searchProductsSchema,
   getProductsByCategorySchema,
+  getProductByBarcodeSchema,
 } from "../schemas/product.schema";
 
 const router = Router();
@@ -312,5 +314,72 @@ router.get(
  *         description: Internal server error
  */
 router.get("/search", validate(searchProductsSchema), searchProducts);
+
+/**
+ * @openapi
+ * /products/by-barcode:
+ *   get:
+ *     tags:
+ *       - Products
+ *     summary: Get product by barcode
+ *     description: Returns a product matching the provided barcode.
+ *     parameters:
+ *       - in: query
+ *         name: barcode
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Barcode of the product
+ *     responses:
+ *       200:
+ *         description: A product
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 barcode:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *                 image:
+ *                   type: string
+ *                 category:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                 supplier:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                 prices:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       merchant_uuid:
+ *                         type: integer
+ *                       price:
+ *                         type: number
+ *                       price_normalized:
+ *                         type: number
+ *                       date:
+ *                         type: string
+ *                         format: date
+ *                       unit:
+ *                         type: string
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: No product found for the given barcode
+ *       500:
+ *         description: Internal server error
+ */
+router.get(
+  "/by-barcode",
+  validate(getProductByBarcodeSchema),
+  getProductByBarcode
+);
 
 export default router;

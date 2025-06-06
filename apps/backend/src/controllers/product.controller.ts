@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import {
+  fetchProductByBarcode,
   fetchProducts,
   fetchProductsByBarcodes,
   searchProductsService,
@@ -129,6 +130,28 @@ export const searchProducts = async (
     const query = req.query.query as string;
     const products = await searchProductsService(query);
     res.status(200).json(products);
+  } catch (error) {
+    if (error instanceof Error) {
+      const status = error instanceof ApiError ? error.status : 500;
+      next(new ApiError(status, error.message));
+    } else {
+      next(new ApiError(500, "An unexpected error occurred"));
+    }
+  }
+};
+
+// @desc  Get product by barcode
+// @route GET /products/by-barcode?barcode=1234567890
+// @access Public
+export const getProductByBarcode = async (
+  req: Request,
+  res: Response<Product | ErrorResponse>,
+  next: NextFunction
+) => {
+  try {
+    const { barcode } = req.query;
+    const product = await fetchProductByBarcode(barcode as string);
+    res.status(200).json(product);
   } catch (error) {
     if (error instanceof Error) {
       const status = error instanceof ApiError ? error.status : 500;
