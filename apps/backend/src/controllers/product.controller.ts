@@ -18,7 +18,8 @@ interface ErrorResponse {
 }
 
 // @desc  Get all products of specific category and specific range
-// @route GET /api/products?categoryId=2&start=0&end=9
+// @route GET /products?categoryId=2&start=0&end=9
+// @access Public
 export const getProductsByCategory = async (
   req: Request,
   res: Response<Product[] | ErrorResponse>,
@@ -60,7 +61,8 @@ export const getProductsByCategory = async (
 };
 
 // @desc  Get all products of specific sub-sub-categories and specific range
-// @route GET /api/products?subCategoryId=2&start=0&end=9
+// @route GET /products?subCategoryId=2&start=0&end=9
+// @access Public
 export const getProducts = async (
   req: Request,
   res: Response<Product[] | ErrorResponse>,
@@ -94,7 +96,8 @@ export const getProducts = async (
 };
 
 // @desc  Get products by a list of barcodes
-// @route POST /api/products/by-barcodes
+// @route POST /products/by-barcodes
+// @access Public
 export const getProductsByBarcodes = async (
   req: Request,
   res: Response<Product[] | ErrorResponse>,
@@ -115,7 +118,8 @@ export const getProductsByBarcodes = async (
 };
 
 // @desc  Search products by name
-// @route GET /api/products/search?query=milk
+// @route GET /products/search?query=milk
+// @access Public
 export const searchProducts = async (
   req: Request,
   res: Response<Product[] | ErrorResponse>,

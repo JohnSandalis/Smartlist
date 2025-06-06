@@ -7,6 +7,9 @@ interface ErrorResponse {
   message: string;
 }
 
+// @desc Login
+// @route POST /login
+// @access Public
 export const login = async (
   req: Request,
   res: Response<{ user: any } | ErrorResponse>,
@@ -48,6 +51,9 @@ export const login = async (
   }
 };
 
+// @desc Signup
+// @route POST /signup
+// @access Public
 export const signup = async (
   req: Request,
   res: Response<{ user: any } | ErrorResponse>,
@@ -82,6 +88,9 @@ export const signup = async (
   }
 };
 
+// @desc Get user information
+// @route GET /me
+// @access Private
 export const getMe = async (
   req: Request,
   res: Response<{ user: any } | ErrorResponse>,
@@ -102,6 +111,9 @@ export const getMe = async (
   }
 };
 
+// @desc Logout
+// @route POST /logout
+// @access Private
 export const logout = (
   req: Request,
   res: Response<{ message: string } | ErrorResponse>,

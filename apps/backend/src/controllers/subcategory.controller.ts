@@ -9,7 +9,8 @@ interface ErrorResponse {
 }
 
 // @desc  Get all subcategories
-// @route GET /api/subcategories
+// @route GET /subcategories
+// @access Public
 export const getSubcategories = async (
   req: Request,
   res: Response<SubCategory[] | ErrorResponse>,

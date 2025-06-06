@@ -17,7 +17,7 @@ const router = Router();
 
 /**
  * @openapi
- * /api/products:
+ * /products:
  *   get:
  *     tags:
  *       - Products
@@ -62,22 +62,27 @@ const router = Router();
  *                     type: array
  *                     items:
  *                       type: string
+ *                   supplier:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
  *                   prices:
  *                     type: array
  *                     items:
  *                       type: object
  *                       properties:
+ *                         merchant_uuid:
+ *                           type: integer
+ *                         price:
+ *                           type: number
+ *                         price_normalized:
+ *                           type: number
  *                         date:
  *                           type: string
  *                           format: date
  *                         unit:
  *                           type: string
- *                         price:
- *                           type: number
- *                         merchant_uuid:
- *                           type: integer
- *                         price_normalized:
- *                           type: number
  *       400:
  *         description: Bad request
  *       404:
@@ -89,7 +94,7 @@ router.get("/", validate(getProductsSchema), getProducts);
 
 /**
  * @openapi
- * /api/products/by-barcodes:
+ * /products/by-barcodes:
  *   post:
  *     tags:
  *       - Products
@@ -138,8 +143,6 @@ router.get("/", validate(getProductsSchema), getProducts);
  *                     items:
  *                       type: object
  *                       properties:
- *                         barcode:
- *                           type: string
  *                         merchant_uuid:
  *                           type: integer
  *                         price:
@@ -164,12 +167,150 @@ router.post(
   getProductsByBarcodes
 );
 
+/**
+ * @openapi
+ * /products/by-category:
+ *   get:
+ *     tags:
+ *       - Products
+ *     summary: Get products by category
+ *     description: Returns a list of products matching the provided category.
+ *     parameters:
+ *       - in: query
+ *         name: categoryId
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: ID of the category
+ *       - in: query
+ *         name: start
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: Start index for pagination
+ *       - in: query
+ *         name: end
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: End index for pagination
+ *     responses:
+ *       200:
+ *         description: A list of products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   barcode:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                   image:
+ *                     type: string
+ *                   category:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                   supplier:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                   prices:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         merchant_uuid:
+ *                           type: integer
+ *                         price:
+ *                           type: number
+ *                         price_normalized:
+ *                           type: number
+ *                         date:
+ *                           type: string
+ *                           format: date
+ *                         unit:
+ *                           type: string
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: No products found for the given barcodes
+ *       500:
+ *         description: Internal server error
+ */
 router.get(
   "/by-category",
   validate(getProductsByCategorySchema),
   getProductsByCategory
 );
 
+/**
+ * @openapi
+ * /products/search:
+ *   get:
+ *     tags:
+ *       - Products
+ *     summary: Search products by name
+ *     description: Returns a list of products matching the provided query.
+ *     parameters:
+ *       - in: query
+ *         name: query
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Search query
+ *     responses:
+ *       200:
+ *         description: A list of products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   barcode:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                   image:
+ *                     type: string
+ *                   category:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                   supplier:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                   prices:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         merchant_uuid:
+ *                           type: integer
+ *                         price:
+ *                           type: number
+ *                         price_normalized:
+ *                           type: number
+ *                         date:
+ *                           type: string
+ *                           format: date
+ *                         unit:
+ *                           type: string
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: No products found for the given query
+ *       500:
+ *         description: Internal server error
+ */
 router.get("/search", validate(searchProductsSchema), searchProducts);
 
 export default router;
