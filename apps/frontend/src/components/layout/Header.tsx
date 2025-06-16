@@ -5,6 +5,7 @@ import SearchCompact from "../search/SearchCompact";
 import Link from "next/link";
 import Image from "next/image";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Header() {
   return (
@@ -21,6 +22,7 @@ export default function Header() {
         <SearchCompact className="hidden md:block" />
 
         <div className="flex items-center md:gap-2">
+          <LanguageSwitcher />
           <SearchButton className="md:hidden" />
           <Link href="/account">
             <IconButton>
