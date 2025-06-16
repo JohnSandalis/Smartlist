@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useSignup } from "@/app/(auth)/login/actions";
 import LoadingButton from "@/components/ui/LoadingButton";
+import { useTranslations } from "next-intl";
 
 interface Errors {
   email?: string;
@@ -11,6 +12,7 @@ interface Errors {
 }
 
 export default function RegisterForm() {
+  const t = useTranslations("register");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -23,23 +25,21 @@ export default function RegisterForm() {
     let validationErrors: Errors = {};
 
     if (!email) {
-      validationErrors.email = "Το email απαιτείται.";
+      validationErrors.email = t("noEmail");
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      validationErrors.email = "Το email δεν είναι έγκυρο.";
+      validationErrors.email = t("invalidEmail");
     }
 
     if (!password) {
-      validationErrors.password = "Ο κωδικός απαιτείται.";
+      validationErrors.password = t("noPassword");
     } else if (password.length < 6) {
-      validationErrors.password =
-        "Ο κωδικός πρέπει να είναι τουλάχιστον 6 χαρακτήρες.";
+      validationErrors.password = t("invalidPassword");
     }
 
     if (!confirmPassword) {
-      validationErrors.confirmPassword =
-        "Η επαλήθευση κωδικού είναι απαραίτητη.";
+      validationErrors.confirmPassword = t("noConfirmPassword");
     } else if (confirmPassword !== password) {
-      validationErrors.confirmPassword = "Οι κωδικοί δεν ταιριάζουν.";
+      validationErrors.confirmPassword = t("invalidConfirmPassword");
     }
 
     setErrors(validationErrors);
@@ -51,11 +51,9 @@ export default function RegisterForm() {
       try {
         setIsLoading(true);
         await signup({ email, password });
-        toast.success(
-          "Ελέγξτε το email σας για να επιβεβαιώσετε την εγγραφή σας."
-        );
+        toast.success(t("success"));
       } catch (error: any) {
-        toast.error(error.message || "Αποτυχία σύνδεσης.");
+        toast.error(error.message || t("fail"));
       } finally {
         setIsLoading(false);
       }
@@ -79,7 +77,7 @@ export default function RegisterForm() {
           htmlFor="email"
           className="block text-sm font-medium leading-6 text-gray-900"
         >
-          Email
+          {t("email")}
         </label>
         <div>
           <input
@@ -99,7 +97,7 @@ export default function RegisterForm() {
           htmlFor="password"
           className="block text-sm font-medium leading-6 text-gray-900"
         >
-          Κωδικός
+          {t("password")}
         </label>
         <div>
           <input
@@ -119,7 +117,7 @@ export default function RegisterForm() {
           htmlFor="confirmPassword"
           className="block text-sm font-medium leading-6 text-gray-900"
         >
-          Επαλήθευση Κωδικού
+          {t("confirmPassword")}
         </label>
         <div>
           <input
@@ -139,7 +137,7 @@ export default function RegisterForm() {
           loading={isLoading}
           className="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
-          Υποβολή
+          {t("button")}
         </LoadingButton>
       </div>
     </form>

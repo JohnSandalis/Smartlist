@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useLogin } from "@/app/(auth)/login/actions";
 import LoadingButton from "@/components/ui/LoadingButton";
+import { useTranslations } from "next-intl";
 
 interface Errors {
   email?: string;
@@ -10,6 +11,7 @@ interface Errors {
 }
 
 export default function LogInForm() {
+  const t = useTranslations("login");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({});
@@ -21,15 +23,15 @@ export default function LogInForm() {
     const errors: Errors = {};
 
     if (!email) {
-      errors.email = "Το email απαιτείται.";
+      errors.email = t("noEmail");
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = "Το email δεν είναι έγκυρο.";
+      errors.email = t("invalidEmail");
     }
 
     if (!password) {
-      errors.password = "Ο κωδικός απαιτείται.";
+      errors.password = t("noPassword");
     } else if (password.length < 6) {
-      errors.password = "Ο κωδικός πρέπει να είναι τουλάχιστον 6 χαρακτήρες.";
+      errors.password = t("invalidPassword");
     }
 
     setErrors(errors);
@@ -41,9 +43,9 @@ export default function LogInForm() {
       try {
         setIsLoading(true);
         await login({ email, password });
-        toast.success("Επιτυχής σύνδεση!");
+        toast.success(t("success"));
       } catch (error: any) {
-        toast.error(error.message || "Αποτυχία σύνδεσης.");
+        toast.error(error.message || t("fail"));
       } finally {
         setIsLoading(false);
       }
@@ -66,7 +68,7 @@ export default function LogInForm() {
           htmlFor="email"
           className="block text-sm font-medium leading-6 text-gray-900"
         >
-          Email
+          {t("email")}
         </label>
         <div>
           <input
@@ -87,7 +89,7 @@ export default function LogInForm() {
             htmlFor="password"
             className="block text-sm font-medium leading-6 text-gray-900"
           >
-            Κωδικός
+            {t("password")}
           </label>
           {/* <div className="text-sm">
             <Link href="/reset-password" className="font-semibold text-primary hover:text-primary">
@@ -113,7 +115,7 @@ export default function LogInForm() {
           loading={isLoading}
           className="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
-          Σύνδεση
+          {t("button")}
         </LoadingButton>
       </div>
     </form>

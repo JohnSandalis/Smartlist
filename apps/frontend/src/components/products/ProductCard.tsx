@@ -8,6 +8,7 @@ import {
   useSupermarkets,
 } from "@/context/SupermarketProvider";
 import { useShoppingList } from "@/context/ShoppingListProvider";
+import { useTranslations } from "next-intl";
 
 interface SupermarketImageProps {
   src: string;
@@ -31,6 +32,7 @@ interface ProductCardProps {
 
 const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
   ({ product, showRemoveItemButton = true }, ref) => {
+    const t = useTranslations("products");
     const supermarkets = useSupermarkets();
     const { selected: selectedSupermarkets } = useSelectedSupermarkets();
 
@@ -139,7 +141,7 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
                 onClick={addToList}
                 className="text-sm bg-gray-200 px-2 py-1 rounded-md w-max"
               >
-                Προσθήκη
+                {t("addToListBtn")}
               </button>
             )}
           </div>

@@ -8,8 +8,10 @@ import {
 } from "@/context/SupermarketProvider";
 import SelectedSuperMarketsSkeleton from "./SelectedSuperMarketsSkeleton";
 import SelectedSuperMarketLogos from "./SelectedSuperMarketLogos";
+import { useTranslations } from "next-intl";
 
 export default function SelectedSuperMarkets() {
+  const t = useTranslations("selectedSupermarkets");
   const { supermarkets, isLoaded } = useSupermarketState();
   const { selected } = useSelectedSupermarkets();
   const [superMarketsListOpen, setSuperMarketsListOpen] =
@@ -31,7 +33,7 @@ export default function SelectedSuperMarkets() {
       >
         <div className="flex flex-col gap-2 text-start">
           <h2 className="text-md font-medium text-gray-900 leading-tight">
-            Επιλεγμένα Super Markets
+            {t("selected")}
           </h2>
           <div
             className={`flex items-center gap-2 ${

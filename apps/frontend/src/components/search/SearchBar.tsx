@@ -1,3 +1,5 @@
+"use client";
+import { useTranslations } from "next-intl";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState, FormEvent, ChangeEvent } from "react";
 import { type Products } from "@smartlist/schemas";
@@ -16,6 +18,7 @@ export const SearchBar = ({
   className,
 }: SearchBarProps) => {
   const [input, setInput] = useState<string>("");
+  const t = useTranslations("search");
 
   const fetchData = async (value: string) => {
     setLoading(true);
@@ -51,7 +54,7 @@ export const SearchBar = ({
         <input
           id="search"
           name="search"
-          placeholder="Ψάξε προϊόντα..."
+          placeholder={t("placeholder")}
           value={input}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             handleChange(e.target.value)

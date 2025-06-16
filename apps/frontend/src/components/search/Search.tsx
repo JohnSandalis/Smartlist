@@ -11,6 +11,7 @@ import { SearchBar } from "@/components/search/SearchBar";
 import { SearchResults } from "@/components/search/SearchResults";
 import ProductCardSkeleton from "@/components/products/ProductCardSkeleton";
 import { type Product } from "@smartlist/schemas";
+import { useTranslations } from "next-intl";
 
 export default function Search({
   open,
@@ -19,6 +20,7 @@ export default function Search({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
+  const t = useTranslations("search");
   const [results, setResults] = useState<Product[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -66,7 +68,7 @@ export default function Search({
         )}
         {results && results.length > 0 && <SearchResults results={results} />}
         {results && results.length === 0 && (
-          <span className="text-center">Δεν βρέθηκε κανένα προϊόν</span>
+          <span className="text-center">{t("noResults")}</span>
         )}
       </DialogContent>
     </Dialog>
