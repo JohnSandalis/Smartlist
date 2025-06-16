@@ -9,7 +9,8 @@ interface ErrorResponse {
 }
 
 // @desc  Get all categories
-// @route GET /api/categories
+// @route GET /categories
+// @access Public
 export const getCategories = async (
   req: Request,
   res: Response<Category[] | ErrorResponse>,
@@ -29,7 +30,8 @@ export const getCategories = async (
 };
 
 // @desc  Get a category's name and image url based on uuid
-// @route GET /api/categories/:uuid
+// @route GET /categories/:uuid
+// @access Public
 export const getCategory = async (
   req: Request,
   res: Response<Category | ErrorResponse>,

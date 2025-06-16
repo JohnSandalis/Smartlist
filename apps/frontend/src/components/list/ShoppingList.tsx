@@ -13,6 +13,7 @@ import ProductCard from "@/components/products/ProductCard";
 import Link from "next/link";
 import { useShoppingList } from "@/context/ShoppingListProvider";
 import { useMediaQuery } from "@mui/material";
+import { useTranslations } from "next-intl";
 
 export default function ShoppingList({
   open,
@@ -21,6 +22,7 @@ export default function ShoppingList({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
+  const t = useTranslations("listPreview");
   const { items: shoppingList } = useShoppingList();
   const isMdUp = useMediaQuery("(min-width: 768px)");
 
@@ -71,7 +73,7 @@ export default function ShoppingList({
       }}
     >
       <DialogTitle className="bg-off-white text-center !p-6 page-title">
-        Λίστα
+        {t("title")}
       </DialogTitle>
       <DialogContent className="bg-off-white flex-1 grid grid-cols-1 gap-2 overflow-y-auto !px-4 !py-6 sm:!px-6 auto-rows-min container-default w-full">
         {shoppingList.map((item) => {
@@ -83,8 +85,7 @@ export default function ShoppingList({
         })}
         {latestPriceDate && (
           <h2 className="text-center mt-4">
-            Η τιμή των προϊόντων που αναγράφεται αφορά την{" "}
-            {latestPriceDate.toLocaleDateString("en-GB")}
+            {t("priceDate")} {latestPriceDate.toLocaleDateString("en-GB")}
           </h2>
         )}
       </DialogContent>
@@ -94,7 +95,7 @@ export default function ShoppingList({
           onClick={handleClose}
           className="w-full bg-primary text-white p-4 rounded-xl text-center font-semibold"
         >
-          Επόμενο
+          {t("buttonNext")}
         </Link>
         <IconButton
           onClick={handleClose}

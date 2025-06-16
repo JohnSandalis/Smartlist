@@ -45,3 +45,12 @@ export const searchProductsSchema = z.object({
     query: z.string().min(1, "Search query is required"),
   }),
 });
+
+export const getProductByBarcodeSchema = z.object({
+  query: z.object({
+    barcode: z
+      .string()
+      .regex(/^\d+$/, "Barcode must only contain numbers")
+      .min(1, "Barcode is required"),
+  }),
+});

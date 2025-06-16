@@ -17,6 +17,9 @@ interface SuccessResponse {
   message?: string;
 }
 
+// @desc Fetch latest shopping list
+// @route GET /shopping-lists/latest
+// @access Private
 export const getLatestShoppingList = async (
   req: Request,
   res: Response,
@@ -44,6 +47,9 @@ export const getLatestShoppingList = async (
   }
 };
 
+// @desc Save shopping list
+// @route POST /shopping-lists
+// @access Private
 export const saveShoppingList = async (
   req: Request,
   res: Response<SuccessResponse | ErrorResponse>,

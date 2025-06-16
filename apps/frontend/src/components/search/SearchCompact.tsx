@@ -4,8 +4,10 @@ import { SearchBar } from "@/components/search/SearchBar";
 import { SearchResults } from "@/components/search/SearchResults";
 import ProductCardSkeleton from "@/components/products/ProductCardSkeleton";
 import { type Product } from "@smartlist/schemas";
+import { useTranslations } from "next-intl";
 
 export default function SearchCompact({ className }: { className?: string }) {
+  const t = useTranslations("search");
   const [open, setOpen] = useState(false);
   const [results, setResults] = useState<Product[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -45,9 +47,7 @@ export default function SearchCompact({ className }: { className?: string }) {
               <SearchResults results={results} />
             )}
             {results && results.length === 0 && (
-              <span className="text-center block">
-                Δεν βρέθηκε κανένα προϊόν
-              </span>
+              <span className="text-center block">{t("noResults")}</span>
             )}
           </div>
         </div>

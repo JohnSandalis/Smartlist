@@ -160,3 +160,51 @@ export const searchProductsService = async (
     );
   }
 };
+
+export const fetchProductByBarcode = async (
+  barcode: string
+): Promise<Product> => {
+  try {
+    const { data, error } = await supabase
+      .from("products")
+      .select(
+        `
+        barcode,
+        name,
+        image,
+        category,
+        supplier:suppliers (name),
+        prices (
+          merchant_uuid,
+          price,
+          price_normalized,
+          date,
+          unit
+        )`
+      )
+      .eq("barcode", barcode)
+      .single();
+
+    if (error) {
+      throw new ProductServiceError(
+        `Failed to fetch product by barcode: ${error.message}`
+      );
+    }
+
+    if (!data) {
+      throw new ProductServiceError("No product found for the given barcode");
+    }
+
+    return {
+      ...data,
+      supplier: Array.isArray(data.supplier) ? data.supplier[0] : data.supplier,
+    } as Product;
+  } catch (error) {
+    if (error instanceof ProductServiceError) {
+      throw error;
+    }
+    throw new ProductServiceError(
+      "An unexpected error occurred while fetching product by barcode"
+    );
+  }
+};

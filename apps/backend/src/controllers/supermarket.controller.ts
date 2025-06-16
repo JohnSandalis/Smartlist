@@ -8,8 +8,9 @@ interface ErrorResponse {
   message: string;
 }
 
-// @desc  Get all supermarkets
-// @route GET /api/supermarkets
+// @desc Get all supermarkets
+// @route GET /supermarkets
+// @access Public
 export const getSupermarkets = async (
   req: Request,
   res: Response<Supermarket[] | ErrorResponse>,

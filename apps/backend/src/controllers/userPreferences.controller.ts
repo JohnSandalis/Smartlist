@@ -10,6 +10,9 @@ interface ErrorResponse {
   message: string;
 }
 
+// @desc Fetch user preferences
+// @route GET /user-preferences
+// @access Private
 export const fetchUserPreferences = async (
   req: Request,
   res: Response<{ selected_supermarkets: number[] } | ErrorResponse>,
@@ -33,6 +36,9 @@ export const fetchUserPreferences = async (
   }
 };
 
+// @desc Save user preferences
+// @route POST /user-preferences
+// @access Private
 export const saveUserPreferences = async (
   req: Request,
   res: Response<{ message: string } | ErrorResponse>,

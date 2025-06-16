@@ -5,7 +5,7 @@ const router = Router();
 
 /**
  * @openapi
- * /api/subcategories:
+ * /subcategories:
  *   get:
  *     tags:
  *       - SubCategories
