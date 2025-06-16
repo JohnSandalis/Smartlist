@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
 import AccountLoading from "./AccountLoading";
+import { useTranslations } from "next-intl";
 
 export default function AccountPage() {
+  const t = useTranslations("account");
   const { user, isLoading, signOut } = useUser();
   const router = useRouter();
 
@@ -22,14 +24,14 @@ export default function AccountPage() {
     <>
       <div className="flex flex-col items-start container-default">
         <div className="flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center w-full mb-4 py-1 container-default gap-4">
-          <h1 className="text-2xl font-bold">Ο Λογαριασμός μου</h1>
+          <h1 className="text-2xl font-bold">{t("title")}</h1>
 
           <button
             onClick={signOut}
             className="btn-white text-sm flex items-center gap-2"
           >
             <ArrowLeftStartOnRectangleIcon className="h-5 w-5" />
-            Αποσύνδεση
+            {t("logoutButton")}
           </button>
         </div>
 
@@ -37,15 +39,19 @@ export default function AccountPage() {
           {/* Personal Information Section */}
           <section className="bg-white rounded-lg shadow-sm p-6 mb-6">
             <h2 className="text-xl font-semibold mb-4">
-              Προσωπικές Πληροφορίες
+              {t("memberInfo.title")}
             </h2>
             <div className="space-y-4">
               <div className="flex flex-col">
-                <label className="text-sm text-gray-600">Email</label>
+                <label className="text-sm text-gray-600">
+                  {t("memberInfo.emailLabel")}
+                </label>
                 <p className="text-md font-medium">{user?.email}</p>
               </div>
               <div className="flex flex-col">
-                <label className="text-sm text-gray-600">Μέλος από</label>
+                <label className="text-sm text-gray-600">
+                  {t("memberInfo.memberSinceLabel")}
+                </label>
                 <p className="text-md font-medium">
                   {user?.created_at
                     ? new Date(user.created_at).toLocaleDateString()

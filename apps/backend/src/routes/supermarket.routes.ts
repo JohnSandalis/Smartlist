@@ -5,7 +5,7 @@ const router = Router();
 
 /**
  * @openapi
- * /api/supermarkets:
+ * /supermarkets:
  *   get:
  *     tags:
  *       - Supermarkets

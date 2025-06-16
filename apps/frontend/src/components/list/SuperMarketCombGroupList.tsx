@@ -2,6 +2,7 @@ import { type CombinationResult } from "@smartlist/schemas";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import SupermarketCombCard from "./SuperMarketCombCard";
+import { useTranslations } from "next-intl";
 
 type GroupedCombination = {
   noOfSupermarkets: number;
@@ -17,6 +18,8 @@ export default function SuperMarketCombGroupList({
   group,
   groupIndex,
 }: SuperMarketCombGroupListProps): JSX.Element {
+  const t = useTranslations("list");
+
   const minPrice = Math.min(...group.combinations.map((c) => c.total)).toFixed(
     2
   );
@@ -31,9 +34,11 @@ export default function SuperMarketCombGroupList({
       >
         <div className="flex flex-col">
           <h2 className="font-medium">
-            Έως {group.noOfSupermarkets} Super Market
+            {t("upTo")} {group.noOfSupermarkets} Super Markets
           </h2>
-          <p className="text-gray-500">Από €{minPrice}</p>
+          <p className="text-gray-500">
+            {t("from")} €{minPrice}
+          </p>
         </div>
       </AccordionSummary>
       <AccordionDetails className="p-0">

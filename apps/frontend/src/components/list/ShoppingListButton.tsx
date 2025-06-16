@@ -4,8 +4,10 @@ import ShoppingList from "./ShoppingList";
 import { useState } from "react";
 import { ClipboardDocumentListIcon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export default function ShoppingListButton() {
+  const t = useTranslations("listPreview");
   const { isLoading, totalItems, totalPrice } = useShoppingList();
   const [listOpen, setListOpen] = useState(false);
   const pathname = usePathname();
@@ -37,10 +39,10 @@ export default function ShoppingListButton() {
                 totalItems > 0
                   ? "bg-primary text-white"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              } p-3 rounded-xl flex justify-between items-center gap-4`}
+              } w-[156px] p-3 rounded-xl flex justify-between items-center gap-4`}
             >
               <ClipboardDocumentListIcon className="w-6 h-6" />
-              <span className="text-md font-medium">Λίστα</span>
+              <span className="text-md font-medium">{t("buttonOpen")}</span>
               <div className="ml-1">
                 <span
                   className={`flex items-center justify-center ${
@@ -68,7 +70,9 @@ export default function ShoppingListButton() {
                         {totalItems}
                       </span>
                     </div>
-                    <span className="w-1/3 text-md font-medium">Λίστα</span>
+                    <span className="w-1/3 text-md font-medium">
+                      {t("buttonOpen")}
+                    </span>
                     <span className="w-1/3 text-right text-sm font-medium">
                       {totalPrice.toFixed(2)}€
                     </span>

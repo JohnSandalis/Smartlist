@@ -8,6 +8,7 @@ import {
   type Category,
 } from "@smartlist/schemas";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 const PRODUCTS_PER_PAGE = 20;
 
@@ -30,6 +31,8 @@ export default function ProductList({
   loading,
   lastProductElementRef,
 }: Props) {
+  const t = useTranslations("");
+
   return (
     <div className="flex gap-4 lg:mt-4 container-default">
       <div className="min-w-[300px] hidden lg:block bg-white p-4 rounded-lg shadow-actions sticky top-[90px] h-fit">
@@ -37,7 +40,8 @@ export default function ProductList({
           href="/"
           className="text-sm text-gray-500 hover:text-black flex items-center gap-2 text-hover-transition"
         >
-          <ArrowLeftIcon width="16px" height="16px" /> Όλες οι κατηγορίες
+          <ArrowLeftIcon width="16px" height="16px" />{" "}
+          {t("categories.allCategories")}
         </Link>
         <h2 className="text-md font-medium mb-2 mt-4">{category.name}</h2>
 
@@ -48,7 +52,7 @@ export default function ProductList({
               selectedSubCategory === null ? "!text-black font-medium" : ""
             }`}
           >
-            Όλα τα προϊόντα
+            {t("categories.allProducts")}
           </li>
           {subcategories.map((subcategory) => (
             <li
@@ -92,7 +96,7 @@ export default function ProductList({
 
         {!loading && products.length === 0 && (
           <h2 className="text-lg text-center mt-4 col-span-full">
-            Δεν βρέθηκε κάποιο προϊόν
+            {t("products.noResults")}
           </h2>
         )}
       </div>

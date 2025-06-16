@@ -1,0 +1,73 @@
+{
+  "search": {
+    "placeholder": "Ψάξε προϊόντα...",
+    "noResults": "Δεν υπάρχουν αποτελέσματα"
+  },
+  "listPreview": {
+    "buttonOpen": "Λίστα",
+    "title": "Λίστα Προϊόντων",
+    "buttonNext": "Επόμενο",
+    "priceDate": "Η τιμή των προϊόντων που αναγράφεται αφορά την"
+  },
+  "list": {
+    "title": "Φθηνότεροι Συνδιασμοί",
+    "subtitle": "Παρακάτω θα βρείτε από ποια super market συμφέρει να αγοράσετε τα προϊόντα της λίστας σας.",
+    "nonSelectedSubtitle": "Συνδιασμοί από μη επιλεγμένα Super Market",
+    "upTo": "Έως",
+    "from": "Από"
+  },
+  "selectedSupermarkets": {
+    "title": "Διάλεξε Super Markets",
+    "subtitle": "Επίλεξε τα super market που σε εξυπηρετούν καλύτερα.",
+    "selected": "Επιλεγμένα Super Markets",
+    "button": "Αποθήκευση"
+  },
+  "login": {
+    "title": "Συνδέσου στον λογαριασμό σου",
+    "email": "Email",
+    "password": "Κωδικός",
+    "button": "Σύνδεση",
+    "notAMember": "Δεν είσαι μέλος;",
+    "notAMemberButton": "Δημιούργησε λογαριασμό",
+    "noEmail": "Το email απαιτείται.",
+    "invalidEmail": "Το email δεν είναι έγκυρο.",
+    "noPassword": "Ο κωδικός απαιτείται.",
+    "invalidPassword": "Ο κωδικός πρέπει να είναι τουλάχιστον 6 χαρακτήρες.",
+    "success": "Επιτυχής σύνδεση!",
+    "fail": "Αποτυχία σύνδεσης."
+  },
+  "register": {
+    "title": "Δημιούργησε λογαριασμό",
+    "email": "Email",
+    "password": "Κωδικός",
+    "confirmPassword": "Επαλήθευση κωδικού",
+    "button": "Υποβολή",
+    "areYouAMember": "Είσαι ήδη μέλος;",
+    "areYouAMemberButton": "Συνδέσου",
+    "noEmail": "Το email απαιτείται.",
+    "invalidEmail": "Το email δεν είναι έγκυρο.",
+    "noPassword": "Ο κωδικός απαιτείται.",
+    "invalidPassword": "Ο κωδικός πρέπει να είναι τουλάχιστον 6 χαρακτήρες.",
+    "noConfirmPassword": "Η επαλήθευση κωδικού είναι απαραίτητη.",
+    "invalidConfirmPassword": "Οι κωδικοί δεν ταιριάζουν.",
+    "success": "Ελέγξτε το email σας για να επιβεβαιώσετε την εγγραφή σας.",
+    "fail": "Αποτυχία σύνδεσης."
+  },
+  "account": {
+    "title": "Ο Λογαριασμός μου",
+    "memberInfo": {
+      "title": "Προσωπικές Πληροφορίες",
+      "emailLabel": "Email",
+      "memberSinceLabel": "Μέλος από"
+    },
+    "logoutButton": "Αποσύνδεση"
+  },
+  "categories": {
+    "allCategories": "Όλες οι κατηγορίες",
+    "allProducts": "Όλα τα προϊόντα"
+  },
+  "products": {
+    "addToListBtn": "Προσθήκη",
+    "noResults": "Δεν βρέθηκε κάποιο προϊόν"
+  }
+}

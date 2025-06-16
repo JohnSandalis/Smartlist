@@ -10,6 +10,7 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import SuperMarketCard from "./SuperMarketCard";
 import { FC } from "react";
 import { type Supermarket } from "@smartlist/schemas";
+import { useTranslations } from "next-intl";
 
 type SupermarketMap = Record<string, Supermarket>;
 
@@ -24,6 +25,7 @@ const SuperMarketsList: FC<SuperMarketsListProps> = ({
   setOpen,
   supermarkets,
 }) => {
+  const t = useTranslations("selectedSupermarkets");
   const handleClose = (): void => {
     setOpen(false);
   };
@@ -46,11 +48,9 @@ const SuperMarketsList: FC<SuperMarketsListProps> = ({
     >
       <DialogContent className="bg-off-white flex flex-col gap-2 overflow-y-auto !px-4 !py-6 sm:!px-6 w-full container-default">
         <span className="text-xl text-center font-semibold mt-8 px-16">
-          Διάλεξε Super Market
+          {t("title")}
         </span>
-        <p className="text-md text-center px-4">
-          Επίλεξε τα super market που σε εξυπηρετούν καλύτερα.
-        </p>
+        <p className="text-md text-center px-4">{t("subtitle")}</p>
         <div className="grid grid-cols-2 md:grid-cols-4 grid-rows-min gap-2 mt-4">
           {sortedSupermarkets.map((supermarket) => (
             <SuperMarketCard
@@ -62,7 +62,7 @@ const SuperMarketsList: FC<SuperMarketsListProps> = ({
       </DialogContent>
       <DialogActions className="w-full !rounded-t-lg bg-white !py-4 !px-2 !shadow-lg container-default">
         <button onClick={() => setOpen(false)} className="w-full btn-primary">
-          Αποθήκευση
+          {t("button")}
         </button>
         <IconButton
           onClick={handleClose}

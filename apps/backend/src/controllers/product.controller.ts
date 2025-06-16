@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import {
+  fetchProductByBarcode,
   fetchProducts,
   fetchProductsByBarcodes,
   searchProductsService,
@@ -18,7 +19,8 @@ interface ErrorResponse {
 }
 
 // @desc  Get all products of specific category and specific range
-// @route GET /api/products?categoryId=2&start=0&end=9
+// @route GET /products?categoryId=2&start=0&end=9
+// @access Public
 export const getProductsByCategory = async (
   req: Request,
   res: Response<Product[] | ErrorResponse>,
@@ -60,7 +62,8 @@ export const getProductsByCategory = async (
 };
 
 // @desc  Get all products of specific sub-sub-categories and specific range
-// @route GET /api/products?subCategoryId=2&start=0&end=9
+// @route GET /products?subCategoryId=2&start=0&end=9
+// @access Public
 export const getProducts = async (
   req: Request,
   res: Response<Product[] | ErrorResponse>,
@@ -94,7 +97,8 @@ export const getProducts = async (
 };
 
 // @desc  Get products by a list of barcodes
-// @route POST /api/products/by-barcodes
+// @route POST /products/by-barcodes
+// @access Public
 export const getProductsByBarcodes = async (
   req: Request,
   res: Response<Product[] | ErrorResponse>,
@@ -115,7 +119,8 @@ export const getProductsByBarcodes = async (
 };
 
 // @desc  Search products by name
-// @route GET /api/products/search?query=milk
+// @route GET /products/search?query=milk
+// @access Public
 export const searchProducts = async (
   req: Request,
   res: Response<Product[] | ErrorResponse>,
@@ -125,6 +130,28 @@ export const searchProducts = async (
     const query = req.query.query as string;
     const products = await searchProductsService(query);
     res.status(200).json(products);
+  } catch (error) {
+    if (error instanceof Error) {
+      const status = error instanceof ApiError ? error.status : 500;
+      next(new ApiError(status, error.message));
+    } else {
+      next(new ApiError(500, "An unexpected error occurred"));
+    }
+  }
+};
+
+// @desc  Get product by barcode
+// @route GET /products/by-barcode?barcode=1234567890
+// @access Public
+export const getProductByBarcode = async (
+  req: Request,
+  res: Response<Product | ErrorResponse>,
+  next: NextFunction
+) => {
+  try {
+    const { barcode } = req.query;
+    const product = await fetchProductByBarcode(barcode as string);
+    res.status(200).json(product);
   } catch (error) {
     if (error instanceof Error) {
       const status = error instanceof ApiError ? error.status : 500;

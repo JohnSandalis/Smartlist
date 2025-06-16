@@ -11,7 +11,7 @@ const router = Router();
 
 /**
  * @openapi
- * /api/shopping-list/latest:
+ * /shopping-list/latest:
  *   get:
  *     tags:
  *       - Shopping List
@@ -32,7 +32,7 @@ router.get("/latest", authenticateJWT, getLatestShoppingList);
 
 /**
  * @openapi
- * /api/shopping-list:
+ * /shopping-list:
  *   post:
  *     tags:
  *       - Shopping List

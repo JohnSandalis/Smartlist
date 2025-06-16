@@ -9,11 +9,14 @@ SmartList is a web application designed for Greek consumers to simplify grocery 
 
 ## Tech Stack
 
-- **Backend:** Node.js with Express, TypeScript
-- **Frontend:** Next.js, React, TypeScript, Tailwind CSS
-- **Database:** Supabase
+- **Frontend:** Next.js (React, TypeScript, Tailwind CSS)
+- **Backend:** Node.js (Express, TypeScript)
+- **Database:** Supabase (PostgreSQL)
+- **Internationalization:** next-intl
+- **Schema Validation:** Zod
+- **API Documentation:** Swagger
 - **Containerization:** Docker
-- **Deployment:** Digital Ocean Droplet
+- **Deployment:** DigitalOcean Droplet
 
 ## How to Run (Development)
 
@@ -37,9 +40,18 @@ NODE_ENV="development"
 PORT="8080"
 ```
 
-### Run with Docker Compose
+### Run in Development Mode
 
-Build and start the application containers with:
+Run frontend & backend simultaneously using:
+
+```bash
+npm install
+npm run dev
+```
+
+### Test Docker Compose Build
+
+Make sure you have Docker installed & running in the background of your local machine. Build and start the application containers with:
 
 ```bash
 docker compose up --build -d

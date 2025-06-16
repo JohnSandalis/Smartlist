@@ -7,6 +7,7 @@ import { useSelectedSupermarkets } from "@/context/SupermarketProvider";
 import { type CombinationResult } from "@smartlist/schemas";
 import SuperMarketCombGroupList from "@/components/list/SuperMarketCombGroupList";
 import { useShoppingList } from "@/context/ShoppingListProvider";
+import { useTranslations } from "next-intl";
 
 type GroupedCombination = {
   noOfSupermarkets: number;
@@ -14,6 +15,7 @@ type GroupedCombination = {
 };
 
 export default function List() {
+  const t = useTranslations("list");
   const { items: shoppingList } = useShoppingList();
   const { selected: selectedSupermarkets } = useSelectedSupermarkets();
   const router = useRouter();
@@ -36,12 +38,9 @@ export default function List() {
 
   return (
     <>
-      <h1 className="text-center page-title mb-2 mt-8">
-        Φθηνότεροι Συνδιασμοί
-      </h1>
+      <h1 className="text-center page-title mb-2 mt-8">{t("title")}</h1>
       <p className="text-md text-center mb-6 text-gray-700 max-w-[600px] mx-auto">
-        Παρακάτω θα βρείτε από ποια super market συμφέρει να αγοράσετε τα
-        προϊόντα της λίστας σας.
+        {t("subtitle")}
       </p>
 
       <div className="grid grid-cols-1 gap-4 max-w-[600px] mx-auto">
@@ -57,7 +56,7 @@ export default function List() {
           <>
             <hr className="my-6" />
             <h2 className="text-center text-gray-600 text-md mb-2">
-              Συνδιασμοί από μη επιλεγμένα Super Market
+              {t("nonSelectedSubtitle")}
             </h2>
             <div className="opacity-50 grid grid-cols-1 gap-4">
               {excludedGrouped.map((group, groupIndex) => (

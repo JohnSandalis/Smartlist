@@ -7,7 +7,7 @@ const router = Router();
 
 /**
  * @openapi
- * /api/categories:
+ * /categories:
  *   get:
  *     tags:
  *       - Categories
@@ -38,7 +38,7 @@ router.get("/", getCategories);
 
 /**
  * @openapi
- * /api/categories/{uuid}:
+ * /categories/{uuid}:
  *   get:
  *     tags:
  *       - Categories

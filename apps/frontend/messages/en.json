@@ -1,0 +1,73 @@
+{
+  "search": {
+    "placeholder": "Search for products...",
+    "noResults": "No results found"
+  },
+  "listPreview": {
+    "buttonOpen": "List",
+    "title": "Shopping List",
+    "buttonNext": "Next",
+    "priceDate": "The price of the products listed is for the"
+  },
+  "list": {
+    "title": "Cheapest Combinations",
+    "subtitle": "Below you will find which supermarkets offer the best prices for the products on your list.",
+    "upTo": "Up to",
+    "from": "From",
+    "nonSelectedSubtitle": "Combinations from non-selected Supermarkets"
+  },
+  "selectedSupermarkets": {
+    "title": "Select Super Markets",
+    "subtitle": "Select the super markets that serve you best.",
+    "selected": "Selected Super Markets",
+    "button": "Save"
+  },
+  "login": {
+    "title": "Log in to your account",
+    "email": "Email",
+    "password": "Password",
+    "button": "Sign In",
+    "notAMember": "Not a member?",
+    "notAMemberButton": "Create an account",
+    "noEmail": "Email is required.",
+    "invalidEmail": "Email is not valid.",
+    "noPassword": "Password is required.",
+    "invalidPassword": "Password must be at least 6 characters.",
+    "success": "Login successful!",
+    "fail": "Login failed."
+  },
+  "register": {
+    "title": "Create an account",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "button": "Submit",
+    "areYouAMember": "Already a member?",
+    "areYouAMemberButton": "Log in",
+    "noEmail": "Email is required.",
+    "invalidEmail": "Email is not valid.",
+    "noPassword": "Password is required.",
+    "invalidPassword": "Password must be at least 6 characters.",
+    "noConfirmPassword": "Password confirmation is required.",
+    "invalidConfirmPassword": "Passwords do not match.",
+    "success": "Check your email to confirm your registration.",
+    "fail": "Registration failed."
+  },
+  "account": {
+    "title": "My Account",
+    "memberInfo": {
+      "title": "Personal Information",
+      "emailLabel": "Email",
+      "memberSinceLabel": "Member since"
+    },
+    "logoutButton": "Log out"
+  },
+  "categories": {
+    "allCategories": "All categories",
+    "allProducts": "All products"
+  },
+  "products": {
+    "addToListBtn": "Add To List",
+    "noResults": "No products found"
+  }
+}
